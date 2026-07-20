@@ -799,9 +799,16 @@ def run_skill(intent, parsed, meta):
 
     extra_files = []
     if intent in ("bidding", "recruitment", "performance"):
-        word_path = out_path.with_suffix(".docx")
-        if word_path.exists():
-            extra_files.append(word_path)
+        # These scripts create a directory from out_prefix and put files inside it
+        output_dir = Path(str(out_prefix))
+        if output_dir.exists() and output_dir.is_dir():
+            excel_files = sorted(output_dir.glob("*.xlsx"), key=lambda p: p.stat().st_mtime, reverse=True)
+            word_files = sorted(output_dir.glob("*.docx"), key=lambda p: p.stat().st_mtime, reverse=True)
+            if excel_files:
+                out_path = excel_files[0]
+                out_name = out_path.name
+            if word_files:
+                extra_files.append(word_files[0])
 
     return out_path, out_name, extra_files, result
 
@@ -1213,9 +1220,16 @@ with tab_templates:
 
         extra_files = []
         if selected_skill in ("bidding", "recruitment", "performance"):
-            word_path = out_path.with_suffix(".docx")
-            if word_path.exists():
-                extra_files.append(word_path)
+            # These scripts create a directory from out_prefix and put files inside it
+            output_dir = Path(str(out_prefix))
+            if output_dir.exists() and output_dir.is_dir():
+                excel_files = sorted(output_dir.glob("*.xlsx"), key=lambda p: p.stat().st_mtime, reverse=True)
+                word_files = sorted(output_dir.glob("*.docx"), key=lambda p: p.stat().st_mtime, reverse=True)
+                if excel_files:
+                    out_path = excel_files[0]
+                    out_name = out_path.name
+                if word_files:
+                    extra_files.append(word_files[0])
 
         if out_path.exists():
             file_size = out_path.stat().st_size
