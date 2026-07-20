@@ -1,0 +1,10 @@
+{
+  "id": "prajna-performance-system",
+  "name": "prajna-performance-system",
+  "version": "1.0.0",
+  "description": "为企业一键生成完整的绩效管理体系套件，包含 KPI 指标库、绩效合同、评分表、绩效面谈记录、结果分布、PIP 改进计划及绩效管理制度 Word 文档。",
+  "author": "Prajna",
+  "download_url": "prajna-performance-system-1.0.0.tar.gz",
+  "sha256": "",
+  "tags": ["hr", "performance", "kpi", "okr", "360", "pip", "excel", "docx", "考核"]
+}

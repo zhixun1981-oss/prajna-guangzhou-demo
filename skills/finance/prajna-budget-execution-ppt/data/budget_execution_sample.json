@@ -1,0 +1,91 @@
+{
+  "month": "2026年7月",
+  "company": "启明星科技有限公司",
+  "author": "财务部",
+  "currency": "CNY",
+  "categories": [
+    {
+      "name": "人力成本",
+      "budget": 1200000,
+      "actual": 1250000,
+      "dept": "人力资源部/财务部",
+      "reason": "招聘进度超预期、加班费增加及社保公积金基数上调",
+      "severity": "high"
+    },
+    {
+      "name": "市场推广费",
+      "budget": 300000,
+      "actual": 345000,
+      "dept": "市场部",
+      "reason": "行业展会与线上投放集中上线",
+      "severity": "high"
+    },
+    {
+      "name": "差旅费",
+      "budget": 180000,
+      "actual": 165000,
+      "dept": "销售部/各部门",
+      "reason": "部分客户拜访改为线上会议",
+      "severity": "normal"
+    },
+    {
+      "name": "办公费",
+      "budget": 80000,
+      "actual": 62000,
+      "dept": "行政部",
+      "reason": "推行无纸化办公及耗材集采",
+      "severity": "normal"
+    },
+    {
+      "name": "设备采购",
+      "budget": 250000,
+      "actual": 220000,
+      "dept": "IT部/行政部",
+      "reason": "部分设备采购延期至下月验收",
+      "severity": "normal"
+    },
+    {
+      "name": "云服务与IT支出",
+      "budget": 150000,
+      "actual": 158000,
+      "dept": "IT部",
+      "reason": "业务量增长导致服务器扩容",
+      "severity": "medium"
+    },
+    {
+      "name": "培训费",
+      "budget": 60000,
+      "actual": 35000,
+      "dept": "人力资源部",
+      "reason": "外部讲师档期推迟",
+      "severity": "normal"
+    },
+    {
+      "name": "业务招待费",
+      "budget": 50000,
+      "actual": 58000,
+      "dept": "销售部",
+      "reason": "重点客户接待频次增加",
+      "severity": "medium"
+    }
+  ],
+  "root_causes": [
+    {"category": "外部市场因素", "detail": "行业展会档期集中、流量成本上涨，导致市场推广费前置。"},
+    {"category": "业务增长驱动", "detail": "新业务线扩招及云资源扩容，带动人力与IT支出同步增长。"},
+    {"category": "费用集中投放", "detail": "品牌活动与重点客户接待集中在7月执行，形成阶段性超支。"},
+    {"category": "内部管控疏漏", "detail": "部分设备采购审批周期较长，培训计划执行跟踪不足。"}
+  ],
+  "next_month_adjustments": [
+    {"name": "市场推广费", "original_budget": 300000, "adjustment": 35000, "reason": "延续展会及线上投放需求"},
+    {"name": "云服务与IT支出", "original_budget": 150000, "adjustment": 15000, "reason": "预留服务器扩容及安全加固费用"},
+    {"name": "业务招待费", "original_budget": 50000, "adjustment": 8000, "reason": "配合Q3大客户攻坚"},
+    {"name": "培训费", "original_budget": 60000, "adjustment": -10000, "reason": "部分课程改为内部讲师，压缩外采预算"},
+    {"name": "办公费", "original_budget": 80000, "adjustment": -5000, "reason": "无纸化办公持续降本"}
+  ],
+  "surplus_suggestions": [
+    {"name": "差旅费", "surplus": 15000, "usage": "补充重点客户现场拜访基金", "benefit": "提升大客户转化率", "dept": "销售部"},
+    {"name": "办公费", "surplus": 18000, "usage": "升级会议室智能设备", "benefit": "提升远程会议体验", "dept": "行政部"},
+    {"name": "设备采购", "surplus": 30000, "usage": "提前采购下季度研发测试机", "benefit": "缩短研发设备到位周期", "dept": "IT部"},
+    {"name": "培训费", "surplus": 25000, "usage": "投入AI工具内部训练营", "benefit": "提升人均产出约8%", "dept": "人力资源部"}
+  ]
+}

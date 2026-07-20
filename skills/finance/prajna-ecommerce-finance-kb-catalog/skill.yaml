@@ -1,0 +1,36 @@
+name: prajna-ecommerce-finance-kb-catalog
+version: 1.0.0
+runtime:
+  inputs:
+  - name: company
+    type: string
+    required: false
+    description: 企业名称，用于标题，默认 XX电商
+  - name: author
+    type: string
+    required: false
+    description: 维护部门/人，默认 财务部
+  - name: date
+    type: string
+    required: false
+    description: 更新日期，默认当天
+  - name: output
+    type: string
+    required: false
+    description: 输出文件完整路径
+  outputs:
+  - name: catalog_md
+    type: markdown
+    description: 电商企业财务知识库钉钉文档目录 Markdown 文件
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies: []
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

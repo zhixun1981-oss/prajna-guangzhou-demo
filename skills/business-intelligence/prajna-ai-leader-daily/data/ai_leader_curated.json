@@ -1,0 +1,144 @@
+{
+  "leaders": [
+    {
+      "id": "kaifu-lee",
+      "name": "李开复 / 零一万物",
+      "color": "#C62828",
+      "items": [
+        {
+          "title": "AI 三阶段论：2026 年将接管企业职能",
+          "summary": "李开复在 AMD AI 开发者日提出，2024 年 AI 能完成任务、2025 年跑通流程、2026 年将接管整个企业职能，多 Agent 框架让个人也能高效创业。",
+          "source_title": "经济观察网",
+          "source_url": "https://www.eeo.com.cn/2026/0519/882601.shtml",
+          "date": "2026-05-19"
+        },
+        {
+          "title": "多智能体“上岗元年”与企业组织重构",
+          "summary": "李开复展望 2026 年是多智能体“上岗元年”，Agent 将从单点工具升级为 AI 团队，在市场、法务、产研等核心部门形成生产力闭环。",
+          "source_title": "新浪科技",
+          "source_url": "http://k.sina.com.cn/article_7879848900_1d5acf3c401902pscc.html",
+          "date": "2026-02-03"
+        },
+        {
+          "title": "AI 智能硬件爆发，手机或成“错误设备”",
+          "summary": "李开复认为 2026 年将爆发 AI 智能硬件，但手机难以满足 AI 原生交互需求，下一代设备更可能是眼镜、手环等更隐形、随时在线的终端。",
+          "source_title": "搜狐科技",
+          "source_url": "https://m.sohu.com/a/983831993_121948396",
+          "date": "2026-02-04"
+        }
+      ]
+    },
+    {
+      "id": "sam-altman-openai",
+      "name": "Sam Altman / OpenAI",
+      "color": "#1565C0",
+      "items": [
+        {
+          "title": "Altman 剧透 2026 路线图：GPT-6 与个性化记忆",
+          "summary": "Sam Altman 透露 OpenAI 2026 路线图，下一代模型将超越 GPT-5.2，重点转向实用性与个性化记忆，AI 从“纯智力”走向现实应用。",
+          "source_title": "腾讯云开发者社区",
+          "source_url": "https://cloud.tencent.com/developer/article/2625007",
+          "date": "2026-01-28"
+        },
+        {
+          "title": "OpenAI 2026 全面发力企业级市场",
+          "summary": "OpenAI 2026 年将重点发力企业级市场，B 端业务增长已超 C 端，模型稳定性提升后，ChatGPT 记忆与界面革新成为企业竞争关键。",
+          "source_title": "AIGC 资讯",
+          "source_url": "https://aigc.bar/AI%E8%B5%84%E8%AE%AF%E6%96%87%E7%AB%A0/2026/01/04/sam-altman-openai-enterprise-strategy-2026",
+          "date": "2026-01-04"
+        },
+        {
+          "title": "与 Jony Ive 联手打造 AI 伴侣设备，目标出货 1 亿台",
+          "summary": "OpenAI 收购前苹果设计师 Jony Ive 的 io 公司，计划 2026 年底前推出 AI 伴侣设备，目标出货量 1 亿台，欲打造继 MacBook、iPhone 后的核心设备。",
+          "source_title": "新浪财经",
+          "source_url": "https://finance.sina.com.cn/jjxw/2025-05-22/doc-inexmnme7097200.shtml",
+          "date": "2025-05-22"
+        }
+      ]
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic / Claude",
+      "color": "#6A1B9A",
+      "items": [
+        {
+          "title": "Anthropic 被曝测试 AMD GPU，分散算力依赖",
+          "summary": "Anthropic 正将 AMD 纳入算力供应商体系，构建涵盖谷歌 TPU、三星的多元算力矩阵，以降低对英伟达的单一依赖并分散供应链风险。",
+          "source_title": "华尔街见闻",
+          "source_url": "https://wallstreetcn.com/articles/3777394",
+          "date": "2026-07-20"
+        },
+        {
+          "title": "计划召开 IPO 投资者会议，上市脚步临近",
+          "summary": "Anthropic 据悉计划几周内召开 IPO 投资者会议，为大规模 IPO 做准备，Claude 开发商的资本化路径与市场估值受到广泛关注。",
+          "source_title": "财新网",
+          "source_url": "https://database.caixin.com/2026-07-16/102464668.html?originReferrer=kimi",
+          "date": "2026-07-16"
+        },
+        {
+          "title": "发布 2026 代理式编码趋势报告",
+          "summary": "Anthropic 发布趋势报告，提出人类将从逐行写代码转向编排 AI Agent 团队，多智能体协同、长时运行 Agent 自主构建系统成为焦点。",
+          "source_title": "2048 AI 社区 / CSDN",
+          "source_url": "https://devpress.csdn.net/v1/article/detail/157993405",
+          "date": "2026-02-12"
+        }
+      ]
+    },
+    {
+      "id": "google-deepmind",
+      "name": "Google DeepMind",
+      "color": "#2E7D32",
+      "items": [
+        {
+          "title": "Google I/O 2026：Gemini 界面与 Deep Think 升级",
+          "summary": "Google I/O 2026 更新 Gemini 界面，将模型选择与思考深度分离，用户可自定义 Deep Think 程度，在速度、推理质量与成本间取得平衡。",
+          "source_title": "cyberq.tw",
+          "source_url": "https://cyberq.tw/2026/05/20/google-io-2026-gemini-interface/",
+          "date": "2026-05-20"
+        },
+        {
+          "title": "DeepMind 发布 AlphaEvolve，AI 自动发明算法",
+          "summary": "DeepMind 推出基于 Gemini 的 AI 代理 AlphaEvolve，通过进化方法自动评估和改进算法，在数学与科学问题上取得新突破。",
+          "source_title": "至顶网",
+          "source_url": "https://ai.zhiding.cn/2025/0515/3166463.shtml",
+          "date": "2026-06-23"
+        },
+        {
+          "title": "Gemini 3.5 Pro 推迟发布，专注提升编程能力",
+          "summary": "谷歌最强旗舰模型 Gemini 3.5 Pro 发布时间推迟数月，公司投入更多时间提升编程能力，引发内部工程师与研究人员关注。",
+          "source_title": "财新网",
+          "source_url": "https://database.caixin.com/2026-07-17/102465026.html?originReferrer=kimi",
+          "date": "2026-07-17"
+        }
+      ]
+    },
+    {
+      "id": "meta",
+      "name": "Meta",
+      "color": "#00695C",
+      "items": [
+        {
+          "title": "2026 年起大规模部署自研 ASIC 芯片 MTIA",
+          "summary": "Meta 计划自 2026 年起大规模部署自研 ASIC 芯片 MTIA，机构预测 ASIC 总出货量有望在年内超越英伟达 GPU，重塑 AI 服务器市场格局。",
+          "source_title": "涨乐早知道 / 小宇宙",
+          "source_url": "https://www.xiaoyuzhoufm.com/episode/68516f4b4abe6e29cb9f7f4c",
+          "date": "2025-06-17"
+        },
+        {
+          "title": "组建人形机器人团队，进军家庭服务机器人",
+          "summary": "Meta 在 Reality Labs 组建人形机器人团队，初期聚焦家务场景，希望基于 Llama 平台与 VR 数据积累，打造机器人底层软件生态。",
+          "source_title": "声动早咖啡 / 彭博",
+          "source_url": "https://www.xiaoyuzhoufm.com/episode/67b3389605a90dfd0d11e807",
+          "date": "2025-02-17"
+        },
+        {
+          "title": "将 AI 聊天对话用于广告与内容个性化",
+          "summary": "Meta 宣布把用户与 AI 聊天机器人的对话用于个性化广告和内容推荐，该政策被视为 AI 变现与数字隐私边界的新探索。",
+          "source_title": "华尔街日报",
+          "source_url": "https://www.wsj.com/tech/ai/meta-will-begin-using-ai-chatbot-conversations-to-target-ads-291093d3",
+          "date": "2025-10-01"
+        }
+      ]
+    }
+  ]
+}

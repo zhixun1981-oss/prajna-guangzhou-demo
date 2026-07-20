@@ -1,0 +1,57 @@
+name: prajna-compensation-system
+version: 1.0.0
+runtime:
+  inputs:
+  - name: company
+    type: string
+    required: false
+    description: 企业名称，默认 智云科技
+  - name: industry
+    type: string
+    required: false
+    description: 行业，默认 互联网
+  - name: city
+    type: string
+    required: false
+    description: 总部城市，默认 广州
+  - name: scale
+    type: integer
+    required: false
+    description: 企业规模（人数），默认 200
+  - name: seqs
+    type: string
+    required: false
+    description: 岗位序列，逗号分隔
+  - name: levels
+    type: string
+    required: false
+    description: 职级序列，逗号分隔，默认 P1-P7
+  - name: budget
+    type: number
+    required: false
+    description: 年度薪酬总预算（元），默认 30000000
+  - name: growth
+    type: number
+    required: false
+    description: 年度普调幅度（%），默认 5.0
+  - name: output
+    type: string
+    required: false
+    description: 输出文件完整路径
+  outputs:
+  - name: compensation_xlsx
+    type: excel
+    description: 企业薪酬体系 Excel 工作簿
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - openpyxl
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

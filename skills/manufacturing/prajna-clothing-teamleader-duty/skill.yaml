@@ -1,0 +1,45 @@
+name: prajna-clothing-teamleader-duty
+version: 1.0.0
+runtime:
+  inputs:
+  - name: preset
+    type: string
+    required: false
+    description: 班组预设类型，如 服装缝纫组、服装裁剪组、服装包装组、通用
+  - name: team
+    type: string
+    required: false
+    description: 班组名称
+  - name: factory
+    type: string
+    required: false
+    description: 工厂名称
+  - name: month
+    type: string
+    required: false
+    description: 考核周期，如 2026-07
+  - name: author
+    type: string
+    required: false
+    description: 编制人姓名
+  - name: output
+    type: string
+    required: false
+    description: 输出文件完整路径
+  outputs:
+  - name: duty_kpi_template
+    type: xlsx
+    description: 服装厂小组长岗位职责与 KPI 考核 Excel 文件
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - openpyxl
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

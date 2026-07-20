@@ -1,0 +1,209 @@
+{
+  "description": "Prajna 绩效体系助手 KPI 指标库。按部门/岗位分类，指标设计参考 prajna-salary-template、prajna-clothing-teamleader-duty 等现有技能的岗位 KPI 思路，便于 Skill 间打通与复用。",
+  "version": "1.0.0",
+  "departments": {
+    "电商运营部": {
+      "keywords": ["电商", "运营", "推广", "活动", "内容", "用户运营", "新媒体"],
+      "positions": {
+        "电商运营助理": {
+          "note": "与 prajna-salary-template 中「互联网-电商运营助理」KPI 思路保持一致",
+          "kpis": [
+            {"id": "KPI-EO-01", "name": "销售额/GMV 达成率", "weight": 25, "target": "≥85%", "formula": "实际销售额/目标销售额×100%", "source": "电商后台/ERP", "rule": "每低1%扣2分，低于70%得0分", "cycle": "月度"},
+            {"id": "KPI-EO-02", "name": "用户增长/活跃度", "weight": 20, "target": "≥88%", "formula": "实际新增用户数/目标×100% 或 DAU 达成率", "source": "数据分析平台", "rule": "每低1%扣2分，低于75%得0分", "cycle": "月度"},
+            {"id": "KPI-EO-03", "name": "活动执行完成率", "weight": 15, "target": "≥95%", "formula": "按时完成活动数/计划活动数×100%", "source": "运营日历", "rule": "每低1%扣3分，低于85%得0分", "cycle": "月度"},
+            {"id": "KPI-EO-04", "name": "内容/商品质量", "weight": 15, "target": "≥88%", "formula": "内容/商品审核合格率或评分", "source": "平台后台/质检表", "rule": "每低1%扣2分，低于75%得0分", "cycle": "月度"},
+            {"id": "KPI-EO-05", "name": "数据分析准确率", "weight": 15, "target": "≥90%", "formula": "准确报表数/总报表数×100%", "source": "报表抽检", "rule": "每低1%扣2分，低于80%得0分", "cycle": "月度"},
+            {"id": "KPI-EO-06", "name": "渠道拓展与维护", "weight": 10, "target": "≥85%", "formula": "目标渠道数达成率或渠道评分", "source": "渠道管理表", "rule": "每低1%扣2分，低于70%得0分", "cycle": "季度"}
+          ]
+        },
+        "电商运营经理": {
+          "kpis": [
+            {"id": "KPI-EO-M01", "name": "部门 GMV 达成率", "weight": 30, "target": "≥100%", "formula": "实际 GMV/目标 GMV×100%", "source": "电商后台", "rule": "每低1%扣2分，低于85%得0分", "cycle": "季度"},
+            {"id": "KPI-EO-M02", "name": "运营费用率", "weight": 20, "target": "≤8%", "formula": "运营费用/GMV×100%", "source": "财务系统", "rule": "每超0.5%扣3分，高于12%得0分", "cycle": "月度"},
+            {"id": "KPI-EO-M03", "name": "团队人均产出", "weight": 20, "target": "≥定额95%", "formula": "GMV/团队人数", "source": "HR与运营数据", "rule": "每低1%扣2分，低于80%得0分", "cycle": "季度"},
+            {"id": "KPI-EO-M04", "name": "重点项目上线质量", "weight": 15, "target": "≥90%", "formula": "按时高质量上线项目数/总数", "source": "项目管理表", "rule": "每低1%扣2分，低于75%得0分", "cycle": "季度"},
+            {"id": "KPI-EO-M05", "name": "团队培养与留存", "weight": 15, "target": "核心流失率≤10%", "formula": "核心员工离职人数/核心人数×100%", "source": "HR系统", "rule": "每超1%扣3分，高于20%得0分", "cycle": "季度"}
+          ]
+        }
+      }
+    },
+    "生产制造部": {
+      "keywords": ["制造", "生产", "车间", "服装", "缝纫", "裁剪", "包装", "班组长"],
+      "positions": {
+        "服装厂小组长": {
+          "note": "复用 prajna-clothing-teamleader-duty 中的岗位 KPI 思路",
+          "kpis": [
+            {"id": "KPI-MF-01", "name": "产量达成率", "weight": 25, "target": "≥95%", "formula": "实际产量/计划产量×100%", "source": "MES/生产日报", "rule": "每低1%扣2分，低于85%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-02", "name": "质量合格率", "weight": 25, "target": "≥98%", "formula": "合格数/总检验数×100%", "source": "品检日报/返修记录", "rule": "每低0.5%扣3分，低于93%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-03", "name": "返修率", "weight": 10, "target": "≤2%", "formula": "返修件数/总产出件数×100%", "source": "后道质检", "rule": "每超0.5%扣3分，高于5%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-04", "name": "人员出勤率", "weight": 10, "target": "≥96%", "formula": "实际出勤工时/应出勤工时×100%", "source": "考勤系统", "rule": "每低1%扣2分，低于90%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-05", "name": "员工流失率", "weight": 5, "target": "≤5%/月", "formula": "离职人数/月初在岗人数×100%", "source": "HR系统", "rule": "每超1%扣2分，高于10%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-06", "name": "设备故障停机时间", "weight": 10, "target": "≤4小时/月", "formula": "∑本组责任停机小时数", "source": "设备维修单", "rule": "每超1小时扣2分，高于12小时得0分", "cycle": "月度"},
+            {"id": "KPI-MF-07", "name": "安全事故", "weight": 10, "target": "0 起/月", "formula": "本组责任安全事故起数", "source": "安全报告", "rule": "每发生一起扣5分，重大事故0分", "cycle": "月度"},
+            {"id": "KPI-MF-08", "name": "物料损耗率", "weight": 5, "target": "≤3%", "formula": "实际损耗/标准用量×100%", "source": "领料单/退料单", "rule": "每超0.5%扣2分，高于6%得0分", "cycle": "月度"}
+          ]
+        },
+        "生产主管": {
+          "kpis": [
+            {"id": "KPI-MF-S01", "name": "生产计划达成率", "weight": 25, "target": "≥95%", "formula": "实际完成订单数/计划订单数×100%", "source": "ERP/MES", "rule": "每低1%扣2分，低于85%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-S02", "name": "产品一次合格率", "weight": 25, "target": "≥96%", "formula": "一次合格数/总产量×100%", "source": "质检报告", "rule": "每低0.5%扣3分，低于90%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-S03", "name": "单位生产成本", "weight": 15, "target": "≤预算100%", "formula": "实际成本/标准成本×100%", "source": "财务系统", "rule": "每超1%扣2分，高于110%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-S04", "name": "设备综合效率 OEE", "weight": 15, "target": "≥85%", "formula": "时间开动率×性能开动率×合格品率", "source": "MES", "rule": "每低1%扣2分，低于75%得0分", "cycle": "月度"},
+            {"id": "KPI-MF-S05", "name": "安全生产", "weight": 10, "target": "0 起", "formula": "责任安全事故起数", "source": "安全部门", "rule": "每发生一起扣5分，重大事故0分", "cycle": "月度"},
+            {"id": "KPI-MF-S06", "name": "团队培训覆盖率", "weight": 10, "target": "≥100%", "formula": "参训人数/应训人数×100%", "source": "培训记录", "rule": "每低5%扣2分，低于80%得0分", "cycle": "季度"}
+          ]
+        }
+      }
+    },
+    "销售部": {
+      "keywords": ["销售", "商务", "渠道", "客户经理", "BD", "导购", "顾问"],
+      "positions": {
+        "销售代表": {
+          "kpis": [
+            {"id": "KPI-SA-01", "name": "销售业绩达成率", "weight": 35, "target": "≥90%", "formula": "实际销售额/目标销售额×100%", "source": "CRM/销售报表", "rule": "每低1%扣2分，低于70%得0分", "cycle": "月度"},
+            {"id": "KPI-SA-02", "name": "新客户开发数", "weight": 20, "target": "≥目标80%", "formula": "实际开发数/目标数×100%", "source": "CRM", "rule": "每低5%扣2分，低于50%得0分", "cycle": "月度"},
+            {"id": "KPI-SA-03", "name": "客户满意度", "weight": 15, "target": "≥90%", "formula": "满意客户数/调研客户数×100%", "source": "客户调研", "rule": "每低1%扣2分，低于80%得0分", "cycle": "季度"},
+            {"id": "KPI-SA-04", "name": "回款及时率", "weight": 20, "target": "≥95%", "formula": "按期回款金额/应收账款×100%", "source": "财务系统", "rule": "每低1%扣3分，低于80%得0分", "cycle": "月度"},
+            {"id": "KPI-SA-05", "name": "销售过程合规", "weight": 10, "target": "≥98%", "formula": "合规订单数/总订单数×100%", "source": "审计/合规检查", "rule": "每低1%扣2分，低于90%得0分", "cycle": "月度"}
+          ]
+        },
+        "销售经理": {
+          "kpis": [
+            {"id": "KPI-SA-M01", "name": "团队销售目标达成率", "weight": 35, "target": "≥100%", "formula": "团队实际销售额/目标×100%", "source": "CRM", "rule": "每低1%扣2分，低于85%得0分", "cycle": "季度"},
+            {"id": "KPI-SA-M02", "name": "团队人均产出", "weight": 20, "target": "≥定额95%", "formula": "团队销售额/人数", "source": "CRM/HR", "rule": "每低1%扣2分，低于80%得0分", "cycle": "季度"},
+            {"id": "KPI-SA-M03", "name": "大客户保有率", "weight": 20, "target": "≥95%", "formula": "期末大客户数/期初大客户数×100%", "source": "CRM", "rule": "每低1%扣3分，低于85%得0分", "cycle": "季度"},
+            {"id": "KPI-SA-M04", "name": "销售费用率", "weight": 15, "target": "≤10%", "formula": "销售费用/销售额×100%", "source": "财务系统", "rule": "每超0.5%扣2分，高于15%得0分", "cycle": "月度"},
+            {"id": "KPI-SA-M05", "name": "团队培养与晋升", "weight": 10, "target": "≥1人/季", "formula": "晋升/储备人数", "source": "HR系统", "rule": "未达成扣5分", "cycle": "季度"}
+          ]
+        }
+      }
+    },
+    "人力资源部": {
+      "keywords": ["人力资源", "HR", "招聘", "薪酬", "绩效", "培训", "员工关系"],
+      "positions": {
+        "招聘专员": {
+          "kpis": [
+            {"id": "KPI-HR-01", "name": "招聘完成率", "weight": 30, "target": "≥90%", "formula": "实际到岗人数/计划招聘人数×100%", "source": "招聘系统", "rule": "每低1%扣2分，低于75%得0分", "cycle": "月度"},
+            {"id": "KPI-HR-02", "name": "平均招聘周期", "weight": 20, "target": "≤30天", "formula": "∑招聘周期/录用人数", "source": "招聘系统", "rule": "每超2天扣2分，高于45天得0分", "cycle": "月度"},
+            {"id": "KPI-HR-03", "name": "试用期通过率", "weight": 20, "target": "≥90%", "formula": "转正人数/试用人数×100%", "source": "HR系统", "rule": "每低1%扣3分，低于80%得0分", "cycle": "季度"},
+            {"id": "KPI-HR-04", "name": "招聘渠道有效性", "weight": 15, "target": "≥85%", "formula": "有效简历数/总简历数×100%", "source": "招聘后台", "rule": "每低1%扣2分，低于70%得0分", "cycle": "月度"},
+            {"id": "KPI-HR-05", "name": "用人部门满意度", "weight": 15, "target": "≥85%", "formula": "满意度评分均值", "source": "满意度调研", "rule": "每低1%扣2分，低于70%得0分", "cycle": "季度"}
+          ]
+        },
+        "HRBP": {
+          "kpis": [
+            {"id": "KPI-HR-B01", "name": "业务部门人效", "weight": 25, "target": "≥目标95%", "formula": "业务产出/人力成本", "source": "财务/业务系统", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-HR-B02", "name": "员工满意度", "weight": 20, "target": "≥80%", "formula": "满意度调研均值", "source": "调研系统", "rule": "每低1%扣2分", "cycle": "半年度"},
+            {"id": "KPI-HR-B03", "name": "关键人才保留率", "weight": 20, "target": "≥95%", "formula": "期末关键人才数/期初×100%", "source": "HR系统", "rule": "每低1%扣3分", "cycle": "季度"},
+            {"id": "KPI-HR-B04", "name": "绩效流程完成率", "weight": 15, "target": "≥100%", "formula": "按时完成人数/应考核人数×100%", "source": "绩效系统", "rule": "每低1%扣3分", "cycle": "季度"},
+            {"id": "KPI-HR-B05", "name": "培训落地率", "weight": 20, "target": "≥90%", "formula": "完成培训人数/计划人数×100%", "source": "培训系统", "rule": "每低1%扣2分", "cycle": "季度"}
+          ]
+        }
+      }
+    },
+    "财务部": {
+      "keywords": ["财务", "会计", "出纳", "审计", "税务", "资金"],
+      "positions": {
+        "财务会计": {
+          "kpis": [
+            {"id": "KPI-FI-01", "name": "结账及时率", "weight": 25, "target": "≥100%", "formula": "按时结账次数/应结账次数×100%", "source": "财务系统", "rule": "每延迟1天扣5分", "cycle": "月度"},
+            {"id": "KPI-FI-02", "name": "报表准确率", "weight": 25, "target": "≥99%", "formula": "准确报表数/总报表数×100%", "source": "审计/复核记录", "rule": "每错1处扣2分，重大错误0分", "cycle": "月度"},
+            {"id": "KPI-FI-03", "name": "预算执行偏差率", "weight": 20, "target": "≤5%", "formula": "|实际-预算|/预算×100%", "source": "预算系统", "rule": "每超1%扣2分，高于10%得0分", "cycle": "季度"},
+            {"id": "KPI-FI-04", "name": "税务申报及时率", "weight": 15, "target": "≥100%", "formula": "按期申报次数/应申报次数×100%", "source": "税务系统", "rule": "每延迟1次扣5分", "cycle": "月度"},
+            {"id": "KPI-FI-05", "name": "费用审核合规率", "weight": 15, "target": "≥98%", "formula": "合规单据数/总单据数×100%", "source": "费用系统", "rule": "每低1%扣2分", "cycle": "月度"}
+          ]
+        }
+      }
+    },
+    "研发技术部": {
+      "keywords": ["研发", "技术", "开发", "工程师", "产品", "测试", "算法", "架构"],
+      "positions": {
+        "软件工程师": {
+          "note": "与 prajna-salary-template 中「互联网-软件工程师」KPI 思路保持一致",
+          "kpis": [
+            {"id": "KPI-RD-01", "name": "代码交付准时率", "weight": 25, "target": "≥90%", "formula": "按时交付需求数/总需求数×100%", "source": "项目管理工具", "rule": "每低1%扣2分，低于75%得0分", "cycle": "月度"},
+            {"id": "KPI-RD-02", "name": "Bug 率与代码质量", "weight": 20, "target": "≤每千行3个", "formula": "Bug数/代码行数×1000", "source": "测试/线上监控", "rule": "每超1个扣3分，高于6个得0分", "cycle": "月度"},
+            {"id": "KPI-RD-03", "name": "系统稳定性保障", "weight": 15, "target": "可用性≥99.9%", "formula": "可用时长/总时长×100%", "source": "监控系统", "rule": "每低0.1%扣5分", "cycle": "月度"},
+            {"id": "KPI-RD-04", "name": "技术文档完整性", "weight": 15, "target": "≥85%", "formula": "已文档化模块/应文档化模块×100%", "source": "文档系统", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-RD-05", "name": "团队协作与知识分享", "weight": 15, "target": "≥90%", "formula": "协作评分/分享次数", "source": "360评估", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-RD-06", "name": "技术学习与成长", "weight": 10, "target": "≥85%", "formula": "培训/认证/实践达成率", "source": "学习平台", "rule": "每低1%扣2分", "cycle": "季度"}
+          ]
+        },
+        "产品经理": {
+          "note": "与 prajna-salary-template 中「互联网-产品经理」KPI 思路保持一致",
+          "kpis": [
+            {"id": "KPI-RD-P01", "name": "产品需求交付及时率", "weight": 25, "target": "≥90%", "formula": "按时交付需求数/总需求数×100%", "source": "项目管理工具", "rule": "每低1%扣2分", "cycle": "月度"},
+            {"id": "KPI-RD-P02", "name": "项目上线质量", "weight": 20, "target": "≥88%", "formula": "上线无重大缺陷项目数/总数", "source": "测试/运维", "rule": "每低1%扣2分", "cycle": "月度"},
+            {"id": "KPI-RD-P03", "name": "用户满意度/NPS", "weight": 15, "target": "≥85%", "formula": "用户满意度评分或 NPS 值", "source": "用户调研", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-RD-P04", "name": "跨部门协作评分", "weight": 15, "target": "≥90%", "formula": "协作方评分均值", "source": "360评估", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-RD-P05", "name": "数据分析与决策支持", "weight": 15, "target": "≥88%", "formula": "数据报告准确率/及时率", "source": "数据平台", "rule": "每低1%扣2分", "cycle": "月度"},
+            {"id": "KPI-RD-P06", "name": "创新提案落地", "weight": 10, "target": "≥80%", "formula": "落地提案数/通过提案数×100%", "source": "创新管理表", "rule": "每低1%扣2分", "cycle": "季度"}
+          ]
+        }
+      }
+    },
+    "通用": {
+      "keywords": ["行政", "助理", "专员", "综合", "后勤", "前台", "客服"],
+      "positions": {
+        "通用岗位": {
+          "note": "适用于未匹配到具体岗位时的默认 KPI 模板",
+          "kpis": [
+            {"id": "KPI-GN-01", "name": "工作完成质量", "weight": 25, "target": "≥92%", "formula": "合格完成任务数/总任务数×100%", "source": "上级评估", "rule": "每低1%扣2分", "cycle": "月度"},
+            {"id": "KPI-GN-02", "name": "工作效率", "weight": 20, "target": "≥88%", "formula": "按时完成任务数/总任务数×100%", "source": "任务系统", "rule": "每低1%扣2分", "cycle": "月度"},
+            {"id": "KPI-GN-03", "name": "团队协作", "weight": 15, "target": "≥90%", "formula": "协作评分均值", "source": "360评估", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-GN-04", "name": "学习成长", "weight": 15, "target": "≥85%", "formula": "培训/学习达成率", "source": "学习平台", "rule": "每低1%扣2分", "cycle": "季度"},
+            {"id": "KPI-GN-05", "name": "出勤纪律", "weight": 15, "target": "≥95%", "formula": "实际出勤/应出勤×100%", "source": "考勤系统", "rule": "每低1%扣2分", "cycle": "月度"},
+            {"id": "KPI-GN-06", "name": "创新能力", "weight": 10, "target": "≥80%", "formula": "有效改进建议数", "source": "建议征集表", "rule": "每低1%扣2分", "cycle": "季度"}
+          ]
+        }
+      }
+    }
+  },
+  "methods": {
+    "KPI": {
+      "description": "关键绩效指标法，强调结果量化，适用于目标明确、数据可获取的岗位。",
+      "steps": ["目标分解", "指标设定", "权重分配", "过程跟踪", "结果评分", "反馈改进"]
+    },
+    "OKR": {
+      "description": "目标与关键成果法，强调目标挑战与对齐，适用于创新、研发、项目管理类岗位。",
+      "steps": ["设定 Objective", "定义 KR", "周/双周对齐", "季度复盘", "信心指数评分", "经验沉淀"]
+    },
+    "360": {
+      "description": "360度反馈评估，强调多维度能力评价，适用于管理者、HR、项目协同岗位。",
+      "steps": ["评估维度设计", "评估人选择", "问卷发放", "数据汇总", "反馈面谈", "发展计划"]
+    },
+    "MBO": {
+      "description": "目标管理法，强调上下级共同制定目标，适用于销售、项目、职能岗位。",
+      "steps": ["组织目标分解", "个人目标协商", "行动计划", "中期检查", "期末评估", "结果应用"]
+    }
+  },
+  "level_schemes": {
+    "A/B/C/D": {
+      "levels": [
+        {"level": "A", "name": "优秀", "score_min": 90, "score_max": 100, "ratio_guidance": "≤20%", "application": "晋升优先、高绩效奖金、重点培养"},
+        {"level": "B", "name": "良好", "score_min": 80, "score_max": 89, "ratio_guidance": "≈30%", "application": "绩效奖金正常发放、提供发展机会"},
+        {"level": "C", "name": "合格", "score_min": 60, "score_max": 79, "ratio_guidance": "≈40%", "application": "绩效奖金打折、制定改进计划"},
+        {"level": "D", "name": "不合格", "score_min": 0, "score_max": 59, "ratio_guidance": "≤10%", "application": "PIP、调岗或淘汰"}
+      ]
+    },
+    "S/A/B/C/D": {
+      "levels": [
+        {"level": "S", "name": "卓越", "score_min": 95, "score_max": 100, "ratio_guidance": "≤5%", "application": "股权激励/高额奖金/晋升"},
+        {"level": "A", "name": "优秀", "score_min": 85, "score_max": 94, "ratio_guidance": "≤20%", "application": "晋升优先、高绩效奖金"},
+        {"level": "B", "name": "良好", "score_min": 75, "score_max": 84, "ratio_guidance": "≈35%", "application": "绩效奖金正常发放"},
+        {"level": "C", "name": "合格", "score_min": 60, "score_max": 74, "ratio_guidance": "≈30%", "application": "绩效奖金打折、制定改进计划"},
+        {"level": "D", "name": "不合格", "score_min": 0, "score_max": 59, "ratio_guidance": "≤10%", "application": "PIP、调岗或淘汰"}
+      ]
+    }
+  },
+  "salary_linkage": {
+    "note": "绩效结果与薪酬联动规则，可与 prajna-salary-template、prajna-compensation-system 打通使用。",
+    "rules": [
+      {"level": "S", "performance_multiplier": 1.5, "quarter_bonus_factor": 1.5, "annual_bonus_factor": 2.0, "adjustment": "晋升+大幅调薪"},
+      {"level": "A", "performance_multiplier": 1.2, "quarter_bonus_factor": 1.2, "annual_bonus_factor": 1.5, "adjustment": "优先晋升+调薪"},
+      {"level": "B", "performance_multiplier": 1.0, "quarter_bonus_factor": 1.0, "annual_bonus_factor": 1.0, "adjustment": "正常调薪"},
+      {"level": "C", "performance_multiplier": 0.8, "quarter_bonus_factor": 0.6, "annual_bonus_factor": 0.5, "adjustment": "暂缓调薪+改进计划"},
+      {"level": "D", "performance_multiplier": 0.5, "quarter_bonus_factor": 0.0, "annual_bonus_factor": 0.0, "adjustment": "PIP+调岗/淘汰"}
+    ]
+  }
+}

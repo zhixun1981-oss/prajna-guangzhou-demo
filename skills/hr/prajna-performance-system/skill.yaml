@@ -1,0 +1,57 @@
+name: prajna-performance-system
+version: 1.0.0
+runtime:
+  inputs:
+  - name: department
+    type: string
+    required: false
+    description: 考核部门名称，如 电商运营部
+  - name: position
+    type: string
+    required: false
+    description: 考核岗位名称，如 电商运营助理
+  - name: cycle
+    type: string
+    required: false
+    description: 考核周期，如 月度、季度、半年度、年度
+  - name: method
+    type: string
+    required: false
+    description: 考核方法，如 KPI、OKR、360、MBO
+  - name: levels
+    type: string
+    required: false
+    description: 绩效等级划分，如 A/B/C/D 或 S/A/B/C/D
+  - name: company
+    type: string
+    required: false
+    description: 企业名称
+  - name: output
+    type: string
+    required: false
+    description: 输出文件目录或完整路径
+  - name: format
+    type: string
+    required: false
+    description: 输出格式，如 excel、word、all，默认 all
+  outputs:
+  - name: performance_excel
+    type: xlsx
+    description: 绩效管理体系 Excel 工作簿
+  - name: performance_word
+    type: docx
+    description: 绩效管理制度 Word 文档
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - openpyxl
+  - python-docx
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

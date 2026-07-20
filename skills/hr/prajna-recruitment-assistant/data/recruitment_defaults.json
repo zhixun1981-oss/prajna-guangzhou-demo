@@ -1,0 +1,58 @@
+{
+  "city_multipliers": {
+    "一线城市": {
+      "multiplier": 1.3,
+      "cities": ["北京", "上海", "深圳", "广州"]
+    },
+    "新一线城市": {
+      "multiplier": 1.15,
+      "cities": ["杭州", "成都", "南京", "武汉", "重庆", "天津", "苏州", "西安", "长沙", "青岛", "郑州", "宁波", "东莞", "佛山", "合肥"]
+    },
+    "二线城市": {
+      "multiplier": 1.0,
+      "cities": ["无锡", "厦门", "福州", "济南", "沈阳", "大连", "昆明", "哈尔滨", "长春", "石家庄", "南昌", "贵阳", "南宁", "海口", "兰州", "银川", "西宁", "乌鲁木齐", "呼和浩特", "太原"]
+    },
+    "三线城市": {
+      "multiplier": 0.85,
+      "cities": ["珠海", "惠州", "中山", "南通", "常州", "徐州", "扬州", "绍兴", "嘉兴", "台州", "金华", "温州", "泉州", "烟台", "威海", "潍坊", "淄博", "临沂", "唐山", "秦皇岛", "保定", "邯郸", "洛阳", "南阳", "襄阳", "宜昌", "岳阳", "常德", "株洲", "湘潭", "柳州", "桂林", "三亚", "拉萨", "大庆", "包头", "鄂尔多斯", "芜湖", "蚌埠", "滁州", "马鞍山", "安庆", "阜阳", "宿州", "六安", "淮安", "盐城", "连云港", "宿迁", "镇江", "泰州", "湖州", "衢州", "舟山", "丽水"]
+    },
+    "四线及以下": {
+      "multiplier": 0.75,
+      "cities": []
+    }
+  },
+  "level_bandwidth": {
+    "P1": {"name": "初级专员", "salary_min": 3500, "salary_max": 5000, "performance_months": 0.5},
+    "P2": {"name": "专员", "salary_min": 5000, "salary_max": 8000, "performance_months": 0.8},
+    "P3": {"name": "高级专员", "salary_min": 7000, "salary_max": 12000, "performance_months": 1.0},
+    "P4": {"name": "主管", "salary_min": 10000, "salary_max": 16000, "performance_months": 1.5},
+    "P5": {"name": "经理", "salary_min": 15000, "salary_max": 25000, "performance_months": 2.0},
+    "P6": {"name": "高级经理", "salary_min": 22000, "salary_max": 35000, "performance_months": 2.5},
+    "P7": {"name": "总监", "salary_min": 30000, "salary_max": 50000, "performance_months": 3.0},
+    "P8": {"name": "高级总监", "salary_min": 45000, "salary_max": 70000, "performance_months": 4.0},
+    "P9": {"name": "VP/高管", "salary_min": 60000, "salary_max": 100000, "performance_months": 6.0}
+  },
+  "position_kpi": {
+    "电商运营助理": ["店铺销售额达成率", "流量转化率", "客单价维护", "活动执行完成率", "商品上架准确率", "客户好评率"],
+    "电商运营": ["GMV 达成率", "ROI", "用户复购率", "流量成本管控", "活动策划与执行", "库存周转"],
+    "产品经理": ["产品需求交付准时率", "用户满意度", "项目上线成功率", "需求变更率", "数据指标达成率"],
+    "软件工程师": ["代码交付准时率", "Bug 逃逸率", "代码评审通过率", "技术债务清理率", "线上故障数"],
+    "服装缝纫组组长": ["产量达成率", "质量合格率", "返修率", "人员出勤率", "员工流失率", "物料损耗率"],
+    "通用": ["工作目标达成率", "工作质量", "团队协作", "执行力", "学习能力", "责任心"]
+  },
+  "competency": {
+    "通用": ["执行力", "沟通能力", "学习能力", "团队协作", "责任心"],
+    "运营类": ["数据分析", "活动策划", "用户洞察", "平台工具", "执行力"],
+    "产品类": ["需求分析", "用户研究", "项目管理", "数据驱动", "跨部门协作"],
+    "技术类": ["专业技术", "代码质量", "问题解决", "系统设计", "团队协作"],
+    "生产类": ["生产执行", "质量管控", "人员管理", "成本意识", "安全意识"],
+    "销售类": ["客户开发", "商务谈判", "结果导向", "抗压能力", "市场敏锐度"]
+  },
+  "channel_defaults": [
+    {"channel": "招聘网站（BOSS/智联/前程）", "applications": 80, "screen_pass": 25, "first_interview": 12, "second_interview": 6, "offer": 3, "hire": 2},
+    {"channel": "内部推荐", "applications": 20, "screen_pass": 12, "first_interview": 8, "second_interview": 5, "offer": 3, "hire": 2},
+    {"channel": "猎头", "applications": 8, "screen_pass": 6, "first_interview": 5, "second_interview": 3, "offer": 2, "hire": 1},
+    {"channel": "校园招聘", "applications": 30, "screen_pass": 10, "first_interview": 6, "second_interview": 3, "offer": 2, "hire": 2},
+    {"channel": "官网/公众号", "applications": 15, "screen_pass": 4, "first_interview": 2, "second_interview": 1, "offer": 0, "hire": 0}
+  ]
+}

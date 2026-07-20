@@ -1,0 +1,69 @@
+name: prajna-recruitment-assistant
+version: 1.0.0
+runtime:
+  inputs:
+  - name: position
+    type: string
+    required: true
+    description: 岗位名称，如 电商运营助理
+  - name: department
+    type: string
+    required: false
+    description: 所属部门，默认 人力资源部
+  - name: city
+    type: string
+    required: false
+    description: 工作城市，默认 广州
+  - name: level
+    type: string
+    required: false
+    description: 职级 P1-P9，默认 P2
+  - name: salary_min
+    type: number
+    required: false
+    description: 月薪下限（元），默认按职级带宽
+  - name: salary_max
+    type: number
+    required: false
+    description: 月薪上限（元），默认按职级带宽
+  - name: reports_to
+    type: string
+    required: false
+    description: 汇报对象，默认 部门经理
+  - name: headcount
+    type: number
+    required: false
+    description: 招聘人数，默认 1
+  - name: urgency
+    type: string
+    required: false
+    description: 紧急程度，高/中/低，默认 中
+  - name: output
+    type: string
+    required: false
+    description: 输出目录或文件路径
+  - name: format
+    type: string
+    required: false
+    description: 输出格式 excel/word/all，默认 all
+  outputs:
+  - name: recruitment_kit_excel
+    type: xlsx
+    description: 招聘套件 Excel 工作簿
+  - name: recruitment_kit_word
+    type: docx
+    description: 完整招聘套件 Word 文档
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - openpyxl
+  - python-docx
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

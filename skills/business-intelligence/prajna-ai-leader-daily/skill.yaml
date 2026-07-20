@@ -1,0 +1,33 @@
+name: prajna-ai-leader-daily
+version: 1.0.0
+runtime:
+  inputs:
+  - name: date
+    type: string
+    required: false
+    description: 日报日期，格式 YYYY-MM-DD，默认当天
+  - name: output
+    type: string
+    required: false
+    description: 输出文件完整路径
+  - name: data
+    type: string
+    required: false
+    description: 自定义新闻数据 JSON 路径
+  outputs:
+  - name: daily_report
+    type: html
+    description: AI 领袖动态日报 HTML 文件
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - jinja2
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

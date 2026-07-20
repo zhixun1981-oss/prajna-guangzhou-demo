@@ -1,0 +1,10 @@
+{
+  "id": "prajna-recruitment-assistant",
+  "name": "prajna-recruitment-assistant",
+  "version": "1.0.0",
+  "description": "Prajna 企智招聘助手原生技能。一键生成岗位说明书（JD）、任职资格与胜任力模型、结构化面试评估表、招聘漏斗与周报、人才画像卡、Offer 薪资建议等 6 张 Excel 工作表，以及完整招聘套件 Word 文档。与城市薪酬系数、职级带宽、薪资模板原生打通。",
+  "author": "Prajna",
+  "download_url": "prajna-recruitment-assistant-1.0.0.tar.gz",
+  "sha256": "",
+  "tags": ["hr", "recruitment", "jd", "interview", "offer", "excel", "word", "template"]
+}

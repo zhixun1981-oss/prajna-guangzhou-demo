@@ -1,0 +1,37 @@
+name: prajna-financial-dashboard
+version: 1.0.0
+runtime:
+  inputs:
+  - name: preset
+    type: string
+    required: false
+    description: 财务预设类型，如 通用制造集团、互联网/SaaS企业、零售连锁企业、新能源科技企业、通用企业
+  - name: company
+    type: string
+    required: false
+    description: 企业名称
+  - name: period
+    type: string
+    required: false
+    description: 报表周期描述，如 2026年6月
+  - name: output
+    type: string
+    required: false
+    description: 输出 HTML 文件完整路径
+  outputs:
+  - name: financial_dashboard
+    type: html
+    description: 财务核心指标分析看板 HTML 页面
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - jinja2
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

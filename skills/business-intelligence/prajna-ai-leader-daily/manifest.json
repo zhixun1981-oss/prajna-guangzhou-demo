@@ -1,0 +1,10 @@
+{
+  "id": "prajna-ai-leader-daily",
+  "name": "prajna-ai-leader-daily",
+  "version": "1.0.0",
+  "description": "每日追踪李开复、Sam Altman/OpenAI、Anthropic、Google DeepMind、Meta 等全球 AI 领袖的最新技术与战略动态，生成卡片式、响应式、适合邮件阅读的 HTML 日报。",
+  "author": "Prajna",
+  "download_url": "prajna-ai-leader-daily-1.0.0.tar.gz",
+  "sha256": "",
+  "tags": ["ai-leader", "daily-report", "html", "email", "business-intelligence"]
+}

@@ -1,0 +1,41 @@
+name: prajna-budget-execution-ppt
+version: 1.0.0
+runtime:
+  inputs:
+  - name: month
+    type: string
+    required: false
+    description: 汇报月份，例如 2026年7月
+  - name: company
+    type: string
+    required: false
+    description: 公司名称，覆盖默认值
+  - name: author
+    type: string
+    required: false
+    description: 汇报部门或作者
+  - name: data
+    type: string
+    required: false
+    description: 自定义预算数据 JSON 文件路径
+  - name: output
+    type: string
+    required: false
+    description: 输出文件完整路径
+  outputs:
+  - name: budget_execution_ppt
+    type: pptx
+    description: 本月预算执行情况汇报 PPTX 文件
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - python-pptx
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

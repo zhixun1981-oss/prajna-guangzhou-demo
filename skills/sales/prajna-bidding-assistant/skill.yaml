@@ -1,0 +1,57 @@
+name: prajna-bidding-assistant
+version: 1.0.0
+runtime:
+  inputs:
+  - name: project
+    type: string
+    required: true
+    description: 项目名称
+  - name: bidder
+    type: string
+    required: false
+    description: 投标人/公司名称
+  - name: tenderer
+    type: string
+    required: false
+    description: 招标人/采购人
+  - name: amount
+    type: number
+    required: false
+    description: 投标总金额（元）
+  - name: duration
+    type: string
+    required: false
+    description: 工期/服务期，如 180天
+  - name: industry
+    type: string
+    required: false
+    description: 行业领域，如 IT、建筑、服务、制造
+  - name: output
+    type: string
+    required: false
+    description: 输出目录或文件路径前缀
+  - name: format
+    type: string
+    required: false
+    description: 输出格式 excel / word / all，默认 all
+  outputs:
+  - name: bidding_kit
+    type: xlsx
+    description: 招投标套件 Excel 工作簿
+  - name: bid_outline
+    type: docx
+    description: 投标文件 Word 大纲
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - openpyxl
+  - python-docx
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []
