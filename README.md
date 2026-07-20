@@ -31,12 +31,18 @@ streamlit run streamlit_app.py
 
 浏览器访问 `http://localhost:8501`。
 
-## 部署到 Streamlit Cloud
+## 部署到 Render
 
-1. 打开 [Streamlit Cloud](https://share.streamlit.io/)，用 GitHub 登录。
-2. 点击 **New app**。
-3. 选择仓库 `zhixun1981-oss/prajna-guangzhou-demo`，分支 `main`，主文件路径填 `streamlit_app.py`。
-4. 点击 **Deploy**，等待 1-2 分钟即可获得在线链接。
+1. 打开 [render.com](https://render.com/)，用 GitHub 登录。
+2. 点击 **New +** → **Web Service**。
+3. 选择仓库 `zhixun1981-oss/prajna-guangzhou-demo`，分支 `main`。
+4. 填写：
+   - **Name**：`prajna-guangzhou-demo`
+   - **Runtime**：Python 3
+   - **Build Command**：`pip install -r requirements.txt`
+   - **Start Command**：`streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0`
+5. 选择 **Free** 实例，点击 **Deploy Web Service**。
+6. 等待 2-5 分钟，Render 会生成在线链接。
 
 ## 仓库结构
 
