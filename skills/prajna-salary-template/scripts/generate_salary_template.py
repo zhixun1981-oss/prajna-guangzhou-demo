@@ -403,11 +403,11 @@ def _base_styles():
     return {
         "header_font": Font(name="Arial", bold=True, color="FFFFFF", size=11),
         "header_fill": PatternFill("solid", fgColor="1F4E78"),
-        "blue_font": Font(name="Arial", color="0000FF", size=10),
-        "black_font": Font(name="Arial", color="000000", size=10),
-        "green_font": Font(name="Arial", color="008000", size=10),
-        "red_font": Font(name="Arial", color="FF0000", size=10),
-        "orange_font": Font(name="Arial", color="FF6600", size=10),
+        "blue_font": Font(name="Arial", color="1F4E78", size=10),
+        "black_font": Font(name="Arial", color="1F4E78", size=10),
+        "green_font": Font(name="Arial", color="1F4E78", size=10),
+        "red_font": Font(name="Arial", color="1F4E78", size=10),
+        "orange_font": Font(name="Arial", color="1F4E78", size=10),
         "center_align": Alignment(horizontal="center", vertical="center", wrap_text=True),
         "left_align": Alignment(horizontal="left", vertical="center", wrap_text=True),
         "thin_border": Border(

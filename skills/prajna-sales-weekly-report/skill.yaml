@@ -1,0 +1,49 @@
+name: prajna-sales-weekly-report
+version: 1.0.0
+runtime:
+  inputs:
+  - name: preset
+    type: string
+    required: false
+    description: 团队预设类型，如 互联网/SaaS 销售团队、电商销售团队、线下零售销售团队
+  - name: team
+    type: string
+    required: false
+    description: 团队名称
+  - name: week
+    type: string
+    required: false
+    description: 报表周期，如 2026年第30周
+  - name: sales_target
+    type: number
+    required: false
+    description: 本周销售目标金额（元）
+  - name: author
+    type: string
+    required: false
+    description: 填写人姓名
+  - name: date
+    type: string
+    required: false
+    description: 填写日期，格式 YYYY-MM-DD
+  - name: output
+    type: string
+    required: false
+    description: 输出文件完整路径
+  outputs:
+  - name: weekly_report
+    type: xlsx
+    description: 销售团队标准周报 Excel 文件
+  required_tools:
+  - python
+  - file_tools
+  python_dependencies:
+  - openpyxl
+  permissions:
+    admin:
+    - '*'
+    manager:
+    - run
+    user:
+    - run
+    guest: []

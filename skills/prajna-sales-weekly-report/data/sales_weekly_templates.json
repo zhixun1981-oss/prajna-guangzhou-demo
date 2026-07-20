@@ -1,0 +1,104 @@
+{
+  "互联网/SaaS 销售团队": {
+    "team_type": "互联网/SaaS 销售团队",
+    "team_name": "企业客户销售部",
+    "default_sales_target": 1200000,
+    "avg_deal_value": 35000,
+    "sales_cycle_days": 45,
+    "kpi_weights": {
+      "新增 ARR": 0.30,
+      "客户签约数量": 0.20,
+      "回款金额": 0.20,
+      "商机转化率": 0.15,
+      "客户续约率": 0.10,
+      "销售预测准确率": 0.05
+    },
+    "core_kpis": [
+      {"name": "新增 ARR", "unit": "元", "target": 1200000, "weight": 0.30},
+      {"name": "客户签约数量", "unit": "家", "target": 35, "weight": 0.20},
+      {"name": "回款金额", "unit": "元", "target": 1000000, "weight": 0.20},
+      {"name": "商机转化率", "unit": "%", "target": 25, "weight": 0.15},
+      {"name": "客户续约率", "unit": "%", "target": 90, "weight": 0.10},
+      {"name": "销售预测准确率", "unit": "%", "target": 85, "weight": 0.05}
+    ],
+    "pipeline_stages": ["线索确认", "需求沟通", "方案演示", "商务谈判", "合同签署", "赢单"],
+    "issue_categories": ["竞品价格压力", "客户需求变更", "内部交付延迟", "销售流程卡点", "人员产能不足", "CRM 数据不准"],
+    "plan_priorities": ["重点客户攻坚", "新行业拓展", "销售培训", "流程优化", "老客户续约"]
+  },
+  "电商销售团队": {
+    "team_type": "电商销售团队",
+    "team_name": "平台电商销售部",
+    "default_sales_target": 800000,
+    "avg_deal_value": 1200,
+    "sales_cycle_days": 7,
+    "kpi_weights": {
+      "GMV": 0.35,
+      "订单量": 0.20,
+      "客单价": 0.15,
+      "转化率": 0.15,
+      "退货率": 0.10,
+      "获客成本": 0.05
+    },
+    "core_kpis": [
+      {"name": "GMV", "unit": "元", "target": 800000, "weight": 0.35},
+      {"name": "订单量", "unit": "单", "target": 700, "weight": 0.20},
+      {"name": "客单价", "unit": "元", "target": 1200, "weight": 0.15},
+      {"name": "转化率", "unit": "%", "target": 3.5, "weight": 0.15},
+      {"name": "退货率", "unit": "%", "target": 8, "weight": 0.10},
+      {"name": "获客成本", "unit": "元", "target": 120, "weight": 0.05}
+    ],
+    "pipeline_stages": ["流量获取", "浏览加购", "下单支付", "发货履约", "签收评价", "复购"],
+    "issue_categories": ["流量成本上涨", "平台规则变动", "库存缺货", "物流延迟", "差评集中", "退款率上升"],
+    "plan_priorities": ["大促活动筹备", "爆款打造", "流量结构优化", "供应链协同", "客服响应提升"]
+  },
+  "线下零售销售团队": {
+    "team_type": "线下零售销售团队",
+    "team_name": "连锁门店销售部",
+    "default_sales_target": 450000,
+    "avg_deal_value": 280,
+    "sales_cycle_days": 1,
+    "kpi_weights": {
+      "门店销售额": 0.40,
+      "客流量": 0.15,
+      "连带率": 0.15,
+      "会员新增": 0.10,
+      "库存周转": 0.10,
+      "损耗率": 0.10
+    },
+    "core_kpis": [
+      {"name": "门店销售额", "unit": "元", "target": 450000, "weight": 0.40},
+      {"name": "客流量", "unit": "人次", "target": 5000, "weight": 0.15},
+      {"name": "连带率", "unit": "件/单", "target": 2.5, "weight": 0.15},
+      {"name": "会员新增", "unit": "人", "target": 300, "weight": 0.10},
+      {"name": "库存周转", "unit": "天", "target": 30, "weight": 0.10},
+      {"name": "损耗率", "unit": "%", "target": 2, "weight": 0.10}
+    ],
+    "pipeline_stages": ["进店", "需求识别", "推荐试穿", "异议处理", "收银成交", "售后跟进"],
+    "issue_categories": ["客流下滑", "人员流动", "陈列效果差", "库存结构不合理", "促销活动乏力", "客诉增加"],
+    "plan_priorities": ["周末促销活动", "会员日运营", "员工销售培训", "门店陈列升级", "库存补货调整"]
+  },
+  "通用销售团队": {
+    "team_type": "通用销售团队",
+    "team_name": "销售部",
+    "default_sales_target": 600000,
+    "avg_deal_value": 5000,
+    "sales_cycle_days": 14,
+    "kpi_weights": {
+      "销售额": 0.40,
+      "回款额": 0.25,
+      "新客户数": 0.15,
+      "客户拜访量": 0.10,
+      "商机推进": 0.10
+    },
+    "core_kpis": [
+      {"name": "销售额", "unit": "元", "target": 600000, "weight": 0.40},
+      {"name": "回款额", "unit": "元", "target": 500000, "weight": 0.25},
+      {"name": "新客户数", "unit": "家", "target": 20, "weight": 0.15},
+      {"name": "客户拜访量", "unit": "次", "target": 60, "weight": 0.10},
+      {"name": "商机推进", "unit": "个", "target": 15, "weight": 0.10}
+    ],
+    "pipeline_stages": ["线索", "接触", "需求确认", "报价", "谈判", "成交"],
+    "issue_categories": ["市场竞争加剧", "客户预算压缩", "交付周期紧张", "团队协作不畅", "销售工具缺失", "培训不足"],
+    "plan_priorities": ["重点客户跟进", "新客开拓", "销售能力提升", "流程标准化", "数据复盘"]
+  }
+}
