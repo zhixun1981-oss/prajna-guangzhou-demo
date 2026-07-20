@@ -13,9 +13,11 @@
 
 ## 代码仓库
 
-👉 **push 到 GitHub 公开仓库后，把下面的占位链接替换成你的真实链接**
+✅ 已 push 到 GitHub：
 
-例如：`https://github.com/你的用户名/prajna-guangzhou-demo`
+**https://github.com/zhixun1981-oss/prajna-guangzhou-demo**
+
+（代码仓库链接填这个）
 
 ## 在线演示视频
 
