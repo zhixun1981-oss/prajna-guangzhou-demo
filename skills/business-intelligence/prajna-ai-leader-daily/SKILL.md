@@ -2,7 +2,7 @@
 name: prajna-ai-leader-daily
 description: 每日追踪李开复、Sam Altman/OpenAI、Anthropic、Google DeepMind、Meta 等全球 AI 领袖的最新技术与战略动态，生成卡片式、响应式、适合邮件阅读的 HTML 日报。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: business-intelligence
 tags:
@@ -18,7 +18,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `business-intelligence` 方向原生能力，面向关注全球 AI 产业趋势的高管、投资人、产品经理与研究员，一键生成「AI 领袖动态日报」HTML 页面。输出采用卡片式布局、响应式设计、邮件客户端友好，可直接嵌入企业邮件、内部 Wiki 或移动端阅读。
+本技能是 prajna 企智 `business-intelligence` 方向原生能力，面向关注全球 AI 产业趋势的高管、投资人、产品经理与研究员，一键生成「AI 领袖动态日报」HTML 页面。输出采用卡片式布局、响应式设计、邮件客户端友好，可直接嵌入企业邮件、内部 Wiki 或移动端阅读。
 
 ## 触发条件
 
@@ -84,7 +84,7 @@ python3 /Users/a12345/.prajna/skills/business-intelligence/prajna-ai-leader-dail
 
 ### 协同调用规范
 
-本 skill 可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/business-intelligence/prajna-ai-leader-daily/scripts/generate_ai_leader_daily.py \
@@ -114,4 +114,4 @@ python3 /Users/a12345/.prajna/skills/business-intelligence/prajna-ai-leader-dail
 
 ## 免责声明
 
-本技能生成的日报内容基于公开网络搜索与示例数据，仅供信息参考，不构成投资建议或商业决策依据。新闻摘要与来源链接可能随时间变化，用户应自行核实原始报道。Prajna 企智不对因使用本日报而产生的任何决策承担责任。
+本技能生成的日报内容基于公开网络搜索与示例数据，仅供信息参考，不构成投资建议或商业决策依据。新闻摘要与来源链接可能随时间变化，用户应自行核实原始报道。prajna 企智不对因使用本日报而产生的任何决策承担责任。

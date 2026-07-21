@@ -3,7 +3,7 @@
   "name": "prajna-bidding-assistant",
   "version": "1.0.0",
   "description": "为销售/投标团队一键生成招投标套件：招标文件拆解清单、资格自审表、技术偏离表、商务报价表、评分响应索引、时间节点与材料清单，以及投标文件 Word 大纲。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-bidding-assistant-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["sales", "bidding", "tender", "excel", "word", "template"]

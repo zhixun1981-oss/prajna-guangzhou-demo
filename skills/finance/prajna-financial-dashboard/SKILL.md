@@ -2,7 +2,7 @@
 name: prajna-financial-dashboard
 description: 为管理层一键生成「财务核心指标分析看板」HTML 页面，覆盖资产负债率、净利润率、现金流量比率、营业收入、毛利率、ROE、流动比率、经营现金流净额等关键指标的趋势图表与同比环比分析。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: finance
 tags:
@@ -21,7 +21,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `finance` 方向原生能力，帮助财务、管理层快速产出「财务核心指标分析看板」。输出为一份自包含、可离线打开的 **HTML 页面**，内置交互式 Chart.js 图表，支持资产负债率、净利润率、现金流量比率、营业收入、毛利率、净资产收益率（年化）、流动比率、经营现金流净额等关键指标的趋势展示与同比环比分析。
+本技能是 prajna 企智 `finance` 方向原生能力，帮助财务、管理层快速产出「财务核心指标分析看板」。输出为一份自包含、可离线打开的 **HTML 页面**，内置交互式 Chart.js 图表，支持资产负债率、净利润率、现金流量比率、营业收入、毛利率、净资产收益率（年化）、流动比率、经营现金流净额等关键指标的趋势展示与同比环比分析。
 
 适用于：月度经营分析会、董事会/管理层决策、财务健康度监控、银行/投资人汇报、内部风控复盘等场景。
 
@@ -112,7 +112,7 @@ python3 scripts/generate_financial_dashboard.py --list-presets
 
 ### 协同调用规范
 
-本 skill 设计为可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 设计为可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/finance/prajna-financial-dashboard/scripts/generate_financial_dashboard.py \
@@ -143,4 +143,4 @@ python3 /Users/a12345/.prajna/skills/finance/prajna-financial-dashboard/scripts/
 
 ## 免责声明
 
-本技能生成的 HTML 看板及示例数据仅供管理层经营分析与财务健康度监控参考，不构成投资、融资、信贷或任何商业决策依据。实际财务数据应以企业 ERP/财务系统为准，关键决策建议由财务负责人、审计机构及管理层共同审核确认。Prajna 企智不对因使用本看板而产生的任何业务决策或数据结果承担责任。
+本技能生成的 HTML 看板及示例数据仅供管理层经营分析与财务健康度监控参考，不构成投资、融资、信贷或任何商业决策依据。实际财务数据应以企业 ERP/财务系统为准，关键决策建议由财务负责人、审计机构及管理层共同审核确认。prajna 企智不对因使用本看板而产生的任何业务决策或数据结果承担责任。

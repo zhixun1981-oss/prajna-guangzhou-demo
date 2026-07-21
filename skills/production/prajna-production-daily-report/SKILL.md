@@ -2,7 +2,7 @@
 name: prajna-production-daily-report
 description: 一键生成生产日报 Excel 套件，覆盖生产日报、产量统计、设备运行、质量检验、人员出勤五大工作表，支持完成率、OEE、合格率公式联动。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: production
 tags:
@@ -18,7 +18,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `production` 方向原生能力，面向生产制造企业的车间管理、生产计划、质量管理，一键生成 **生产日报 Excel 套件**。
+本技能是 prajna 企智 `production` 方向原生能力，面向生产制造企业的车间管理、生产计划、质量管理，一键生成 **生产日报 Excel 套件**。
 
 输出包含：
 - 生产日报（计划/实际/完成率/差异原因）

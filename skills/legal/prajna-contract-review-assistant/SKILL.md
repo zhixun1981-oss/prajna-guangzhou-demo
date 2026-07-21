@@ -2,7 +2,7 @@
 name: prajna-contract-review-assistant
 description: 一键生成合同审查意见书 Word 文档，覆盖主体资格、商务条款、付款财务、违约责任、知识产权、争议解决六大维度，附风险登记与修改建议表。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: legal
 tags:
@@ -16,7 +16,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `legal` 方向原生能力，面向法务、合规、商务人员，一键生成 **合同审查意见书**。
+本技能是 prajna 企智 `legal` 方向原生能力，面向法务、合规、商务人员，一键生成 **合同审查意见书**。
 
 输出包含：
 - 审查结论

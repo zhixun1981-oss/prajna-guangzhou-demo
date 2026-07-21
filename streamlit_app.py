@@ -41,7 +41,7 @@ HISTORY_DIR = Path.home() / ".prajna" / "demo_history"
 # Page config
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="Prajna 企业智能体平台",
+    page_title="prajna 企业智能体平台",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -395,7 +395,7 @@ def parse_agent_input(text):
             "preset": infer_sales_preset(text),
             "week": extract_week(text),
             "target": extract_target(text),
-            "author": "Prajna",
+            "author": "prajna",
             "date": datetime.now().strftime("%Y-%m-%d"),
         })
     elif intent == "finance_kb":
@@ -413,7 +413,7 @@ def parse_agent_input(text):
             "team": "缝纫一组",
             "factory": "成衣A厂",
             "month": datetime.now().strftime("%Y-%m"),
-            "author": "Prajna",
+            "author": "prajna",
         })
     elif intent == "ai_daily":
         result.update({"date": datetime.now().strftime("%Y-%m-%d"), "search": False})
@@ -525,7 +525,7 @@ def parse_agent_input(text):
             "cycle": "季度",
             "method": "KPI",
             "levels": "A/B/C/D",
-            "company": "Prajna示范企业",
+            "company": "prajna示范企业",
         })
     return result
 
@@ -728,7 +728,7 @@ def run_scenario(scenario_key):
 # Sidebar - minimal
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    st.title("🧠 Prajna")
+    st.title("🧠 prajna")
     st.markdown("**企业智能体平台**")
     st.divider()
     st.markdown(
@@ -754,7 +754,7 @@ st.markdown(
         <div style="display:inline-block;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);color:white;padding:0.35rem 0.9rem;border-radius:999px;font-size:0.8rem;font-weight:600;margin-bottom:1rem;">
             🏆 广州「广智能」超级智能体大赛 · 可运行成果
         </div>
-        <div class="hero-title">🧠 Prajna 企业智能体平台</div>
+        <div class="hero-title">🧠 prajna 企业智能体平台</div>
         <div class="hero-subtitle">
             人力带着业务走 · 人力资源做导演，贴近业务，引领变化<br>
             <span style="opacity:0.85;font-size:1.05rem;">先做自己的 0 号客户，再做行业的基础设施 · 32 位数字员工 Agent 覆盖 HR 核心、业务增长与管理决策全链路</span>
@@ -794,9 +794,9 @@ st.markdown(
 tab_home, tab_templates, tab_architecture, tab_agents, tab_showcase = st.tabs([
     "🏠 首页",
     "🛠️ 企业模板中台",
-    "🧠 Prajna 核心架构",
+    "🧠 prajna 核心架构",
     "🤖 Agent 联动示例",
-    "🎁 Prajna 全能力",
+    "🎁 prajna 全能力",
 ])
 
 # ---------------------------------------------------------------------------
@@ -805,7 +805,7 @@ tab_home, tab_templates, tab_architecture, tab_agents, tab_showcase = st.tabs([
 with tab_home:
     st.markdown(
         """
-        <div class="section-title">关于 Prajna</div>
+        <div class="section-title">关于 prajna</div>
         <div style="background:white;border-radius:20px;padding:2rem;border:1px solid #e2e8f0;box-shadow:0 8px 32px -8px rgba(15,23,42,0.08);margin-bottom:1.5rem;">
             <p style="margin:0 0 1rem 0;color:#334155;line-height:1.8;font-size:1.05rem;">
                 prajna 由锦辉人力自主研发，是以 <strong>HRO 为首个深度落地场景</strong>、面向中小企业的通用 Agent 平台。
@@ -814,7 +814,7 @@ with tab_home:
             </p>
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
                 <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
-                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">50+</div>
+                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">200+</div>
                     <div style="font-size:0.85rem;color:#64748b;">服务客户企业</div>
                 </div>
                 <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
@@ -838,7 +838,7 @@ with tab_home:
     st.markdown(
         """
         <div class="section-title">核心能力</div>
-        <div class="section-subtitle">Prajna 不仅是模板生成器，更是一套面向企业的原生智能体平台 · 听得懂 · 干得了 · 记得住 · 可合规</div>
+        <div class="section-subtitle">prajna 不仅是模板生成器，更是一套面向企业的原生智能体平台 · 听得懂 · 干得了 · 记得住 · 可合规</div>
         """,
         unsafe_allow_html=True,
     )
@@ -946,7 +946,7 @@ with tab_home:
     st.markdown('<div class="section-title">🚀 快速体验</div>', unsafe_allow_html=True)
 
     agent_input = st.text_area(
-        "告诉 Prajna 你要生成什么",
+        "告诉 prajna 你要生成什么",
         value="帮我做一份深圳互联网产品经理 P5 的薪资模板",
         height=100,
         placeholder="例如：生成电商销售团队本周周报 / 搭建京东集团财务知识库目录 / 为美的集团生成本月预算执行汇报 PPT / 生成美的集团采购管理套件 / 审查一份采购合同",
@@ -961,7 +961,7 @@ with tab_home:
         unsafe_allow_html=True,
     )
 
-    execute_clicked = st.button("🚀 Prajna 立即生成", type="primary", use_container_width=True)
+    execute_clicked = st.button("🚀 prajna 立即生成", type="primary", use_container_width=True)
 
     if execute_clicked:
         parsed = parse_agent_input(agent_input)
@@ -970,7 +970,7 @@ with tab_home:
         else:
             intent = parsed["intent"]
             meta = SKILL_REGISTRY[intent]
-            with st.spinner(f"Prajna 正在生成 {meta['name']}..."):
+            with st.spinner(f"prajna 正在生成 {meta['name']}..."):
                 try:
                     out_path, out_name, extra_files, result = run_skill(intent, parsed, meta)
                 except subprocess.CalledProcessError as e:
@@ -1009,7 +1009,7 @@ with tab_home:
     st.markdown(
         """
         <div class="section-title">🎬 全能力一键演示</div>
-        <div class="section-subtitle">点击按钮，Prajna 会依次调用全部 15 个技能并打包成 zip，真实展示平台覆盖能力</div>
+        <div class="section-subtitle">点击按钮，prajna 会依次调用全部 15 个技能并打包成 zip，真实展示平台覆盖能力</div>
         """,
         unsafe_allow_html=True,
     )
@@ -1154,7 +1154,7 @@ with tab_templates:
             with c2:
                 params["factory"] = st.text_input("工厂名称", value="成衣A厂")
                 params["month"] = st.text_input("考核周期", value=datetime.now().strftime("%Y-%m"))
-                params["author"] = st.text_input("编制人", value="Prajna")
+                params["author"] = st.text_input("编制人", value="prajna")
 
         elif selected_skill == "ai_daily":
             c1, c2 = st.columns(2)
@@ -1255,7 +1255,7 @@ with tab_templates:
             with c2:
                 params["method"] = st.selectbox("考核方法", ["KPI", "OKR", "360", "MBO"])
                 params["levels"] = st.text_input("绩效等级", value="A/B/C/D")
-                params["company"] = st.text_input("企业名称", value="Prajna示范企业")
+                params["company"] = st.text_input("企业名称", value="prajna示范企业")
 
         generate_clicked = st.button(f"🚀 生成 {meta['name']}", type="primary", use_container_width=True)
 
@@ -1351,7 +1351,7 @@ with tab_templates:
             out_path = Path(f"{out_prefix}.xlsx")
             cmd = [sys.executable, str(meta["script"]), "--department", params["department"], "--position", params["position"], "--cycle", params["cycle"], "--method", params["method"], "--levels", params["levels"], "--company", params["company"], "--output", str(out_prefix), "--format", "all"]
 
-        with st.spinner(f"Prajna 正在生成 {meta['name']}..."):
+        with st.spinner(f"prajna 正在生成 {meta['name']}..."):
             try:
                 result = subprocess.run(cmd, capture_output=True, text=True, check=True, timeout=90)
             except subprocess.CalledProcessError as e:
@@ -1404,7 +1404,7 @@ with tab_templates:
 with tab_architecture:
     st.markdown(
         """
-        <div class="section-title">🧠 Prajna 原生 Agent 架构</div>
+        <div class="section-title">🧠 prajna 原生 Agent 架构</div>
         <div class="section-subtitle">四层架构 + 五大原生能力，构建企业级智能体底座</div>
         """,
         unsafe_allow_html=True,
@@ -1648,7 +1648,7 @@ with tab_agents:
     st.markdown(
         """
         <div class="section-title">🤖 Agent 联动示例</div>
-        <div class="section-subtitle">Prajna 原生 Agent 如何通过记忆核心实现跨 Agent 协同</div>
+        <div class="section-subtitle">prajna 原生 Agent 如何通过记忆核心实现跨 Agent 协同</div>
         """,
         unsafe_allow_html=True,
     )
@@ -1657,7 +1657,7 @@ with tab_agents:
     st.markdown(
         """
         <div style="background:linear-gradient(135deg,#eff6ff,#f5f3ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1.5rem;">
-            <h4 style="margin-top:0;color:#1e40af;">🎛️ Agent 调度中心：输入任务，查看 Prajna 如何分配 Agent</h4>
+            <h4 style="margin-top:0;color:#1e40af;">🎛️ Agent 调度中心：输入任务，查看 prajna 如何分配 Agent</h4>
             <p style="color:#64748b;margin:0;">调度中心会根据意图识别结果、Agent 能力匹配度、负载、历史成功率与记忆协同分，自动选择最优 Agent。</p>
         </div>
         """,
@@ -1813,13 +1813,13 @@ with tab_agents:
         )
 
 # ---------------------------------------------------------------------------
-# Tab 5: Prajna Full Capability Showcase
+# Tab 5: prajna Full Capability Showcase
 # ---------------------------------------------------------------------------
 with tab_showcase:
     st.markdown(
         """
-        <div class="section-title">🎁 Prajna 全能力 showcase</div>
-        <div class="section-subtitle">从底层记忆核心到上层业务 Agent，一览 Prajna 企业智能体平台的完整能力矩阵</div>
+        <div class="section-title">🎁 prajna 全能力 showcase</div>
+        <div class="section-subtitle">从底层记忆核心到上层业务 Agent，一览 prajna 企业智能体平台的完整能力矩阵</div>
         """,
         unsafe_allow_html=True,
     )
@@ -1842,7 +1842,7 @@ with tab_showcase:
         st.markdown(
             """
             <div style="background:white;border-radius:16px;padding:2rem;border:1px solid #e2e8f0;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                <h3 style="margin-top:0;color:#1e3a8a;">Prajna 能力分层全景</h3>
+                <h3 style="margin-top:0;color:#1e3a8a;">prajna 能力分层全景</h3>
                 <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1.5rem;">
                     <div style="background:linear-gradient(90deg,#1e40af,#3b82f6);color:white;border-radius:12px;padding:1rem;">
                         <strong>🚀 应用层</strong> · AI 员工门户 · 多模态对话 · 定时任务 · 企业模板中台
@@ -1858,7 +1858,7 @@ with tab_showcase:
                     </div>
                 </div>
                 <p style="color:#64748b;margin-top:1.5rem;line-height:1.6;">
-                    Prajna 不是单一 Agent，而是一套<b>企业智能体操作系统</b>：底层记忆核心让 Agent 拥有长期记忆，
+                    prajna 不是单一 Agent，而是一套<b>企业智能体操作系统</b>：底层记忆核心让 Agent 拥有长期记忆，
                     原生架构规范让所有 Agent 可协同、可追溯，上层技能市场覆盖 HR、销售、财务、生产、情报等全业务场景。
                 </p>
             </div>
@@ -1871,7 +1871,7 @@ with tab_showcase:
         st.markdown(
             """
             <div class="section-title">📦 多 Agent 业务场景包</div>
-            <div class="section-subtitle">一个真实业务场景往往需要多个 Agent 协同。点击卡片，Prajna 会按工作流顺序生成完整文档包。</div>
+            <div class="section-subtitle">一个真实业务场景往往需要多个 Agent 协同。点击卡片，prajna 会按工作流顺序生成完整文档包。</div>
             """,
             unsafe_allow_html=True,
         )
@@ -1892,7 +1892,7 @@ with tab_showcase:
                     unsafe_allow_html=True,
                 )
                 if st.button(f"🚀 生成 {scenario_key}", key=f"scenario_{scenario_key}", use_container_width=True):
-                    with st.spinner(f"Prajna 正在生成 {scenario_key}..."):
+                    with st.spinner(f"prajna 正在生成 {scenario_key}..."):
                         try:
                             results = run_scenario(scenario_key)
                             zip_name = f"prajna_{scenario_key}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
@@ -2014,7 +2014,7 @@ with tab_showcase:
             """
             <div style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
                 <h4 style="margin-top:0;color:#5b21b6;">💾 记忆核心交互演示</h4>
-                <p style="color:#64748b;margin:0;">模拟调用 memory_remember / memory_recall / memory_reflect / memory_forget 四个原生接口。数据仅存于当前会话，用于演示 Prajna 全模态记忆核心的接口形态与智能剪枝效果。</p>
+                <p style="color:#64748b;margin:0;">模拟调用 memory_remember / memory_recall / memory_reflect / memory_forget 四个原生接口。数据仅存于当前会话，用于演示 prajna 全模态记忆核心的接口形态与智能剪枝效果。</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -2324,7 +2324,7 @@ memory_context:
             st.markdown(
                 """
                 <div style="background:linear-gradient(135deg,#f0fdf4,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
-                    <h4 style="margin-top:0;color:#047857;">Prajna 系统运行监控</h4>
+                    <h4 style="margin-top:0;color:#047857;">prajna 系统运行监控</h4>
                     <p style="color:#64748b;margin:0;">实时展示各 Agent 健康状态、业务指标与记忆核心健康度（演示数据）。</p>
                 </div>
                 """,
@@ -2517,7 +2517,7 @@ memory_context:
             """
             <div style="background:linear-gradient(135deg,#f0f9ff,#f5f3ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
                 <h4 style="margin-top:0;color:#0369a1;">➕ 一句话创建新 Skill</h4>
-                <p style="color:#64748b;margin:0;">用自然语言描述你想创建的 Skill，Prajna 自动生成 SKILL.md 框架与 manifest.json。</p>
+                <p style="color:#64748b;margin:0;">用自然语言描述你想创建的 Skill，prajna 自动生成 SKILL.md 框架与 manifest.json。</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -2528,7 +2528,7 @@ memory_context:
             value="创建一个合同审查助手，能够自动识别合同中的风险条款、付款条件和违约责任，并生成审查报告。",
             height=100,
         )
-        skill_author = st.text_input("作者", value="Prajna")
+        skill_author = st.text_input("作者", value="prajna")
         skill_category = st.selectbox("分类", ["业务", "工具", "系统", "分析", "内容", "其他"])
 
         if st.button("✨ 生成 Skill 框架", use_container_width=True):
@@ -2574,7 +2574,7 @@ memory_context:
 
 ## 1. 角色定位
 
-{skill_name} 是 Prajna 企业智能体平台中的 {skill_category} 类 Skill，{skill_desc.strip()}。
+{skill_name} 是 prajna 企业智能体平台中的 {skill_category} 类 Skill，{skill_desc.strip()}。
 
 ## 2. 核心功能
 
@@ -2633,7 +2633,7 @@ memory_context:
 st.markdown(
     """
     <div class="footer">
-        <strong>Prajna 企业智能体平台</strong><br>
+        <strong>prajna 企业智能体平台</strong><br>
         记忆觉醒 · 智能新生｜让记忆型 AI 赋能企业数字化转型<br>
         出品方：惠州市锦辉人力资源管理有限公司 · 20+ 年一线 HRO 运营经验 · AAA 级和谐劳动关系企业<br>
         <small>广州「广智能」超级智能体大赛 · 开放赛道 · 自然语言智能体 · 原生 Agent 架构 · 全模态记忆核心</small>

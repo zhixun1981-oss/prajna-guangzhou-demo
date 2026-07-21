@@ -3,7 +3,7 @@
   "name": "prajna-compensation-system",
   "version": "1.0.0",
   "description": "为企业一键生成完整的薪酬体系 Excel 工作簿，包含岗位薪酬矩阵、薪酬结构、城市系数、调薪方案、年度预算、人力成本测算与绩效联动规则。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-compensation-system-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["hr", "compensation", "salary", "payroll", "budget", "excel", "performance", "recruitment"]

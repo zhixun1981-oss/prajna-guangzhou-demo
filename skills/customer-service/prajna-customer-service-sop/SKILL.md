@@ -2,7 +2,7 @@
 name: prajna-customer-service-sop
 description: 一键生成客服标准作业程序 Excel 套件，覆盖话术库、工单处理流程、客诉分类与升级规则、FAQ，帮助企业建立标准化客服体系。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: customer-service
 tags:
@@ -18,7 +18,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `customer-service` 方向原生能力，面向客服中心、运营团队，一键生成 **客服 SOP Excel 套件**。
+本技能是 prajna 企智 `customer-service` 方向原生能力，面向客服中心、运营团队，一键生成 **客服 SOP Excel 套件**。
 
 输出包含：
 - 客服话术库（场景、情绪、话术、禁止用语）

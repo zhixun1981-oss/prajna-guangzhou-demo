@@ -1,8 +1,8 @@
 ---
 name: prajna-recruitment-assistant
-description: Prajna 企智招聘助手原生技能。一键生成岗位说明书（JD）、任职资格与胜任力模型、结构化面试评估表、招聘漏斗与周报、人才画像卡、Offer 薪资建议等 6 张 Excel 工作表，以及完整招聘套件 Word 文档。与城市薪酬系数、职级带宽、薪资模板原生打通。
+description: prajna 企智招聘助手原生技能。一键生成岗位说明书（JD）、任职资格与胜任力模型、结构化面试评估表、招聘漏斗与周报、人才画像卡、Offer 薪资建议等 6 张 Excel 工作表，以及完整招聘套件 Word 文档。与城市薪酬系数、职级带宽、薪资模板原生打通。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: hr
 tags:
@@ -23,7 +23,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `hr` 方向原生能力，面向 HR、用人部门及招聘负责人，一键生成结构完整的 **招聘套件**。
+本技能是 prajna 企智 `hr` 方向原生能力，面向 HR、用人部门及招聘负责人，一键生成结构完整的 **招聘套件**。
 
 输出包含：
 - 岗位说明书（JD）Excel 工作表
@@ -116,7 +116,7 @@ python3 ~/.prajna/skills/hr/prajna-recruitment-assistant/scripts/generate_recrui
 
 ### 协同调用规范
 
-本 skill 设计为可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 设计为可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/hr/prajna-recruitment-assistant/scripts/generate_recruitment_kit.py \
@@ -160,7 +160,7 @@ python3 /Users/a12345/.prajna/skills/hr/prajna-recruitment-assistant/scripts/gen
 
 ## 免责声明
 
-> 【人工智能生成-需人工核验】本技能生成的岗位说明书、任职资格、面试评估表、招聘漏斗、人才画像、Offer 薪资建议仅供企业招聘管理参考，不构成正式劳动用工、薪酬决策或法律文件。最终招聘方案、录用决定及薪酬待遇须由企业 HR、用人部门及管理层依据当地法律法规和公司政策审核确认。Prajna 企智不对因使用本模板而产生的任何业务决策或数据结果承担责任。
+> 【人工智能生成-需人工核验】本技能生成的岗位说明书、任职资格、面试评估表、招聘漏斗、人才画像、Offer 薪资建议仅供企业招聘管理参考，不构成正式劳动用工、薪酬决策或法律文件。最终招聘方案、录用决定及薪酬待遇须由企业 HR、用人部门及管理层依据当地法律法规和公司政策审核确认。prajna 企智不对因使用本模板而产生的任何业务决策或数据结果承担责任。
 
 ## 版本记录
 

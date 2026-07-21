@@ -796,7 +796,7 @@ def generate_word(args, output_path):
 # ---------------------------------------------------------------------------
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Prajna 招聘助手：一键生成招聘套件（Excel + Word）"
+        description="prajna 招聘助手：一键生成招聘套件（Excel + Word）"
     )
     parser.add_argument("--position", required=True, help="岗位名称")
     parser.add_argument("--department", default="人力资源部", help="所属部门")

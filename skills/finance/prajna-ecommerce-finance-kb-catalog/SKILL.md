@@ -2,7 +2,7 @@
 name: prajna-ecommerce-finance-kb-catalog
 description: 为电商企业一键生成财务知识库钉钉文档目录 Markdown 模板，覆盖核算规范、成本利润模型、库存管理、资金税务、经营分析、内控审计、工具模板七大模块，每个模块下设 3 个子文件夹，支持首页醒目标题与更新日志。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: finance
 tags:
@@ -24,7 +24,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `finance` 方向原生能力，面向电商企业，一键生成标准化的 **财务知识库钉钉文档目录 Markdown 文件**。
+本技能是 prajna 企智 `finance` 方向原生能力，面向电商企业，一键生成标准化的 **财务知识库钉钉文档目录 Markdown 文件**。
 
 目录采用 `数字_中文` 命名规范，包含七大一级模块：
 
@@ -134,7 +134,7 @@ python3 scripts/generate_catalog.py \
 
 ### 协同调用规范
 
-本 skill 设计为可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 设计为可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/finance/prajna-ecommerce-finance-kb-catalog/scripts/generate_catalog.py \
@@ -164,7 +164,7 @@ python3 /Users/a12345/.prajna/skills/finance/prajna-ecommerce-finance-kb-catalog
 
 ## 免责声明
 
-> 【人工智能生成-需人工核验】本技能生成的知识库目录模板仅供参考，不构成财务、税务或法律建议。企业应根据自身经营模式、所在地区法规及内部管理制度填充、调整并审核具体制度文件。Prajna 企智不对因使用本模板而产生的任何业务决策或制度执行结果承担责任。
+> 【人工智能生成-需人工核验】本技能生成的知识库目录模板仅供参考，不构成财务、税务或法律建议。企业应根据自身经营模式、所在地区法规及内部管理制度填充、调整并审核具体制度文件。prajna 企智不对因使用本模板而产生的任何业务决策或制度执行结果承担责任。
 
 ## 版本记录
 

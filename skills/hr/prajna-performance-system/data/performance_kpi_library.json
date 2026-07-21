@@ -1,5 +1,5 @@
 {
-  "description": "Prajna 绩效体系助手 KPI 指标库。按部门/岗位分类，指标设计参考 prajna-salary-template、prajna-clothing-teamleader-duty 等现有技能的岗位 KPI 思路，便于 Skill 间打通与复用。",
+  "description": "prajna 绩效体系助手 KPI 指标库。按部门/岗位分类，指标设计参考 prajna-salary-template、prajna-clothing-teamleader-duty 等现有技能的岗位 KPI 思路，便于 Skill 间打通与复用。",
   "version": "1.0.0",
   "departments": {
     "电商运营部": {

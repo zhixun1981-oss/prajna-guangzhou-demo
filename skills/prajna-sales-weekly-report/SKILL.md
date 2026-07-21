@@ -2,7 +2,7 @@
 name: prajna-sales-weekly-report
 description: 为销售团队一键生成标准周报 Excel 模板，覆盖业绩汇总、核心 KPI、重点商机、问题分析与下周计划。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: sales
 tags:
@@ -18,7 +18,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `sales` 方向原生能力，帮助销售团队完成「标准周报生成」任务。输出为一份结构化 **Excel 工作簿**，包含 5 张工作表：封面汇总、核心业绩数据、重点商机进展、问题分析、下周工作计划。
+本技能是 prajna 企智 `sales` 方向原生能力，帮助销售团队完成「标准周报生成」任务。输出为一份结构化 **Excel 工作簿**，包含 5 张工作表：封面汇总、核心业绩数据、重点商机进展、问题分析、下周工作计划。
 
 适用于：销售主管、销售运营、区域负责人、CRM 管理员等需要定期产出销售周报的岗位。
 
@@ -97,7 +97,7 @@ python3 scripts/generate_sales_weekly_report.py --list-presets
 
 ### 协同调用规范
 
-本 skill 设计为可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 设计为可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/sales/prajna-sales-weekly-report/scripts/generate_sales_weekly_report.py \
@@ -131,4 +131,4 @@ python3 /Users/a12345/.prajna/skills/sales/prajna-sales-weekly-report/scripts/ge
 
 ## 免责声明
 
-本技能生成的 Excel 模板仅供业务参考与填写使用，其中的示例数据、公式、KPI 权重及目标值均为模板默认值，不构成实际业绩评价或薪酬核算依据。用户应根据自身业务实际情况修改目标值、公式与考核规则。Prajna 企智不对因使用本模板而产生的任何业务决策或数据结果承担责任。
+本技能生成的 Excel 模板仅供业务参考与填写使用，其中的示例数据、公式、KPI 权重及目标值均为模板默认值，不构成实际业绩评价或薪酬核算依据。用户应根据自身业务实际情况修改目标值、公式与考核规则。prajna 企智不对因使用本模板而产生的任何业务决策或数据结果承担责任。

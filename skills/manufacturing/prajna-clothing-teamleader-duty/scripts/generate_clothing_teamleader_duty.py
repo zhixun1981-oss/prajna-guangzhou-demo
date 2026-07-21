@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Prajna 企智 - 服装厂小组长岗位职责与 KPI 考核表生成器
+prajna 企智 - 服装厂小组长岗位职责与 KPI 考核表生成器
 
 生成一份 Excel 工作簿，包含：
 1. 使用说明
@@ -319,7 +319,7 @@ def _add_readme_sheet(wb, metadata):
     ws.append(["3.", "绩效评分记录表中的「单项得分」为百分制，需按 KPI 考核指标中的评分规则人工评定。"])
     ws.append([])
     ws.append(["免责声明"])
-    ws.append(["本模板由 Prajna 企智人工智能生成，仅供业务参考，不构成正式绩效考核或劳动用工依据，使用前请由企业相关部门审核确认。"])
+    ws.append(["本模板由 prajna 企智人工智能生成，仅供业务参考，不构成正式绩效考核或劳动用工依据，使用前请由企业相关部门审核确认。"])
 
     # 合并标题行
     ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=2)
@@ -483,7 +483,7 @@ def build_metadata(args):
     team = args.team or preset["team"]
     factory = args.factory or preset["factory"]
     month = args.month or datetime.now().strftime("%Y-%m")
-    author = args.author or os.environ.get("USER", "Prajna")
+    author = args.author or os.environ.get("USER", "prajna")
     date_str = datetime.now().strftime("%Y-%m-%d")
     return {
         "preset": args.preset,

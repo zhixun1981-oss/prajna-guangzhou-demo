@@ -2,7 +2,7 @@
 name: prajna-procurement-assistant
 description: 一键生成采购管理 Excel 套件，覆盖采购申请单、供应商评估表、询价比价单、采购合同审查清单、采购台账，帮助企业规范采购流程。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: procurement
 tags:
@@ -17,7 +17,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `procurement` 方向原生能力，面向采购部门、供应链管理人员，一键生成结构完整的 **采购管理 Excel 套件**。
+本技能是 prajna 企智 `procurement` 方向原生能力，面向采购部门、供应链管理人员，一键生成结构完整的 **采购管理 Excel 套件**。
 
 输出包含：
 - 采购申请单

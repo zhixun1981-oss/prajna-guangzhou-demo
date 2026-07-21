@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Prajna 企智 - 绩效体系助手生成器 v1.0.0
+prajna 企智 - 绩效体系助手生成器 v1.0.0
 
 为企业一键生成完整的绩效管理体系套件：
 - Excel 工作簿（6 个工作表）：
@@ -243,7 +243,7 @@ def _add_readme_sheet(wb, meta):
     ws.append(["4.", "绩效结果分布中的比例为指导性建议，强制分布需经民主程序并向员工公示。"])
     ws.append([])
     ws.append(["免责声明"])
-    ws.append(["本套件由 Prajna 企智人工智能生成，仅供业务参考，不构成正式绩效考核或劳动用工依据，使用前请由企业 HR、法务及管理层审核确认。"])
+    ws.append(["本套件由 prajna 企智人工智能生成，仅供业务参考，不构成正式绩效考核或劳动用工依据，使用前请由企业 HR、法务及管理层审核确认。"])
     ws.append([])
     ws.append(["与现有 Skill 的打通"])
     ws.append(["- KPI 指标库复用了 prajna-salary-template、prajna-clothing-teamleader-duty 的岗位 KPI 思路。"])
@@ -905,7 +905,7 @@ def generate_word(output_path: Path, meta, kpis):
     doc.add_paragraph()
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    run = p.add_run("【人工智能生成-需人工核验】本制度由 Prajna 企智 prajna-performance-system 技能根据通用管理实践生成，仅供企业参考。最终制度文本须由企业 HR、法务及管理层结合当地法律法规与公司实际审核确认。")
+    run = p.add_run("【人工智能生成-需人工核验】本制度由 prajna 企智 prajna-performance-system 技能根据通用管理实践生成，仅供企业参考。最终制度文本须由企业 HR、法务及管理层结合当地法律法规与公司实际审核确认。")
     run.font.size = Pt(9)
     run.font.name = "微软雅黑"
     run.font.color.rgb = RGBColor(128, 128, 128)
@@ -925,7 +925,7 @@ def parse_args(argv=None):
     parser.add_argument("--cycle", "-c", default="季度", help="考核周期，如 月度、季度、半年度、年度，默认 季度")
     parser.add_argument("--method", "-m", default="KPI", help="考核方法，如 KPI、OKR、360、MBO，默认 KPI")
     parser.add_argument("--levels", "-l", default="A/B/C/D", help="绩效等级划分，如 A/B/C/D 或 S/A/B/C/D，默认 A/B/C/D")
-    parser.add_argument("--company", "-co", default="Prajna示范企业", help="企业名称")
+    parser.add_argument("--company", "-co", default="prajna示范企业", help="企业名称")
     parser.add_argument("--output", "-o", help="输出目录或完整路径（覆盖默认输出目录）")
     parser.add_argument(
         "--format",

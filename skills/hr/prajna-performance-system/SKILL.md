@@ -1,8 +1,8 @@
 ---
 name: prajna-performance-system
-description: Prajna 企智 — 绩效体系助手。为企业一键生成绩效管理体系套件，包括 KPI 指标库、绩效合同/目标责任书、绩效评分表、绩效面谈记录、绩效结果分布、绩效改进计划 PIP，以及绩效管理制度 Word 文档。
+description: prajna 企智 — 绩效体系助手。为企业一键生成绩效管理体系套件，包括 KPI 指标库、绩效合同/目标责任书、绩效评分表、绩效面谈记录、绩效结果分布、绩效改进计划 PIP，以及绩效管理制度 Word 文档。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: hr
 tags:
@@ -23,7 +23,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 **人力资源方向原生能力**，面向企业 HR、部门负责人与管理者，一键生成结构完整、可直接落地使用的绩效管理体系套件。
+本技能是 prajna 企智 **人力资源方向原生能力**，面向企业 HR、部门负责人与管理者，一键生成结构完整、可直接落地使用的绩效管理体系套件。
 
 无论是 KPI、OKR、360 还是 MBO 考核方法，也无论是月度、季度还是年度考核周期，均可通过本技能快速生成对应的 KPI 指标库、绩效合同、评分表、面谈记录、结果分布与 PIP 模板，并配套输出一份完整的《绩效管理制度》Word 文档。
 
@@ -70,7 +70,7 @@ tags:
 | `--cycle` | `-c` | string | 否 | 考核周期，如 `月度`、`季度`、`半年度`、`年度`，默认 `季度` |
 | `--method` | `-m` | string | 否 | 考核方法，如 `KPI`、`OKR`、`360`、`MBO`，默认 `KPI` |
 | `--levels` | `-l` | string | 否 | 绩效等级划分，如 `A/B/C/D`、`S/A/B/C/D`，默认 `A/B/C/D` |
-| `--company` | `-co` | string | 否 | 企业名称，默认 `Prajna示范企业` |
+| `--company` | `-co` | string | 否 | 企业名称，默认 `prajna示范企业` |
 | `--output` | `-o` | string | 否 | 输出目录或完整路径，覆盖默认输出目录 |
 | `--format` | `-f` | string | 否 | 输出格式：`excel`、`word`、`all`，默认 `all` |
 
@@ -115,7 +115,7 @@ python3 /Users/a12345/.prajna/skills/hr/prajna-performance-system/scripts/genera
 
 ## 与现有 Skill 的打通说明
 
-本 skill 作为绩效体系中台，与以下 Prajna 原生 skill 在关键节点打通：
+本 skill 作为绩效体系中台，与以下 prajna 原生 skill 在关键节点打通：
 
 | 调用方 Skill | 调用节点 | 输入 | 输出物 |
 |---|---|---|---|

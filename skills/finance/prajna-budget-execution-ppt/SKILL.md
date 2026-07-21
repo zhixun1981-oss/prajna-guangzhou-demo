@@ -2,7 +2,7 @@
 name: prajna-budget-execution-ppt
 description: 面向管理层一键生成本月预算执行情况汇报 PPTX，包含预算完成率对比图、超支项目分析、结余资金使用建议、下月预算调整方案，首页设计高级大气。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: finance
 tags:
@@ -18,7 +18,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `finance` 方向原生能力，帮助财务、运营及管理层快速产出「本月预算执行情况汇报」演示文稿。输出为一份结构化 **PPTX**，共 9 页，覆盖总体执行概览、预算完成率对比图、超支项目分析、偏差根因、结余资金使用建议、下月预算调整方案及总结行动。
+本技能是 prajna 企智 `finance` 方向原生能力，帮助财务、运营及管理层快速产出「本月预算执行情况汇报」演示文稿。输出为一份结构化 **PPTX**，共 9 页，覆盖总体执行概览、预算完成率对比图、超支项目分析、偏差根因、结余资金使用建议、下月预算调整方案及总结行动。
 
 适用于：财务BP、预算经理、费用会计、运营负责人、高管助理等需要定期向管理层汇报预算进度的岗位。
 
@@ -115,7 +115,7 @@ python3 scripts/generate_budget_execution_ppt.py \
 
 ### 协同调用规范
 
-本 skill 设计为可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 设计为可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/finance/prajna-budget-execution-ppt/scripts/generate_budget_execution_ppt.py \
@@ -144,4 +144,4 @@ python3 /Users/a12345/.prajna/skills/finance/prajna-budget-execution-ppt/scripts
 
 ## 免责声明
 
-> 【人工智能生成-需人工核验】本技能生成的 PPT 及示例数据仅供业务汇报和内部管理参考，不构成财务审计、投资决策或法律意见。预算数字、偏差原因、调整方案均应根据企业真实财务数据和内部审批流程核实后使用。Prajna 企智不对因使用本材料而产生的任何业务决策承担责任。
+> 【人工智能生成-需人工核验】本技能生成的 PPT 及示例数据仅供业务汇报和内部管理参考，不构成财务审计、投资决策或法律意见。预算数字、偏差原因、调整方案均应根据企业真实财务数据和内部审批流程核实后使用。prajna 企智不对因使用本材料而产生的任何业务决策承担责任。

@@ -230,7 +230,7 @@ def build_cover(wb, params, styles):
     ws["B16"] = "说明"
     ws["B16"].font = styles["section_font"]
     notes = [
-        "• 本模板由 Prajna 企智 prajna-sales-weekly-report 技能自动生成。",
+        "• 本模板由 prajna 企智 prajna-sales-weekly-report 技能自动生成。",
         "• 蓝色字体单元格为建议填写项，黑色为说明或计算结果。",
         "• 核心业绩表已内置公式，请直接录入目标值与实际值。",
     ]

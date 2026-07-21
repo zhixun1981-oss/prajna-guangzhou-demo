@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Prajna 企智 - 招投标助手生成器 v1.0.0
+prajna 企智 - 招投标助手生成器 v1.0.0
 
 为销售/投标团队一键生成招投标套件：
 1. Excel 工作簿（6 个工作表）
@@ -214,7 +214,7 @@ def _autofit_columns(ws, min_width=10, max_width=40):
         ws.column_dimensions[col_letter].width = adjusted_width
 
 
-def _add_disclaimer(ws, row, text="本表由 Prajna 企智自动生成，仅供辅助参考。"):
+def _add_disclaimer(ws, row, text="本表由 prajna 企智自动生成，仅供辅助参考。"):
     cell = ws.cell(row=row, column=1, value=f"{DISCLAIMER} {text}")
     cell.font = GRAY_FONT
     cell.alignment = LEFT_ALIGN
@@ -255,7 +255,7 @@ def build_cover(wb, params):
     ws["B13"] = "使用说明"
     ws["B13"].font = SECTION_FONT
     notes = [
-        "1. 本套件由 Prajna 企智 prajna-bidding-assistant 技能自动生成。",
+        "1. 本套件由 prajna 企智 prajna-bidding-assistant 技能自动生成。",
         "2. 蓝色字体单元格为建议填写项，请根据实际招标文件修订。",
         "3. 所有数据仅供投标准备参考，正式投标前须人工复核。",
         "4. 报价表已自动拆分示例分项，实际报价请以招标文件为准。",
@@ -691,7 +691,7 @@ def build_word_outline(params, output_path):
 
     doc.add_paragraph()
     p = doc.add_paragraph()
-    run = p.add_run(f"{DISCLAIMER} 本投标文件大纲由 Prajna 企智自动生成，仅供结构参考，正式投标文件须根据招标文件及企业实际情况调整完善。")
+    run = p.add_run(f"{DISCLAIMER} 本投标文件大纲由 prajna 企智自动生成，仅供结构参考，正式投标文件须根据招标文件及企业实际情况调整完善。")
     run.font.name = "微软雅黑"
     run.font.size = Pt(9)
     run.font.color.rgb = RGBColor(0x80, 0x80, 0x80)

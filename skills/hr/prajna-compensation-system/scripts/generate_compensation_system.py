@@ -554,7 +554,7 @@ def main(argv=None):
     ws["A1"].font = Font(bold=True, size=14, color="1F4E78")
     ws.append([])
     notes = [
-        "1. 本薪酬体系工作簿由 Prajna 企智自动生成，用于快速搭建薪酬框架与预算测算。",
+        "1. 本薪酬体系工作簿由 prajna 企智自动生成，用于快速搭建薪酬框架与预算测算。",
         "2. 岗位薪酬矩阵数据与 prajna-salary-template 的职级带宽、城市系数保持一致。",
         "3. 薪酬结构表中的比例可用于 prajna-recruitment-assistant 的 Offer 薪资建议。",
         "4. 绩效联动规则可与 prajna-performance-system 的 KPI 指标库、绩效评分表配套使用。",

@@ -177,7 +177,7 @@ def build_markdown(company: str = "", author: str = "", date: str = "") -> str:
     lines.append("")
     lines.append("## ⚠️ 免责声明")
     lines.append("")
-    lines.append("> 【人工智能生成-需人工核验】本知识库目录模板由 Prajna 企智自动生成，仅供参考。具体财务制度、税务处理、内控流程应根据企业所处行业、经营模式、所在地区法规及公司内部管理制度制定，并建议由财务负责人、法务或审计人员审核后使用。")
+    lines.append("> 【人工智能生成-需人工核验】本知识库目录模板由 prajna 企智自动生成，仅供参考。具体财务制度、税务处理、内控流程应根据企业所处行业、经营模式、所在地区法规及公司内部管理制度制定，并建议由财务负责人、法务或审计人员审核后使用。")
     lines.append("")
 
     return "\n".join(lines)

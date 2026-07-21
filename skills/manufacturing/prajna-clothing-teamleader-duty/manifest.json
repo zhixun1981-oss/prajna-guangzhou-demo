@@ -3,7 +3,7 @@
   "name": "prajna-clothing-teamleader-duty",
   "version": "1.0.0",
   "description": "为服装厂车间小组长一键生成岗位职责与 KPI 考核 Excel 模板，覆盖上游/下游部门、岗位职责、考核指标、量化标准五大模块及 8 项核心 KPI。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-clothing-teamleader-duty-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["manufacturing", "clothing", "team-leader", "duty", "kpi", "excel", "template"]

@@ -3,7 +3,7 @@
   "name": "prajna-financial-dashboard",
   "version": "1.0.0",
   "description": "为管理层一键生成财务核心指标分析看板 HTML 页面，覆盖资产负债率、净利润率、现金流量比率等关键指标的趋势图表与同比环比分析。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-financial-dashboard-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["finance", "dashboard", "financial-metrics", "chart.js", "html", "kpi", "monthly-report"]

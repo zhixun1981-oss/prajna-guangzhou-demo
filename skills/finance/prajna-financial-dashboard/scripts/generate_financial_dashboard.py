@@ -563,7 +563,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     </section>
 
     <div class="footer">
-      <p>本看板由 Prajna 企智 prajna-financial-dashboard 技能自动生成，示例数据仅供经营分析参考，不构成投资决策依据。</p>
+      <p>本看板由 prajna 企智 prajna-financial-dashboard 技能自动生成，示例数据仅供经营分析参考，不构成投资决策依据。</p>
     </div>
   </div>
 

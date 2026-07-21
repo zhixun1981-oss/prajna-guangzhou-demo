@@ -3,7 +3,7 @@
   "name": "prajna-budget-execution-ppt",
   "version": "1.0.0",
   "description": "面向管理层一键生成本月预算执行情况汇报 PPTX，包含预算完成率对比图、超支项目分析、结余资金使用建议、下月预算调整方案，首页设计高级大气。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-budget-execution-ppt-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["finance", "budget", "pptx", "report", "management", "expense"]

@@ -2,7 +2,7 @@
 name: prajna-clothing-teamleader-duty
 description: 为服装厂车间小组长一键生成岗位职责与 KPI 考核 Excel 模板，覆盖上游/下游部门、岗位职责、考核指标、量化标准五大模块及 8 项核心 KPI。
 version: 1.0.0
-author: Prajna 企智
+author: prajna 企智
 language: zh-CN
 category: manufacturing
 tags:
@@ -19,7 +19,7 @@ tags:
 
 ## 技能定位
 
-本技能是 Prajna 企智 `manufacturing` 方向原生能力，面向服装厂车间小组长岗位，一键生成结构完整的 **岗位职责与 KPI 考核 Excel 工作簿**。
+本技能是 prajna 企智 `manufacturing` 方向原生能力，面向服装厂车间小组长岗位，一键生成结构完整的 **岗位职责与 KPI 考核 Excel 工作簿**。
 
 输出包含：
 - 服装厂小组长岗位职责矩阵（上游部门、下游部门、岗位职责、考核指标、量化标准）
@@ -101,7 +101,7 @@ python3 scripts/generate_clothing_teamleader_duty.py --list-presets
 
 ### 协同调用规范
 
-本 skill 设计为可被其他 Prajna 原生 skill 调用，统一入口为：
+本 skill 设计为可被其他 prajna 原生 skill 调用，统一入口为：
 
 ```bash
 python3 /Users/a12345/.prajna/skills/manufacturing/prajna-clothing-teamleader-duty/scripts/generate_clothing_teamleader_duty.py \
@@ -133,4 +133,4 @@ python3 /Users/a12345/.prajna/skills/manufacturing/prajna-clothing-teamleader-du
 
 ## 免责声明
 
-> 【人工智能生成-需人工核验】本技能生成的岗位职责、KPI 权重、目标值、评分规则及量化标准仅供企业管理参考，不构成正式劳动用工、绩效考核或薪酬核算依据。用户应结合企业实际情况、行业规范及当地法律法规进行调整，并由 HR、生产管理及相关管理层审核确认。Prajna 企智不对因使用本模板而产生的任何业务决策或数据结果承担责任。
+> 【人工智能生成-需人工核验】本技能生成的岗位职责、KPI 权重、目标值、评分规则及量化标准仅供企业管理参考，不构成正式劳动用工、绩效考核或薪酬核算依据。用户应结合企业实际情况、行业规范及当地法律法规进行调整，并由 HR、生产管理及相关管理层审核确认。prajna 企智不对因使用本模板而产生的任何业务决策或数据结果承担责任。

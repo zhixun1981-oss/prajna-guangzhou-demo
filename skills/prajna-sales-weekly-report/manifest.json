@@ -3,7 +3,7 @@
   "name": "prajna-sales-weekly-report",
   "version": "1.0.0",
   "description": "为销售团队一键生成标准周报 Excel 模板，覆盖业绩汇总、核心 KPI、重点商机、问题分析与下周计划。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-sales-weekly-report-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["sales", "weekly-report", "excel", "kpi", "template"]

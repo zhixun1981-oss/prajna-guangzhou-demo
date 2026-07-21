@@ -41,7 +41,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <tr>
             <td style="padding:28px 24px 20px;border-bottom:2px solid #1a73e8;text-align:center;">
               <h1 style="margin:0 0 8px;font-size:24px;color:#1a237e;">&#127760; AI 领袖动态日报</h1>
-              <p style="margin:0;font-size:14px;color:#666;">{{ date }} · Prajna 企智</p>
+              <p style="margin:0;font-size:14px;color:#666;">{{ date }} · prajna 企智</p>
             </td>
           </tr>
           <tr>
@@ -159,7 +159,7 @@ def _render_fallback(context: dict) -> str:
       <table role="presentation" width="640" cellspacing="0" cellpadding="0" border="0" style="max-width:640px;width:100%;background-color:#ffffff;border-radius:8px;overflow:hidden;">
         <tr><td style="padding:28px 24px 20px;border-bottom:2px solid #1a73e8;text-align:center;">
           <h1 style="margin:0 0 8px;font-size:24px;color:#1a237e;">&#127760; AI 领袖动态日报</h1>
-          <p style="margin:0;font-size:14px;color:#666;">{date_str} · Prajna 企智</p>
+          <p style="margin:0;font-size:14px;color:#666;">{date_str} · prajna 企智</p>
         </td></tr>
         <tr><td style="padding:20px 24px 8px;">
           <p style="margin:0;font-size:14px;color:#555;line-height:1.7;">精选 <strong>李开复 / 零一万物、Sam Altman / OpenAI、Anthropic、Google DeepMind、Meta</strong> 的最新技术与战略动态，帮您快速掌握全球 AI 风向。</p>
@@ -256,7 +256,7 @@ def search_ai_news(date_str: str) -> dict:
             items = [{
                 "title": "今日暂无搜索到有效动态",
                 "summary": "DuckDuckGo 搜索未返回结果，可能受网络或反爬限制，建议稍后重试或切换到本地精选数据。",
-                "source_title": "Prajna",
+                "source_title": "prajna",
                 "source_url": "#",
                 "date": "",
             }]

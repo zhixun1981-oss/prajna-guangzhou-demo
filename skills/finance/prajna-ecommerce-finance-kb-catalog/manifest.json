@@ -3,7 +3,7 @@
   "name": "prajna-ecommerce-finance-kb-catalog",
   "version": "1.0.0",
   "description": "为电商企业一键生成财务知识库钉钉文档目录 Markdown 模板，覆盖核算规范、成本利润模型、库存管理、资金税务、经营分析、内控审计、工具模板七大模块。",
-  "author": "Prajna",
+  "author": "prajna",
   "download_url": "prajna-ecommerce-finance-kb-catalog-1.0.0.tar.gz",
   "sha256": "",
   "tags": ["finance", "ecommerce", "knowledge-base", "dingtalk", "markdown", "catalog", "template"]

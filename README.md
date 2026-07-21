@@ -1,6 +1,6 @@
-# Prajna 企业智能体 · 多场景模板中台 Demo
+# prajna 企业智能体 · 多场景模板中台 Demo
 
-本项目是 **Prajna** 参加广州「广智能」超级智能体大赛的可运行成果，定位为企业级多场景模板中台。用户只需输入参数或一句话自然语言描述，Prajna 即可自动识别意图并生成对应的企业级文档：Excel、Word、PPT、HTML。
+本项目是 **prajna** 参加广州「广智能」超级智能体大赛的可运行成果，定位为企业级多场景模板中台。用户只需输入参数或一句话自然语言描述，prajna 即可自动识别意图并生成对应的企业级文档：Excel、Word、PPT、HTML。
 
 ## 在线 Demo
 
@@ -8,7 +8,7 @@
 
 ## 核心能力
 
-**🤖 自然语言智能体模式**：输入一句话，Prajna 自动识别意图、匹配技能、填充参数并生成文档。
+**🤖 自然语言智能体模式**：输入一句话，prajna 自动识别意图、匹配技能、填充参数并生成文档。
 
 例如：
 - "帮我做一份深圳互联网产品经理 P5 的薪资模板"
@@ -17,7 +17,7 @@
 - "帮我做一份智慧园区建设项目的投标书"
 - "生成招聘电商运营助理的 JD 和面试评估表"
 
-## 支持的 11 个企业场景
+## 支持的 15 个企业场景
 
 | 业务域 | 技能 | 输出 | 说明 |
 |---|---|---|---|
@@ -31,12 +31,16 @@
 | **财务经营** | 📈 财务核心指标看板 | HTML | 资产负债率、净利润率、现金流量比率等 KPI 卡片 + Chart.js 趋势图 + 同比环比 |
 | **财务经营** | 📑 预算执行汇报 PPT | PPTX | 预算完成率对比、超支分析、结余建议、下月调整方案 |
 | **生产运营** | 🏭 服装厂岗位职责 | Excel（4 表） | 服装厂小组长岗位职责矩阵、8 项 KPI、绩效评分记录 |
+| **生产运营** | 🏭 生产日报 | Excel（5 表） | 生产日报、产量统计、设备运行 OEE、质量检验、人员出勤 |
+| **供应链** | 🛒 采购管理套件 | Excel（5 表） | 采购申请单、供应商评估、询价比价、合同审查清单、采购台账 |
+| **法务合规** | ⚖️ 合同审查助手 | Word | 主体资格、商务、财务、违约、知产、争议解决六维度审查意见书 |
+| **客户服务** | 🎧 客服 SOP | Excel（4 表） | 话术库、工单流程、客诉分类与升级规则、FAQ |
 | **情报资讯** | 📰 AI 领袖日报 | HTML | 李开复、OpenAI、Anthropic、DeepMind、Meta 最新动态卡片式日报 |
 
 ## Demo 亮点
 
 - **🤖 自然语言智能体**：一句话识别意图，自动调用对应技能。
-- **🧩 多场景模板中台**：11 个技能覆盖 HR、销售、财务、生产、招投标、情报 6 大业务域。
+- **🧩 多场景模板中台**：15 个技能覆盖 HR、销售、财务、生产、供应链、法务、客服、招投标、情报 8 大业务域。
 - **🎯 多岗位智能适配**：内置 10+ 行业预设、城市薪酬系数、职级带宽体系。
 - **🌍 城市薪酬基准**：根据城市等级自动调整薪资、社保公积金基数。
 - **📈 职级带宽体系**：P1-P9 职级对应薪酬、绩效与奖金带宽。
@@ -80,7 +84,7 @@ prajna-guangzhou-demo/
 ├── requirements.txt                  # Python 依赖
 ├── .streamlit/config.toml            # Streamlit 配置
 ├── assets/                           # 示例文件
-└── skills/                           # 11 个模板生成技能
+└── skills/                           # 15 个模板生成技能
     ├── prajna-salary-template/
     ├── prajna-sales-weekly-report/
     ├── hr/
@@ -95,6 +99,14 @@ prajna-guangzhou-demo/
     │   └── prajna-budget-execution-ppt/
     ├── manufacturing/
     │   └── prajna-clothing-teamleader-duty/
+    ├── procurement/
+    │   └── prajna-procurement-assistant/
+    ├── legal/
+    │   └── prajna-contract-review-assistant/
+    ├── customer-service/
+    │   └── prajna-customer-service-sop/
+    ├── production/
+    │   └── prajna-production-daily-report/
     └── business-intelligence/
         └── prajna-ai-leader-daily/
 ```
