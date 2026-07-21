@@ -91,6 +91,56 @@ export PRAJNA_LLM_PROVIDER=mock
 
 然后勾选「使用 LLM 生成代码」即可体验 LLM 代码生成与执行的完整流程。
 
+## CLI 使用
+
+prajna 提供命令行入口，可直接在终端调用：
+
+```bash
+# 运行自然语言任务
+python3 prajna_cli.py run "核算 payroll_data.xlsx 工资" --input payroll_data.xlsx
+
+# 运行单个 Skill
+python3 prajna_cli.py skill salary --city 广州 --level P2 --position 电商运营助理
+
+# 运行多 Agent 联动工作流
+python3 prajna_cli.py workflow 招聘筛选联动
+
+# 记忆操作
+python3 prajna_cli.py memory remember "广州 P2 电商运营助理薪资带宽 6-9K" --type business --tags 薪酬,广州
+python3 prajna_cli.py memory recall "广州 薪酬" --limit 5
+python3 prajna_cli.py memory list --limit 10
+```
+
+## API 使用
+
+prajna 提供 FastAPI 服务，方便企业系统集成：
+
+```bash
+# 启动 API 服务
+uvicorn prajna_api:app --host 0.0.0.0 --port 8000
+```
+
+常用端点：
+
+| 方法 | 端点 | 说明 |
+|---|---|---|
+| GET | `/health` | 健康检查 |
+| GET | `/skills` | 列出支持的 Skill |
+| GET | `/workflows` | 列出联动工作流 |
+| POST | `/run` | 运行自然语言任务 |
+| POST | `/skill/{skill_key}` | 运行单个 Skill |
+| POST | `/workflow/{workflow_name}` | 运行联动工作流 |
+| GET | `/memory?query=...` | 召回记忆 |
+| POST | `/memory` | 写入记忆 |
+
+示例：
+
+```bash
+curl -X POST http://localhost:8000/run \
+  -H "Content-Type: application/json" \
+  -d '{"task":"读取 sales_data.xlsx 按区域统计销售额"}'
+```
+
 ## 部署到 Render
 
 1. 打开 [render.com](https://render.com/)，用 GitHub 登录。
@@ -108,7 +158,9 @@ export PRAJNA_LLM_PROVIDER=mock
 
 ```
 prajna-guangzhou-demo/
-├── streamlit_app.py                  # Demo 主程序
+├── streamlit_app.py                  # Streamlit Web 界面
+├── prajna_cli.py                     # 命令行入口
+├── prajna_api.py                     # FastAPI 服务
 ├── README.md                         # 项目说明
 ├── requirements.txt                  # Python 依赖
 ├── .streamlit/config.toml            # Streamlit 配置
