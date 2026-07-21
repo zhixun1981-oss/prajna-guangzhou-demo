@@ -1,7 +1,9 @@
 import io
 import re
+import shutil
 import subprocess
 import sys
+import traceback
 import zipfile
 from datetime import datetime
 from pathlib import Path
@@ -14,6 +16,10 @@ import streamlit.components.v1 as components
 # ---------------------------------------------------------------------------
 APP_DIR = Path(__file__).resolve().parent
 SKILLS_DIR = APP_DIR / "skills"
+
+# Import prajna-code-agent directly so the web UI can run code generation & execution
+sys.path.insert(0, str(SKILLS_DIR / "prajna-code-agent" / "scripts"))
+from code_agent import CodeAgent
 
 # 11 skills
 SALARY_SCRIPT = SKILLS_DIR / "prajna-salary-template" / "scripts" / "generate_salary_template.py"
@@ -31,6 +37,7 @@ PROCUREMENT_SCRIPT = SKILLS_DIR / "procurement" / "prajna-procurement-assistant"
 LEGAL_SCRIPT = SKILLS_DIR / "legal" / "prajna-contract-review-assistant" / "scripts" / "generate_contract_review.py"
 CS_SOP_SCRIPT = SKILLS_DIR / "customer-service" / "prajna-customer-service-sop" / "scripts" / "generate_cs_sop.py"
 PRODUCTION_SCRIPT = SKILLS_DIR / "production" / "prajna-production-daily-report" / "scripts" / "generate_production_daily.py"
+CODE_AGENT_SCRIPT = SKILLS_DIR / "prajna-code-agent" / "scripts" / "code_agent.py"
 
 SALARY_SAMPLE = APP_DIR / "assets" / "sample_薪资模板_广州_电商运营助理.xlsx"
 SALES_SAMPLE = APP_DIR / "assets" / "sample_销售周报_示例.xlsx"
@@ -194,9 +201,19 @@ SKILL_REGISTRY = {
         "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         "desc": "生成生产日报、产量统计、设备运行、质量检验、人员出勤",
     },
+    "code_agent": {
+        "icon": "🤖",
+        "name": "代码智能体",
+        "category": "智能体中台",
+        "script": CODE_AGENT_SCRIPT,
+        "ext": "mixed",
+        "mime": "application/octet-stream",
+        "desc": "自然语言生成 Python 代码并沙箱执行，自动沉淀代码与结果到记忆",
+    },
 }
 
 CATEGORIES = {
+    "智能体中台": ["code_agent"],
     "人力资源": ["salary", "recruitment", "compensation", "performance"],
     "销售商务": ["sales", "bidding"],
     "财务经营": ["finance_kb", "finance_dashboard", "budget_ppt"],
@@ -1123,9 +1140,9 @@ with tab_templates:
         if selected_skill == "salary":
             c1, c2 = st.columns(2)
             with c1:
-                params["industry"] = st.text_input("行业", value="互联网")
-                params["position"] = st.text_input("岗位", value="电商运营助理")
-                params["city"] = st.text_input("城市", value="广州")
+                params["industry"] = st.text_input("行业", value="互联网", key=f"{selected_skill}_industry")
+                params["position"] = st.text_input("岗位", value="电商运营助理", key=f"{selected_skill}_position")
+                params["city"] = st.text_input("城市", value="广州", key=f"{selected_skill}_city")
             with c2:
                 params["level"] = st.selectbox("职级", ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9"], index=1)
                 params["description"] = st.text_area("自然语言描述（可选）", value="", height=80)
@@ -1133,28 +1150,28 @@ with tab_templates:
         elif selected_skill == "sales":
             c1, c2 = st.columns(2)
             with c1:
-                params["team"] = st.text_input("团队名称", value="华南销售一部")
+                params["team"] = st.text_input("团队名称", value="华南销售一部", key=f"{selected_skill}_team")
                 params["preset"] = st.selectbox("团队类型", ["互联网/SaaS 销售团队", "电商销售团队", "线下零售销售团队", "通用销售团队"])
-                params["week"] = st.text_input("报表周期", value=f"{datetime.now().year}年第{datetime.now().isocalendar().week}周")
+                params["week"] = st.text_input("报表周期", value=f"{datetime.now().year}年第{datetime.now().isocalendar().week}周", key=f"{selected_skill}_week")
             with c2:
                 params["sales_target"] = st.number_input("本周销售目标（元）", min_value=0, value=1200000, step=10000)
-                params["author"] = st.text_input("填写人", value="销售主管")
+                params["author"] = st.text_input("填写人", value="销售主管", key=f"{selected_skill}_author")
                 params["date"] = st.date_input("填写日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "finance_kb":
-            params["company"] = st.text_input("企业名称", value="京东集团")
-            params["author"] = st.text_input("维护部门", value="财务部")
+            params["company"] = st.text_input("企业名称", value="京东集团", key=f"{selected_skill}_company")
+            params["author"] = st.text_input("维护部门", value="财务部", key=f"{selected_skill}_author")
             params["date"] = st.date_input("更新日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "clothing_duty":
             c1, c2 = st.columns(2)
             with c1:
                 params["preset"] = st.selectbox("班组预设", ["服装缝纫组", "服装裁剪组", "服装包装组", "通用"])
-                params["team"] = st.text_input("班组名称", value="缝纫一组")
+                params["team"] = st.text_input("班组名称", value="缝纫一组", key=f"{selected_skill}_team")
             with c2:
-                params["factory"] = st.text_input("工厂名称", value="成衣A厂")
-                params["month"] = st.text_input("考核周期", value=datetime.now().strftime("%Y-%m"))
-                params["author"] = st.text_input("编制人", value="prajna")
+                params["factory"] = st.text_input("工厂名称", value="成衣A厂", key=f"{selected_skill}_factory")
+                params["month"] = st.text_input("考核周期", value=datetime.now().strftime("%Y-%m"), key=f"{selected_skill}_month")
+                params["author"] = st.text_input("编制人", value="prajna", key=f"{selected_skill}_author")
 
         elif selected_skill == "ai_daily":
             c1, c2 = st.columns(2)
@@ -1167,21 +1184,21 @@ with tab_templates:
             c1, c2 = st.columns(2)
             with c1:
                 params["preset"] = st.selectbox("企业预设", ["通用企业", "通用制造集团", "互联网/SaaS企业", "零售连锁企业", "新能源科技企业"])
-                params["company"] = st.text_input("企业名称", value="美的集团")
+                params["company"] = st.text_input("企业名称", value="美的集团", key=f"{selected_skill}_company")
             with c2:
-                params["period"] = st.text_input("报表周期", value=datetime.now().strftime("%Y年%m月"))
+                params["period"] = st.text_input("报表周期", value=datetime.now().strftime("%Y年%m月"), key=f"{selected_skill}_period")
 
         elif selected_skill == "budget_ppt":
-            params["month"] = st.text_input("汇报月份", value=datetime.now().strftime("%Y年%m月"))
-            params["company"] = st.text_input("公司名称", value="美的集团")
-            params["author"] = st.text_input("汇报部门", value="财务部")
+            params["month"] = st.text_input("汇报月份", value=datetime.now().strftime("%Y年%m月"), key=f"{selected_skill}_month")
+            params["company"] = st.text_input("公司名称", value="美的集团", key=f"{selected_skill}_company")
+            params["author"] = st.text_input("汇报部门", value="财务部", key=f"{selected_skill}_author")
 
         elif selected_skill == "procurement":
             c1, c2 = st.columns(2)
             with c1:
-                params["company"] = st.text_input("公司名称", value="美的集团")
-                params["department"] = st.text_input("申请部门", value="采购部")
-                params["applicant"] = st.text_input("申请人", value="张采购")
+                params["company"] = st.text_input("公司名称", value="美的集团", key=f"{selected_skill}_company")
+                params["department"] = st.text_input("申请部门", value="采购部", key=f"{selected_skill}_department")
+                params["applicant"] = st.text_input("申请人", value="张采购", key=f"{selected_skill}_applicant")
             with c2:
                 params["date"] = st.date_input("申请日期", value=datetime.now()).strftime("%Y-%m-%d")
                 params["delivery_date"] = st.date_input("期望到货日期", value=datetime.now()).strftime("%Y-%m-%d")
@@ -1189,58 +1206,58 @@ with tab_templates:
         elif selected_skill == "legal":
             c1, c2 = st.columns(2)
             with c1:
-                params["company"] = st.text_input("公司名称", value="京东集团")
-                params["contract_name"] = st.text_input("合同名称", value="软件采购与服务合同")
-                params["contract_type"] = st.text_input("合同类型", value="采购合同")
+                params["company"] = st.text_input("公司名称", value="京东集团", key=f"{selected_skill}_company")
+                params["contract_name"] = st.text_input("合同名称", value="软件采购与服务合同", key=f"{selected_skill}_contract_name")
+                params["contract_type"] = st.text_input("合同类型", value="采购合同", key=f"{selected_skill}_contract_type")
             with c2:
                 params["amount"] = st.number_input("合同金额（元）", min_value=0, value=580000, step=10000)
-                params["term"] = st.text_input("合作期限", value="12个月")
+                params["term"] = st.text_input("合作期限", value="12个月", key=f"{selected_skill}_term")
                 params["risk_level"] = st.selectbox("风险等级", ["高", "中", "低"], index=1)
-                params["reviewer"] = st.text_input("审查人", value="法务经理")
+                params["reviewer"] = st.text_input("审查人", value="法务经理", key=f"{selected_skill}_reviewer")
                 params["date"] = st.date_input("审查日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "cs_sop":
-            params["company"] = st.text_input("公司名称", value="京东集团")
+            params["company"] = st.text_input("公司名称", value="京东集团", key=f"{selected_skill}_company")
             params["date"] = st.date_input("更新日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "production":
             c1, c2 = st.columns(2)
             with c1:
-                params["factory"] = st.text_input("工厂名称", value="美的集团武汉工厂")
+                params["factory"] = st.text_input("工厂名称", value="美的集团武汉工厂", key=f"{selected_skill}_factory")
             with c2:
                 params["date"] = st.date_input("日报日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "bidding":
             c1, c2 = st.columns(2)
             with c1:
-                params["project"] = st.text_input("项目名称", value="智慧园区智能化建设项目")
-                params["bidder"] = st.text_input("投标人", value="智讯科技有限公司")
-                params["tenderer"] = st.text_input("招标人", value="广州高新区管委会")
+                params["project"] = st.text_input("项目名称", value="智慧园区智能化建设项目", key=f"{selected_skill}_project")
+                params["bidder"] = st.text_input("投标人", value="智讯科技有限公司", key=f"{selected_skill}_bidder")
+                params["tenderer"] = st.text_input("招标人", value="广州高新区管委会", key=f"{selected_skill}_tenderer")
             with c2:
                 params["amount"] = st.number_input("投标总金额（元）", min_value=0, value=5800000, step=100000)
-                params["duration"] = st.text_input("工期/服务期", value="180天")
-                params["industry"] = st.text_input("行业领域", value="IT")
+                params["duration"] = st.text_input("工期/服务期", value="180天", key=f"{selected_skill}_duration")
+                params["industry"] = st.text_input("行业领域", value="IT", key=f"{selected_skill}_industry")
 
         elif selected_skill == "recruitment":
             c1, c2 = st.columns(2)
             with c1:
-                params["position"] = st.text_input("岗位名称", value="电商运营助理")
-                params["department"] = st.text_input("所属部门", value="电商运营部")
-                params["city"] = st.text_input("工作城市", value="广州")
+                params["position"] = st.text_input("岗位名称", value="电商运营助理", key=f"{selected_skill}_position")
+                params["department"] = st.text_input("所属部门", value="电商运营部", key=f"{selected_skill}_department")
+                params["city"] = st.text_input("工作城市", value="广州", key=f"{selected_skill}_city")
                 params["level"] = st.selectbox("职级", ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9"], index=1)
             with c2:
                 params["salary_min"] = st.number_input("月薪下限", min_value=0, value=6000, step=500)
                 params["salary_max"] = st.number_input("月薪上限", min_value=0, value=9000, step=500)
-                params["reports_to"] = st.text_input("汇报对象", value="部门经理")
+                params["reports_to"] = st.text_input("汇报对象", value="部门经理", key=f"{selected_skill}_reports_to")
                 params["headcount"] = st.number_input("招聘人数", min_value=1, value=1, step=1)
                 params["urgency"] = st.selectbox("紧急程度", ["高", "中", "低"])
 
         elif selected_skill == "compensation":
             c1, c2 = st.columns(2)
             with c1:
-                params["company"] = st.text_input("企业名称", value="智云科技")
-                params["industry"] = st.text_input("行业", value="互联网")
-                params["city"] = st.text_input("总部城市", value="广州")
+                params["company"] = st.text_input("企业名称", value="智云科技", key=f"{selected_skill}_company")
+                params["industry"] = st.text_input("行业", value="互联网", key=f"{selected_skill}_industry")
+                params["city"] = st.text_input("总部城市", value="广州", key=f"{selected_skill}_city")
                 params["scale"] = st.number_input("企业规模（人）", min_value=1, value=200, step=10)
             with c2:
                 params["budget"] = st.number_input("年度薪酬总预算（元）", min_value=0, value=30000000, step=1000000)
@@ -1249,13 +1266,34 @@ with tab_templates:
         elif selected_skill == "performance":
             c1, c2 = st.columns(2)
             with c1:
-                params["department"] = st.text_input("考核部门", value="电商运营部")
-                params["position"] = st.text_input("考核岗位", value="电商运营助理")
-                params["cycle"] = st.selectbox("考核周期", ["月度", "季度", "半年度", "年度"])
+                params["department"] = st.text_input("考核部门", value="电商运营部", key=f"{selected_skill}_department")
+                params["position"] = st.text_input("考核岗位", value="电商运营助理", key=f"{selected_skill}_position")
+                params["cycle"] = st.selectbox("考核周期", ["月度", "季度", "半年度", "年度"], key=f"{selected_skill}_cycle")
             with c2:
-                params["method"] = st.selectbox("考核方法", ["KPI", "OKR", "360", "MBO"])
-                params["levels"] = st.text_input("绩效等级", value="A/B/C/D")
-                params["company"] = st.text_input("企业名称", value="prajna示范企业")
+                params["method"] = st.selectbox("考核方法", ["KPI", "OKR", "360", "MBO"], key=f"{selected_skill}_method")
+                params["levels"] = st.text_input("绩效等级", value="A/B/C/D", key=f"{selected_skill}_levels")
+                params["company"] = st.text_input("企业名称", value="prajna示范企业", key=f"{selected_skill}_company")
+
+        elif selected_skill == "code_agent":
+            st.info("🤖 prajna 代码智能体：用自然语言描述业务数据处理任务，prajna 会自动生成 Python 代码并在沙箱中执行。")
+            params["task"] = st.text_area(
+                "任务描述",
+                value="读取 sales_data.xlsx，按区域统计销售额和完成率，生成 HTML 报告",
+                height=80,
+                key=f"{selected_skill}_task",
+            )
+            params["uploaded_files"] = st.file_uploader(
+                "上传输入数据文件（支持 .xlsx / .csv）",
+                type=["xlsx", "xls", "csv"],
+                accept_multiple_files=True,
+                key=f"{selected_skill}_files",
+            )
+            c1, c2 = st.columns(2)
+            with c1:
+                params["tags"] = st.text_input("记忆标签（逗号分隔，可选）", value="demo", key=f"{selected_skill}_tags")
+            with c2:
+                params["use_sample"] = st.checkbox("使用内置示例数据", value=True, key=f"{selected_skill}_sample")
+            st.caption("支持的意图：销售分析、薪酬核算、简历筛选、库存分析、KPI 评分。后续将接入 LLM 实现开放式代码生成。")
 
         generate_clicked = st.button(f"🚀 生成 {meta['name']}", type="primary", use_container_width=True)
 
@@ -1350,6 +1388,77 @@ with tab_templates:
             out_prefix = HISTORY_DIR / f"prajna_绩效体系_{params['company']}_{safe_pos}_{timestamp}"
             out_path = Path(f"{out_prefix}.xlsx")
             cmd = [sys.executable, str(meta["script"]), "--department", params["department"], "--position", params["position"], "--cycle", params["cycle"], "--method", params["method"], "--levels", params["levels"], "--company", params["company"], "--output", str(out_prefix), "--format", "all"]
+
+        if selected_skill == "code_agent":
+            with st.spinner("🤖 prajna 代码智能体正在理解任务、生成代码并执行..."):
+                try:
+                    # Prepare input files
+                    input_files = []
+                    code_inputs_dir = HISTORY_DIR / f"code_agent_inputs_{timestamp}"
+                    code_inputs_dir.mkdir(parents=True, exist_ok=True)
+
+                    if params.get("use_sample"):
+                        sample_dir = SKILLS_DIR / "prajna-code-agent" / "samples"
+                        for f in sample_dir.glob("*"):
+                            if f.is_file():
+                                shutil.copy2(f, code_inputs_dir / f.name)
+                                input_files.append(code_inputs_dir / f.name)
+
+                    for uploaded in params.get("uploaded_files") or []:
+                        dest = code_inputs_dir / uploaded.name
+                        dest.write_bytes(uploaded.getvalue())
+                        input_files.append(dest)
+
+                    tags = [t.strip() for t in params.get("tags", "").split(",") if t.strip()]
+                    agent = CodeAgent()
+                    result = agent.run(params["task"], input_files=input_files, tags=tags)
+
+                    st.markdown(
+                        f"""
+                        <div class="result-card">
+                            <h4>✅ 代码智能体执行完成</h4>
+                            <p><strong>识别意图：</strong>{result['template_name']}（{result['intent']}）</p>
+                            <p><strong>执行状态：</strong>{'成功' if result['result']['success'] else '失败'}</p>
+                            <p><strong>耗时：</strong>{result['result']['duration_ms']} ms</p>
+                            <p><strong>记忆路径：</strong><code>{result['memory_path']}</code></p>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+
+                    if result["result"]["stdout"]:
+                        with st.expander("📤 执行输出"):
+                            st.code(result["result"]["stdout"])
+                    if result["result"]["stderr"]:
+                        with st.expander("⚠️ 错误输出"):
+                            st.code(result["result"]["stderr"], language="bash")
+                    if result["result"]["error"] and not result["result"]["success"]:
+                        st.error(result["result"]["error"])
+
+                    with st.expander("🧠 生成的代码"):
+                        st.code(result["generated_code"], language="python")
+
+                    # Offer download for each artifact
+                    artifacts = [Path(a) for a in result["result"]["artifacts"] if Path(a).name != "generated_script.py"]
+                    if artifacts:
+                        st.markdown("<p><strong>📦 生成产物</strong></p>", unsafe_allow_html=True)
+                        cols = st.columns(min(len(artifacts), 4))
+                        for idx, artifact in enumerate(artifacts):
+                            with cols[idx % 4]:
+                                with open(artifact, "rb") as f:
+                                    mime = "text/html" if artifact.suffix == ".html" else "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" if artifact.suffix in (".xlsx", ".xls") else "text/csv"
+                                    st.download_button(
+                                        label=f"📥 下载 {artifact.name}",
+                                        data=f,
+                                        file_name=artifact.name,
+                                        mime=mime,
+                                        use_container_width=True,
+                                        key=f"code_agent_dl_{idx}_{timestamp}",
+                                    )
+                except Exception as e:
+                    st.error(f"代码智能体运行异常：{e}")
+                    st.code(traceback.format_exc())
+            st.stop()
 
         with st.spinner(f"prajna 正在生成 {meta['name']}..."):
             try:
@@ -2528,7 +2637,7 @@ memory_context:
             value="创建一个合同审查助手，能够自动识别合同中的风险条款、付款条件和违约责任，并生成审查报告。",
             height=100,
         )
-        skill_author = st.text_input("作者", value="prajna")
+        skill_author = st.text_input("作者", value="prajna", key="skill_author")
         skill_category = st.selectbox("分类", ["业务", "工具", "系统", "分析", "内容", "其他"])
 
         if st.button("✨ 生成 Skill 框架", use_container_width=True):

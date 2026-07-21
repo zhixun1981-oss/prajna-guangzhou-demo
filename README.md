@@ -1,6 +1,6 @@
-# prajna 企业智能体 · 多场景模板中台 Demo
+# prajna 企业智能体 · 多场景模板中台 + 代码智能体
 
-本项目是 **prajna** 参加广州「广智能」超级智能体大赛的可运行成果，定位为企业级多场景模板中台。用户只需输入参数或一句话自然语言描述，prajna 即可自动识别意图并生成对应的企业级文档：Excel、Word、PPT、HTML。
+本项目是 **prajna** 的企业级智能体能力演示：既是一个覆盖 HR、销售、财务、生产、供应链、法务、客服、招投标、情报等多业务场景的**模板中台**，也是一个能**理解业务语义、生成 Python 代码、沙箱执行并沉淀记忆**的代码智能体。用户只需输入参数或一句话自然语言描述，prajna 即可自动识别意图、生成文档或执行数据分析任务。
 
 ## 在线 Demo
 
@@ -17,10 +17,11 @@
 - "帮我做一份智慧园区建设项目的投标书"
 - "生成招聘电商运营助理的 JD 和面试评估表"
 
-## 支持的 15 个企业场景
+## 支持的 16 个企业场景
 
 | 业务域 | 技能 | 输出 | 说明 |
 |---|---|---|---|
+| **智能体中台** | 🤖 代码智能体 | Python + Excel/HTML | 自然语言生成 Python 代码，沙箱执行，自动沉淀代码与结果到记忆 |
 | **人力资源** | 💰 薪资模板 | Excel（8 表） | 薪资结构、绩效考核、调薪机制、奖金方案、福利明细、计算示例、合规校验、绩效系数对照 |
 | **人力资源** | 🤝 招聘助手 | Excel + Word | 岗位说明书 JD、任职资格、结构化面试评估表、招聘漏斗、人才画像、Offer 模板 |
 | **人力资源** | 💵 薪酬体系 | Excel（8 表） | 岗位薪酬矩阵、薪酬结构、城市系数、调薪方案、薪酬预算、人力成本测算、薪酬绩效联动 |
@@ -40,7 +41,10 @@
 ## Demo 亮点
 
 - **🤖 自然语言智能体**：一句话识别意图，自动调用对应技能。
-- **🧩 多场景模板中台**：15 个技能覆盖 HR、销售、财务、生产、供应链、法务、客服、招投标、情报 8 大业务域。
+- **🧩 多场景模板中台**：16 个技能覆盖 HR、销售、财务、生产、供应链、法务、客服、招投标、情报、代码智能体 9 大业务域。
+- **💻 企业业务代码智能体**：销售分析、薪酬核算、简历筛选、库存分析、KPI 评分等业务数据任务，自动生成 Python 代码并执行，输出可下载的 Excel/HTML 报告。
+- **🧠 记忆沉淀**：每次代码执行任务自动保存生成的代码、执行日志与产物到 `~/.prajna/code_agent_memory`，支持复用与审计。
+- **🔌 LLM-ready**：内置 DeepSeek / OpenRouter / OpenAI / Anthropic 适配器，配置 API key 后即可从规则模板升级到开放式代码生成。
 - **🎯 多岗位智能适配**：内置 10+ 行业预设、城市薪酬系数、职级带宽体系。
 - **🌍 城市薪酬基准**：根据城市等级自动调整薪资、社保公积金基数。
 - **📈 职级带宽体系**：P1-P9 职级对应薪酬、绩效与奖金带宽。
@@ -61,6 +65,19 @@ streamlit run streamlit_app.py
 ```
 
 浏览器访问 `http://localhost:8501`。
+
+## 启用 LLM 开放式代码生成（可选）
+
+prajna-code-agent 默认使用规则模板引擎，无需 API key。如需启用 LLM 生成开放式业务代码，配置以下环境变量：
+
+```bash
+export PRAJNA_LLM_PROVIDER=deepseek      # deepseek | openrouter | openai | anthropic
+export PRAJNA_LLM_API_KEY=sk-xxxxxxxx
+export PRAJNA_LLM_MODEL=deepseek-chat    # 可选，不填使用默认模型
+export PRAJNA_LLM_BASE_URL=              # 可选，自定义 API 地址
+```
+
+配置后，代码智能体会优先调用 LLM；若 LLM 未配置或调用失败，自动回退到规则模板。
 
 ## 部署到 Render
 
@@ -84,7 +101,8 @@ prajna-guangzhou-demo/
 ├── requirements.txt                  # Python 依赖
 ├── .streamlit/config.toml            # Streamlit 配置
 ├── assets/                           # 示例文件
-└── skills/                           # 15 个模板生成技能
+└── skills/                           # 16 个智能体技能
+    ├── prajna-code-agent/              # 代码生成 + 沙箱执行 + 记忆沉淀
     ├── prajna-salary-template/
     ├── prajna-sales-weekly-report/
     ├── hr/
