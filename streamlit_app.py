@@ -733,6 +733,9 @@ with st.sidebar:
     st.divider()
     st.markdown(
         """
+        ### 关于 prajna
+        prajna 由锦辉人力自主研发，以 HRO 为首个深度落地场景，内置 32 位数字员工 Agent，面向中小企业通用 Agent 平台。
+
         ### 快速链接
         - [GitHub 仓库](https://github.com/zhixun1981-oss/prajna-guangzhou-demo)
         - [在线 Demo](https://prajna-guangzhou-demo.onrender.com)
@@ -753,15 +756,16 @@ st.markdown(
         </div>
         <div class="hero-title">🧠 Prajna 企业智能体平台</div>
         <div class="hero-subtitle">
-            一句话生成企业级文档 · 原生 Agent 架构底座 · 全模态记忆核心<br>
-            <span style="opacity:0.85;font-size:1.05rem;">HR · 销售 · 财务 · 生产 · 招投标 · 情报，11 个场景一键直达</span>
+            人力带着业务走 · 人力资源做导演，贴近业务，引领变化<br>
+            <span style="opacity:0.85;font-size:1.05rem;">先做自己的 0 号客户，再做行业的基础设施 · 32 位数字员工 Agent 覆盖 HR 核心、业务增长与管理决策全链路</span>
         </div>
         <div>
-            <span class="hero-badge">🤖 自然语言智能体</span>
+            <span class="hero-badge">🤖 32 位数字员工 Agent</span>
             <span class="hero-badge">🧠 原生 Agent 架构</span>
             <span class="hero-badge">💾 全模态记忆核心</span>
-            <span class="hero-badge">📦 11 个企业场景</span>
+            <span class="hero-badge">📦 15 个企业场景</span>
             <span class="hero-badge">🔄 多 Agent 协同</span>
+            <span class="hero-badge">🖥️ 自主桌面自动化</span>
         </div>
     </div>
     """,
@@ -773,10 +777,11 @@ skill_count = len(SKILL_REGISTRY)
 cat_count = len(CATEGORIES)
 st.markdown(
     f"""
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
-        <div class="metric-card"><div class="metric-value">{skill_count}</div><div class="metric-label">企业模板技能</div></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2rem;">
+        <div class="metric-card"><div class="metric-value">32</div><div class="metric-label">数字员工 Agent</div></div>
+        <div class="metric-card"><div class="metric-value">{skill_count}</div><div class="metric-label">可扩展技能</div></div>
         <div class="metric-card"><div class="metric-value">{cat_count}</div><div class="metric-label">业务领域</div></div>
-        <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">核心系统能力</div></div>
+        <div class="metric-card"><div class="metric-value">20+</div><div class="metric-label">协作平台接入</div></div>
         <div class="metric-card"><div class="metric-value">0</div><div class="metric-label">外部 API 依赖</div></div>
     </div>
     """,
@@ -800,20 +805,52 @@ tab_home, tab_templates, tab_architecture, tab_agents, tab_showcase = st.tabs([
 with tab_home:
     st.markdown(
         """
-        <div class="section-title">核心能力</div>
-        <div class="section-subtitle">Prajna 不仅是模板生成器，更是一套面向企业的原生智能体平台</div>
+        <div class="section-title">关于 Prajna</div>
+        <div style="background:white;border-radius:20px;padding:2rem;border:1px solid #e2e8f0;box-shadow:0 8px 32px -8px rgba(15,23,42,0.08);margin-bottom:1.5rem;">
+            <p style="margin:0 0 1rem 0;color:#334155;line-height:1.8;font-size:1.05rem;">
+                prajna 由锦辉人力自主研发，是以 <strong>HRO 为首个深度落地场景</strong>、面向中小企业的通用 Agent 平台。
+                我们最早想做 prajna，不是因为看到了"AI+HR"这个风口，而是因为我们自己就是那个每月被算薪表、合规排查、标书截止日期反复折磨的人。
+                <strong>先给自己治病，再谈别的。</strong>
+            </p>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;">
+                <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
+                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">50+</div>
+                    <div style="font-size:0.85rem;color:#64748b;">服务客户企业</div>
+                </div>
+                <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
+                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">1万+</div>
+                    <div style="font-size:0.85rem;color:#64748b;">派遣/外包员工</div>
+                </div>
+                <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
+                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">20+年</div>
+                    <div style="font-size:0.85rem;color:#64748b;">一线 HRO 运营经验</div>
+                </div>
+                <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
+                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">AAA</div>
+                    <div style="font-size:0.85rem;color:#64748b;">和谐劳动关系企业</div>
+                </div>
+            </div>
+        </div>
         """,
         unsafe_allow_html=True,
     )
 
-    c1, c2, c3 = st.columns(3)
+    st.markdown(
+        """
+        <div class="section-title">核心能力</div>
+        <div class="section-subtitle">Prajna 不仅是模板生成器，更是一套面向企业的原生智能体平台 · 听得懂 · 干得了 · 记得住 · 可合规</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.markdown(
             """
             <div class="capability-card">
-                <div class="capability-icon">🤖</div>
-                <div class="capability-title">自然语言智能体</div>
-                <div class="capability-desc">输入一句话即可识别意图、匹配技能、填充参数并生成文档。支持薪资、招聘、绩效、招投标、财务看板等 11 个企业场景。</div>
+                <div class="capability-icon">🗣️</div>
+                <div class="capability-title">听得懂</div>
+                <div class="capability-desc">自然语言交互，自动识别招聘、薪酬、合规、招投标等 24+ 业务意图，模糊目标主动澄清。</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -822,9 +859,9 @@ with tab_home:
         st.markdown(
             """
             <div class="capability-card">
-                <div class="capability-icon">🧠</div>
-                <div class="capability-title">原生 Agent 架构</div>
-                <div class="capability-desc">定义应用层、能力层、模型层、数据层四层架构，规范 Agent 生命周期、元数据、协同协议与白盒追溯，支撑企业级多智能体协同。</div>
+                <div class="capability-icon">🛠️</div>
+                <div class="capability-title">干得了</div>
+                <div class="capability-desc">47+ 工具、6 种执行后端，可调用终端、浏览器、Office、数据库真实操作系统，子 Agent 并行隔离执行。</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -833,9 +870,73 @@ with tab_home:
         st.markdown(
             """
             <div class="capability-card">
-                <div class="capability-icon">💾</div>
-                <div class="capability-title">全模态记忆核心</div>
-                <div class="capability-desc">时间记忆、语义网络、智能剪枝、自我反思四大模块，为所有 Agent 提供统一记忆服务，实现跨会话、跨 Agent、跨模态长期记忆联动。</div>
+                <div class="capability-icon">🧠</div>
+                <div class="capability-title">记得住</div>
+                <div class="capability-desc">持久记忆 + 用户建模，跨会话保持上下文。时间记忆、语义网络、智能剪枝、自我反思四大模块联动。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with c4:
+        st.markdown(
+            """
+            <div class="capability-card">
+                <div class="capability-icon">🛡️</div>
+                <div class="capability-title">可合规</div>
+                <div class="capability-desc">AIGC 隐式水印、算法审计日志、危险命令审批，关键操作保留人工复核，满足企业合规要求。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="section-title">旗舰 Agent 实测效果</div>
+        <div class="section-subtitle">三个月封闭试点验证：薪酬核算效率提升 95%，招聘方案生成效率提升 98%</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    f1, f2, f3 = st.columns(3)
+    with f1:
+        st.markdown(
+            """
+            <div class="capability-card" style="border-top:4px solid #2563eb;">
+                <div class="capability-title">💰 薪酬 Agent</div>
+                <div class="capability-desc">拉取考勤 → 标记异常 → 计算应发 → 计算个税 → 三级核验 → 生成报盘</div>
+                <div style="margin-top:1rem;display:flex;align-items:baseline;gap:0.5rem;">
+                    <span style="font-size:2rem;font-weight:800;color:#2563eb;">3天→30分钟</span>
+                </div>
+                <div style="font-size:0.85rem;color:#64748b;">单轮核算效率提升</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with f2:
+        st.markdown(
+            """
+            <div class="capability-card" style="border-top:4px solid #10b981;">
+                <div class="capability-title">🛡️ 合规 Agent</div>
+                <div class="capability-desc">实时扫描全量客户用工风险，按高/中/低自动分级预警；法理思辨式咨询，引用法条给出"要做/不要做"对照表</div>
+                <div style="margin-top:1rem;display:flex;align-items:baseline;gap:0.5rem;">
+                    <span style="font-size:2rem;font-weight:800;color:#10b981;">事后→实时</span>
+                </div>
+                <div style="font-size:0.85rem;color:#64748b;">风险发现模式转变</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with f3:
+        st.markdown(
+            """
+            <div class="capability-card" style="border-top:4px solid #7c3aed;">
+                <div class="capability-title">🎯 标书 Agent</div>
+                <div class="capability-desc">招标文件解析 → 评分项提取 → 结构规划 → AI 撰写 → 资质关联 → 格式规范化 → 导出</div>
+                <div style="margin-top:1rem;display:flex;align-items:baseline;gap:0.5rem;">
+                    <span style="font-size:2rem;font-weight:800;color:#7c3aed;">数天→数小时</span>
+                </div>
+                <div style="font-size:0.85rem;color:#64748b;">完整标书（8 章节 / 约 40KB）</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -848,14 +949,14 @@ with tab_home:
         "告诉 Prajna 你要生成什么",
         value="帮我做一份深圳互联网产品经理 P5 的薪资模板",
         height=100,
-        placeholder="例如：生成电商销售团队本周周报，目标 80 万 / 搭建京东集团财务知识库目录 / 为美的集团生成本月预算执行汇报 PPT / 帮我做一份智慧园区建设项目的投标书",
+        placeholder="例如：生成电商销售团队本周周报 / 搭建京东集团财务知识库目录 / 为美的集团生成本月预算执行汇报 PPT / 生成美的集团采购管理套件 / 审查一份采购合同",
         label_visibility="collapsed",
     )
 
     st.markdown(
         """
         <small style="color:#64748b">💡 试试这样说：</small><br>
-        <small style="color:#64748b">"帮我做一份上海制造业生产主管 P4 的薪资模板" · "生成招聘电商运营助理的 JD 和面试评估表" · "生成本月预算执行汇报 PPT"</small>
+        <small style="color:#64748b">"帮我做一份上海制造业生产主管 P4 的薪资模板" · "生成招聘电商运营助理的 JD 和面试评估表" · "为京东集团生成客服 SOP" · "生成美的集团武汉工厂生产日报"</small>
         """,
         unsafe_allow_html=True,
     )
@@ -908,12 +1009,12 @@ with tab_home:
     st.markdown(
         """
         <div class="section-title">🎬 全能力一键演示</div>
-        <div class="section-subtitle">点击按钮，Prajna 会依次调用全部 11 个技能并打包成 zip，真实展示平台覆盖能力</div>
+        <div class="section-subtitle">点击按钮，Prajna 会依次调用全部 15 个技能并打包成 zip，真实展示平台覆盖能力</div>
         """,
         unsafe_allow_html=True,
     )
 
-    run_all_clicked = st.button("🚀 一键运行全部 11 个技能", type="primary", use_container_width=True)
+    run_all_clicked = st.button("🚀 一键运行全部 15 个技能", type="primary", use_container_width=True)
 
     if run_all_clicked:
         results = []
@@ -1411,6 +1512,76 @@ with tab_architecture:
             """,
             unsafe_allow_html=True,
         )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="section-title">🏗️ 三层系统架构</div>
+        <div class="section-subtitle">数字员工 Agent 层 · AI Agent 框架层 · 基础设施层</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    l3, l2, l1 = st.columns(3)
+    with l3:
+        st.markdown(
+            """
+            <div class="capability-card" style="border-top:4px solid #2563eb;">
+                <div class="capability-title">L3 数字员工 Agent 层</div>
+                <div class="capability-desc">招聘 / 薪酬 / 入职 / 客服 / 合规 / 标书 / 审批全链路；32 位专业 Agent 协同完成复杂 HR 业务流程。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with l2:
+        st.markdown(
+            """
+            <div class="capability-card" style="border-top:4px solid #7c3aed;">
+                <div class="capability-title">L2 AI Agent 框架层</div>
+                <div class="capability-desc">智能对话引擎、工具调用系统、多平台消息网关、多 LLM 调度、持久记忆管理。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with l1:
+        st.markdown(
+            """
+            <div class="capability-card" style="border-top:4px solid #10b981;">
+                <div class="capability-title">L1 基础设施层</div>
+                <div class="capability-desc">CLI 终端界面、消息平台适配器、安全与权限控制、AIGC 隐式水印与审计日志。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="section-title">👥 32 位数字员工 Agent 矩阵</div>
+        <div class="section-subtitle">四大类 Agent 覆盖 HR 核心、业务增长、管理决策与平台支撑</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    agent_matrix = [
+        ("💼", "HR 核心", "15 位", "招聘 / 薪酬 / 入职 / 客服 / 合规 / 标书 / 审批等", "#2563eb"),
+        ("📈", "业务增长", "5 位", "文案 / 市场 / 销售 / 客户成功等", "#7c3aed"),
+        ("🎯", "管理决策", "8 位", "财务 / 会议 / 战略 / 采购 / 经营分析等", "#10b981"),
+        ("⚙️", "平台支撑", "4 位", "意图 / 配置 / 调度 / 数据接入等", "#f59e0b"),
+    ]
+    am1, am2, am3, am4 = st.columns(4)
+    for col, (icon, title, count, desc, color) in zip([am1, am2, am3, am4], agent_matrix):
+        with col:
+            st.markdown(
+                f"""
+                <div class="capability-card" style="border-top:4px solid {color};">
+                    <div style="font-size:2rem;margin-bottom:0.5rem;">{icon}</div>
+                    <div class="capability-title">{title} <span style="font-size:1.5rem;color:{color};">{count}</span></div>
+                    <div class="capability-desc">{desc}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown('<div class="section-title">🔄 Agent 标准生命周期</div>', unsafe_allow_html=True)
@@ -2463,11 +2634,13 @@ st.markdown(
     """
     <div class="footer">
         <strong>Prajna 企业智能体平台</strong><br>
-        广州「广智能」超级智能体大赛 · 开放赛道 · 自然语言智能体 · 原生 Agent 架构 · 全模态记忆核心
+        记忆觉醒 · 智能新生｜让记忆型 AI 赋能企业数字化转型<br>
+        出品方：惠州市锦辉人力资源管理有限公司 · 20+ 年一线 HRO 运营经验 · AAA 级和谐劳动关系企业<br>
+        <small>广州「广智能」超级智能体大赛 · 开放赛道 · 自然语言智能体 · 原生 Agent 架构 · 全模态记忆核心</small>
     </div>
     """,
     unsafe_allow_html=True,
 )
 st.caption(
-    "【人工智能生成-需人工核验】本 Demo 输出内容仅供参考，具体薪酬、销售、财务、招投标、招聘等决策请以当地法律法规及公司政策为准。"
+    "【人工智能生成-需人工核验】本 Demo 输出内容仅供参考，具体薪酬、销售、财务、招投标、招聘、采购、法务、生产、客服等决策请以当地法律法规及公司政策为准。"
 )
