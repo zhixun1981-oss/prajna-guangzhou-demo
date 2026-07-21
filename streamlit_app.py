@@ -838,7 +838,7 @@ with tab_home:
     st.markdown(
         """
         <div class="section-title">核心能力</div>
-        <div class="section-subtitle">prajna 不仅是模板生成器，更是一套面向企业的原生智能体平台 · 听得懂 · 干得了 · 记得住 · 可合规</div>
+        <div class="section-subtitle">prajna 是一套面向企业的原生智能体平台 · 听得懂 · 干得了 · 记得住 · 可合规</div>
         """,
         unsafe_allow_html=True,
     )
