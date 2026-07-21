@@ -818,7 +818,7 @@ with tab_home:
                     <div style="font-size:0.85rem;color:#64748b;">服务客户企业</div>
                 </div>
                 <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
-                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">1万+</div>
+                    <div style="font-size:1.75rem;font-weight:800;color:#2563eb;">2万+</div>
                     <div style="font-size:0.85rem;color:#64748b;">派遣/外包员工</div>
                 </div>
                 <div style="text-align:center;padding:1rem;background:#f8fafc;border-radius:12px;">
