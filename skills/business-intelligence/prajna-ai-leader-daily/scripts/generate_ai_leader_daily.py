@@ -193,6 +193,83 @@ def build_html(data: dict, output_path: Path, date_str: str) -> Path:
 
 
 # ---------------------------------------------------------------------------
+# Web search
+# ---------------------------------------------------------------------------
+LEADER_QUERIES = {
+    "李开复 / 零一万物": ["李开复 零一万物 最新", "李开复 AI 2026"],
+    "Sam Altman / OpenAI": ["Sam Altman OpenAI latest news", "OpenAI 2026"],
+    "Anthropic": ["Anthropic Claude latest news 2026", "Dario Amodei Anthropic"],
+    "Google DeepMind": ["Google DeepMind latest news 2026", "Gemini DeepMind"],
+    "Meta": ["Meta AI latest news 2026", "Meta Llama 2026"],
+}
+
+
+def _search_leader(leader_name: str, max_results: int = 2) -> list:
+    """使用 DuckDuckGo 搜索指定领袖的最新动态。"""
+    try:
+        from ddgs import DDGS
+    except ImportError:
+        print("[WARN] 未安装 ddgs，跳过联网搜索。", file=sys.stderr)
+        return []
+
+    queries = LEADER_QUERIES.get(leader_name, [leader_name])
+    items = []
+    seen_urls = set()
+    with DDGS(timeout=20) as ddgs:
+        for q in queries:
+            if len(items) >= max_results:
+                break
+            try:
+                results = ddgs.text(q, region="wt-wt", max_results=4)
+                for r in results:
+                    url = r.get("href", "")
+                    if not url or url in seen_urls:
+                        continue
+                    seen_urls.add(url)
+                    title = r.get("title", "")[:90]
+                    body = r.get("body", "")[:200]
+                    summary = f"{body}……" if body else ""
+                    source_title = url.split("/")[2].replace("www.", "").split(":")[0]
+                    items.append({
+                        "title": title,
+                        "summary": summary,
+                        "source_title": source_title,
+                        "source_url": url,
+                        "date": "",
+                    })
+                    if len(items) >= max_results:
+                        break
+            except Exception as exc:
+                print(f"[WARN] 搜索 {q} 失败：{exc}", file=sys.stderr)
+                continue
+    return items
+
+
+def search_ai_news(date_str: str) -> dict:
+    """联网搜索 AI 领袖动态，构建日报数据。"""
+    leaders = []
+    colors = ["#C62828", "#1565C0", "#6A1B9A", "#00695C", "#E65100"]
+    for idx, (name, _) in enumerate(LEADER_QUERIES.items()):
+        items = _search_leader(name, max_results=2)
+        if not items:
+            # 搜索失败时保留一条占位提示
+            items = [{
+                "title": "今日暂无搜索到有效动态",
+                "summary": "DuckDuckGo 搜索未返回结果，可能受网络或反爬限制，建议稍后重试或切换到本地精选数据。",
+                "source_title": "Prajna",
+                "source_url": "#",
+                "date": "",
+            }]
+        leaders.append({
+            "id": name.split("/")[0].strip().lower().replace(" ", "-"),
+            "name": name,
+            "color": colors[idx % len(colors)],
+            "items": items,
+        })
+    return {"leaders": leaders, "date": date_str, "source": "duckduckgo-search"}
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 def parse_args(argv=None):
@@ -212,6 +289,10 @@ def parse_args(argv=None):
         help=f"自定义新闻数据 JSON 路径（默认：{DEFAULT_DATA}）"
     )
     parser.add_argument(
+        "--search", action="store_true",
+        help="联网搜索最新 AI 领袖动态（默认使用本地精选数据）"
+    )
+    parser.add_argument(
         "--list-leaders", action="store_true",
         help="列出默认覆盖的 AI 领袖"
     )
@@ -222,17 +303,9 @@ def main(argv=None):
     args = parse_args(argv)
 
     data_path = Path(args.data) if args.data else DEFAULT_DATA
-    if not data_path.exists():
+    if not args.search and not data_path.exists():
         print(f"错误：数据文件不存在 {data_path}", file=sys.stderr)
         return 1
-
-    data = load_json(data_path)
-
-    if args.list_leaders:
-        print("默认覆盖的 AI 领袖：")
-        for leader in data.get("leaders", []):
-            print(f"  - {leader.get('name', leader.get('id'))}")
-        return 0
 
     date_str = args.date or _today()
 
@@ -242,6 +315,17 @@ def main(argv=None):
     else:
         SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
         output_path = SAMPLES_DIR / f"prajna_ai_leader_daily_{date_str}.html"
+
+    if args.search:
+        data = search_ai_news(date_str)
+    else:
+        data = load_json(data_path)
+
+    if args.list_leaders:
+        print("默认覆盖的 AI 领袖：")
+        for leader in data.get("leaders", []):
+            print(f"  - {leader.get('name', leader.get('id'))}")
+        return 0
 
     build_html(data, output_path, date_str)
     print(f"已生成 AI 领袖日报：{output_path}")

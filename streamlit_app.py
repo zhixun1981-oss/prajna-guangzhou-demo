@@ -27,6 +27,10 @@ BIDDING_SCRIPT = SKILLS_DIR / "sales" / "prajna-bidding-assistant" / "scripts" /
 RECRUIT_SCRIPT = SKILLS_DIR / "hr" / "prajna-recruitment-assistant" / "scripts" / "generate_recruitment_kit.py"
 COMPENSATION_SCRIPT = SKILLS_DIR / "hr" / "prajna-compensation-system" / "scripts" / "generate_compensation_system.py"
 PERFORMANCE_SCRIPT = SKILLS_DIR / "hr" / "prajna-performance-system" / "scripts" / "generate_performance_system.py"
+PROCUREMENT_SCRIPT = SKILLS_DIR / "procurement" / "prajna-procurement-assistant" / "scripts" / "generate_procurement_kit.py"
+LEGAL_SCRIPT = SKILLS_DIR / "legal" / "prajna-contract-review-assistant" / "scripts" / "generate_contract_review.py"
+CS_SOP_SCRIPT = SKILLS_DIR / "customer-service" / "prajna-customer-service-sop" / "scripts" / "generate_cs_sop.py"
+PRODUCTION_SCRIPT = SKILLS_DIR / "production" / "prajna-production-daily-report" / "scripts" / "generate_production_daily.py"
 
 SALARY_SAMPLE = APP_DIR / "assets" / "sample_薪资模板_广州_电商运营助理.xlsx"
 SALES_SAMPLE = APP_DIR / "assets" / "sample_销售周报_示例.xlsx"
@@ -152,7 +156,43 @@ SKILL_REGISTRY = {
         "script": AI_DAILY_SCRIPT,
         "ext": "html",
         "mime": "text/html",
-        "desc": "生成 AI 领袖动态日报 HTML 页面",
+        "desc": "生成 AI 领袖动态日报 HTML 页面（已接入真实网络数据）",
+    },
+    "procurement": {
+        "icon": "🛒",
+        "name": "采购管理套件",
+        "category": "供应链",
+        "script": PROCUREMENT_SCRIPT,
+        "ext": "xlsx",
+        "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "desc": "生成采购申请、供应商评估、询价比价、合同审查、采购台账",
+    },
+    "legal": {
+        "icon": "⚖️",
+        "name": "合同审查助手",
+        "category": "法务合规",
+        "script": LEGAL_SCRIPT,
+        "ext": "docx",
+        "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "desc": "生成合同审查意见书 Word 文档",
+    },
+    "cs_sop": {
+        "icon": "🎧",
+        "name": "客服 SOP",
+        "category": "客户服务",
+        "script": CS_SOP_SCRIPT,
+        "ext": "xlsx",
+        "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "desc": "生成客服话术库、工单流程、客诉升级规则、FAQ",
+    },
+    "production": {
+        "icon": "🏭",
+        "name": "生产日报",
+        "category": "生产运营",
+        "script": PRODUCTION_SCRIPT,
+        "ext": "xlsx",
+        "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "desc": "生成生产日报、产量统计、设备运行、质量检验、人员出勤",
     },
 }
 
@@ -160,7 +200,10 @@ CATEGORIES = {
     "人力资源": ["salary", "recruitment", "compensation", "performance"],
     "销售商务": ["sales", "bidding"],
     "财务经营": ["finance_kb", "finance_dashboard", "budget_ppt"],
-    "生产运营": ["clothing_duty"],
+    "供应链": ["procurement"],
+    "法务合规": ["legal"],
+    "客户服务": ["cs_sop"],
+    "生产运营": ["clothing_duty", "production"],
     "情报资讯": ["ai_daily"],
 }
 
@@ -200,6 +243,10 @@ INTENT_KEYWORDS = {
     "recruitment": ["招聘", "jd", "岗位说明书", "面试", "offer", "recruitment"],
     "compensation": ["薪酬体系", "薪酬矩阵", "职级薪酬", "compensation", "薪酬带宽"],
     "performance": ["绩效", "kpi", "绩效考核", "绩效体系", "performance", "okr", "pip"],
+    "procurement": ["采购", "供应商", "询价比价", "采购申请", "采购合同", "采购台账"],
+    "legal": ["合同审查", "法务", "合同审核", "法律", "合规", "contract review"],
+    "cs_sop": ["客服", "客服话术", "工单", "客诉", "sop", "faq", "客服流程"],
+    "production": ["生产日报", "产量统计", "设备运行", "质量检验", "人员出勤", "车间日报"],
 }
 
 
@@ -369,7 +416,51 @@ def parse_agent_input(text):
             "author": "Prajna",
         })
     elif intent == "ai_daily":
-        result.update({"date": datetime.now().strftime("%Y-%m-%d")})
+        result.update({"date": datetime.now().strftime("%Y-%m-%d"), "search": False})
+    elif intent == "procurement":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|为|设计|采购管理|采购)", "", text)
+        for kw in ["套件", "模板", "Excel", "excel", "生成", "搭建", "的", "为"]:
+            company_clean = company_clean.replace(kw, "")
+        result.update({
+            "company": company_clean.strip()[:20] or "美的集团",
+            "department": "采购部",
+            "applicant": "张采购",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "delivery_date": datetime.now().strftime("%Y-%m-%d"),
+        })
+    elif intent == "legal":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|为|设计|审查|审核)", "", text)
+        company_clean = re.sub(r"(合同审查意见书|合同审查|合同审核|意见书|合同).*$", "", company_clean)
+        for kw in ["法务", "法律", "的", "生成", "搭建", "为", "公司", "企业"]:
+            company_clean = company_clean.replace(kw, "")
+        result.update({
+            "company": company_clean.strip()[:20] or "京东集团",
+            "contract_name": "软件采购与服务合同",
+            "contract_type": "采购合同",
+            "amount": 580000,
+            "term": "12个月",
+            "risk_level": "中",
+            "reviewer": "法务经理",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+        })
+    elif intent == "cs_sop":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|为|设计)", "", text)
+        company_clean = re.sub(r"(客服SOP|客服话术|客服标准作业程序|客服流程|FAQ|工单流程).*$", "", company_clean)
+        for kw in ["客服", "SOP", "sop", "话术", "的", "生成", "搭建", "为", "公司", "企业"]:
+            company_clean = company_clean.replace(kw, "")
+        result.update({
+            "company": company_clean.strip()[:20] or "京东集团",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+        })
+    elif intent == "production":
+        factory_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|为|设计)", "", text)
+        factory_clean = re.sub(r"(生产日报|产量统计|设备运行|质量检验|人员出勤|日报).*$", "", factory_clean)
+        for kw in ["生产", "车间", "工厂", "的", "生成", "搭建", "为"]:
+            factory_clean = factory_clean.replace(kw, "")
+        result.update({
+            "factory": factory_clean.strip()[:20] or "美的集团武汉工厂",
+            "date": datetime.now().strftime("%Y-%m-%d"),
+        })
     elif intent == "finance_dashboard":
         company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|为|设计)", "", text)
         company_clean = re.sub(r"(财务核心指标看板|财务看板|财务指标).*$", "", company_clean)
@@ -377,7 +468,7 @@ def parse_agent_input(text):
             company_clean = company_clean.replace(kw, "")
         result.update({
             "preset": infer_finance_preset(text),
-            "company": company_clean.strip()[:20] or "示范企业股份",
+            "company": company_clean.strip()[:20] or "美的集团",
             "period": datetime.now().strftime("%Y年%m月"),
         })
     elif intent == "budget_ppt":
@@ -468,6 +559,24 @@ def run_skill(intent, parsed, meta):
         out_name = f"prajna_AI领袖日报_{parsed['date']}_{timestamp}.html"
         out_path = HISTORY_DIR / out_name
         cmd = [sys.executable, str(meta["script"]), "--date", parsed["date"], "--output", str(out_path)]
+        if parsed.get("search"):
+            cmd.append("--search")
+    elif intent == "procurement":
+        out_name = f"prajna_采购管理套件_{parsed['company']}_{timestamp}.xlsx"
+        out_path = HISTORY_DIR / out_name
+        cmd = [sys.executable, str(meta["script"]), "--company", parsed["company"], "--department", parsed["department"], "--applicant", parsed["applicant"], "--date", parsed["date"], "--delivery-date", parsed["delivery_date"], "--output", str(out_path)]
+    elif intent == "legal":
+        out_name = f"prajna_合同审查意见书_{parsed['company']}_{timestamp}.docx"
+        out_path = HISTORY_DIR / out_name
+        cmd = [sys.executable, str(meta["script"]), "--company", parsed["company"], "--contract-name", parsed["contract_name"], "--contract-type", parsed["contract_type"], "--amount", str(parsed["amount"]), "--term", parsed["term"], "--risk-level", parsed["risk_level"], "--reviewer", parsed["reviewer"], "--date", parsed["date"], "--output", str(out_path)]
+    elif intent == "cs_sop":
+        out_name = f"prajna_客服SOP_{parsed['company']}_{timestamp}.xlsx"
+        out_path = HISTORY_DIR / out_name
+        cmd = [sys.executable, str(meta["script"]), "--company", parsed["company"], "--date", parsed["date"], "--output", str(out_path)]
+    elif intent == "production":
+        out_name = f"prajna_生产日报_{parsed['factory']}_{timestamp}.xlsx"
+        out_path = HISTORY_DIR / out_name
+        cmd = [sys.executable, str(meta["script"]), "--factory", parsed["factory"], "--date", parsed["date"], "--output", str(out_path)]
     elif intent == "finance_dashboard":
         out_name = f"prajna_财务核心指标看板_{parsed['company']}_{timestamp}.html"
         out_path = HISTORY_DIR / out_name
@@ -532,6 +641,10 @@ SAMPLE_INPUTS = {
     "recruitment": "帮我招聘一名广州 P2 电商运营助理",
     "compensation": "搭建智云科技企业薪酬体系",
     "performance": "生成电商运营助理岗位的绩效体系",
+    "procurement": "生成美的集团采购管理套件",
+    "legal": "为京东集团生成合同审查意见书",
+    "cs_sop": "生成京东集团客服 SOP",
+    "production": "生成美的集团武汉工厂生产日报",
 }
 
 
@@ -585,6 +698,18 @@ SCENARIOS = {
         "desc": "财务知识库 → 财务看板 → 预算 PPT → 销售周报，管理层月度经营参考",
         "skills": ["finance_kb", "finance_dashboard", "budget_ppt", "sales"],
         "color": "#d97706",
+    },
+    "供应链法务包": {
+        "icon": "🛒",
+        "desc": "采购管理套件 → 合同审查意见书 → 生产日报，覆盖供应链与生产合规",
+        "skills": ["procurement", "legal", "production"],
+        "color": "#0891b2",
+    },
+    "客户服务包": {
+        "icon": "🎧",
+        "desc": "客服 SOP → 生产日报 → 销售周报，打通服务与运营数据",
+        "skills": ["cs_sop", "production", "sales"],
+        "color": "#db2777",
     },
 }
 
@@ -931,7 +1056,11 @@ with tab_templates:
                 params["author"] = st.text_input("编制人", value="Prajna")
 
         elif selected_skill == "ai_daily":
-            params["date"] = st.date_input("日报日期", value=datetime.now()).strftime("%Y-%m-%d")
+            c1, c2 = st.columns(2)
+            with c1:
+                params["date"] = st.date_input("日报日期", value=datetime.now()).strftime("%Y-%m-%d")
+            with c2:
+                params["search"] = st.toggle("🌐 联网搜索最新动态", value=False, help="开启后会调用 DuckDuckGo 实时搜索，可能受网络环境影响")
 
         elif selected_skill == "finance_dashboard":
             c1, c2 = st.columns(2)
@@ -945,6 +1074,40 @@ with tab_templates:
             params["month"] = st.text_input("汇报月份", value=datetime.now().strftime("%Y年%m月"))
             params["company"] = st.text_input("公司名称", value="美的集团")
             params["author"] = st.text_input("汇报部门", value="财务部")
+
+        elif selected_skill == "procurement":
+            c1, c2 = st.columns(2)
+            with c1:
+                params["company"] = st.text_input("公司名称", value="美的集团")
+                params["department"] = st.text_input("申请部门", value="采购部")
+                params["applicant"] = st.text_input("申请人", value="张采购")
+            with c2:
+                params["date"] = st.date_input("申请日期", value=datetime.now()).strftime("%Y-%m-%d")
+                params["delivery_date"] = st.date_input("期望到货日期", value=datetime.now()).strftime("%Y-%m-%d")
+
+        elif selected_skill == "legal":
+            c1, c2 = st.columns(2)
+            with c1:
+                params["company"] = st.text_input("公司名称", value="京东集团")
+                params["contract_name"] = st.text_input("合同名称", value="软件采购与服务合同")
+                params["contract_type"] = st.text_input("合同类型", value="采购合同")
+            with c2:
+                params["amount"] = st.number_input("合同金额（元）", min_value=0, value=580000, step=10000)
+                params["term"] = st.text_input("合作期限", value="12个月")
+                params["risk_level"] = st.selectbox("风险等级", ["高", "中", "低"], index=1)
+                params["reviewer"] = st.text_input("审查人", value="法务经理")
+                params["date"] = st.date_input("审查日期", value=datetime.now()).strftime("%Y-%m-%d")
+
+        elif selected_skill == "cs_sop":
+            params["company"] = st.text_input("公司名称", value="京东集团")
+            params["date"] = st.date_input("更新日期", value=datetime.now()).strftime("%Y-%m-%d")
+
+        elif selected_skill == "production":
+            c1, c2 = st.columns(2)
+            with c1:
+                params["factory"] = st.text_input("工厂名称", value="美的集团武汉工厂")
+            with c2:
+                params["date"] = st.date_input("日报日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "bidding":
             c1, c2 = st.columns(2)
@@ -1040,6 +1203,25 @@ with tab_templates:
             out_name = f"prajna_AI领袖日报_{params['date']}_{timestamp}.html"
             out_path = HISTORY_DIR / out_name
             cmd = [sys.executable, str(meta["script"]), "--date", params["date"], "--output", str(out_path)]
+            if params.get("search"):
+                cmd.append("--search")
+        elif selected_skill == "procurement":
+            out_name = f"prajna_采购管理套件_{params['company']}_{timestamp}.xlsx"
+            out_path = HISTORY_DIR / out_name
+            cmd = [sys.executable, str(meta["script"]), "--company", params["company"], "--department", params["department"], "--applicant", params["applicant"], "--date", params["date"], "--delivery-date", params["delivery_date"], "--output", str(out_path)]
+        elif selected_skill == "legal":
+            out_name = f"prajna_合同审查意见书_{params['company']}_{timestamp}.docx"
+            out_path = HISTORY_DIR / out_name
+            cmd = [sys.executable, str(meta["script"]), "--company", params["company"], "--contract-name", params["contract_name"], "--contract-type", params["contract_type"], "--amount", str(params["amount"]), "--term", params["term"], "--risk-level", params["risk_level"], "--reviewer", params["reviewer"], "--date", params["date"], "--output", str(out_path)]
+        elif selected_skill == "cs_sop":
+            out_name = f"prajna_客服SOP_{params['company']}_{timestamp}.xlsx"
+            out_path = HISTORY_DIR / out_name
+            cmd = [sys.executable, str(meta["script"]), "--company", params["company"], "--date", params["date"], "--output", str(out_path)]
+        elif selected_skill == "production":
+            safe_factory = re.sub(r"[^\u4e00-\u9fa5a-zA-Z0-9_-]", "_", params["factory"])[:20]
+            out_name = f"prajna_生产日报_{safe_factory}_{timestamp}.xlsx"
+            out_path = HISTORY_DIR / out_name
+            cmd = [sys.executable, str(meta["script"]), "--factory", params["factory"], "--date", params["date"], "--output", str(out_path)]
         elif selected_skill == "finance_dashboard":
             out_name = f"prajna_财务核心指标看板_{params['company']}_{timestamp}.html"
             out_path = HISTORY_DIR / out_name
@@ -1323,6 +1505,9 @@ with tab_agents:
             {"key": "bidding", "name": "标书Agent", "base_match": 0.30, "load": 0.40, "success": 0.94, "memory": 0.60},
             {"key": "sales", "name": "销售Agent", "base_match": 0.25, "load": 0.60, "success": 0.88, "memory": 0.50},
             {"key": "customer_service", "name": "客服Agent", "base_match": 0.20, "load": 0.60, "success": 0.88, "memory": 0.50},
+            {"key": "procurement", "name": "采购Agent", "base_match": 0.20, "load": 0.45, "success": 0.93, "memory": 0.55},
+            {"key": "legal", "name": "法务Agent", "base_match": 0.20, "load": 0.30, "success": 0.95, "memory": 0.60},
+            {"key": "production", "name": "生产Agent", "base_match": 0.20, "load": 0.50, "success": 0.91, "memory": 0.55},
         ]
         # Boost the agent whose key matches detected intent
         for a in agent_pool:
@@ -1623,6 +1808,8 @@ with tab_showcase:
             "prajna-compensation-system", "prajna-performance-system", "prajna-bidding-assistant",
             "prajna-ecommerce-finance-kb-catalog", "prajna-financial-dashboard", "prajna-budget-execution-ppt",
             "prajna-clothing-teamleader-duty", "prajna-ai-leader-daily",
+            "prajna-procurement-assistant", "prajna-contract-review-assistant",
+            "prajna-customer-service-sop", "prajna-production-daily-report",
         ]
         highlighted = [s for s in all_skills if any(kw in s["path"] for kw in highlight_keywords)]
 
@@ -1656,7 +1843,7 @@ with tab_showcase:
             """
             <div style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
                 <h4 style="margin-top:0;color:#5b21b6;">💾 记忆核心交互演示</h4>
-                <p style="color:#64748b;margin:0;">模拟调用 memory_recall / memory_remember / memory_reflect / forget 四个原生接口。数据仅存于当前会话，用于演示接口形态。</p>
+                <p style="color:#64748b;margin:0;">模拟调用 memory_remember / memory_recall / memory_reflect / memory_forget 四个原生接口。数据仅存于当前会话，用于演示 Prajna 全模态记忆核心的接口形态与智能剪枝效果。</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -1668,7 +1855,24 @@ with tab_showcase:
                 {"name": "business_reimburse_rule", "type": "business", "content": "报销需提前3天申请，发票须为增值税专用发票", "importance": 5},
                 {"name": "project_q3_compensation", "type": "project", "content": "Q3目标：上线薪酬自动核算模块", "importance": 5},
                 {"name": "agent_bidding_lesson", "type": "agent", "content": "上次智慧园区投标因报价偏高未中标，需加强成本核算", "importance": 4},
+                {"name": "feedback_cs_long_report", "type": "feedback", "content": "客服主管反馈周报内容太长，希望只看关键指标", "importance": 3},
+                {"name": "reference_salary_guangzhou_p2", "type": "reference", "content": "广州 P2 电商运营助理市场薪资带宽 6-9K", "importance": 4},
             ]
+
+        # Stats
+        mem_types = [m["type"] for m in st.session_state.prajna_memory]
+        avg_importance = sum(m["importance"] for m in st.session_state.prajna_memory) / max(len(st.session_state.prajna_memory), 1)
+        m1, m2, m3, m4 = st.columns(4)
+        with m1:
+            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#8b5cf6;">{len(st.session_state.prajna_memory)}</div><div class="metric-label">记忆条目</div></div>', unsafe_allow_html=True)
+        with m2:
+            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#10b981;">{len(set(mem_types))}</div><div class="metric-label">记忆类型</div></div>', unsafe_allow_html=True)
+        with m3:
+            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#f59e0b;">{avg_importance:.1f}</div><div class="metric-label">平均重要性</div></div>', unsafe_allow_html=True)
+        with m4:
+            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#06b6d4;"><span class="pulse-dot"></span>正常</div><div class="metric-label">记忆核心状态</div></div>', unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
 
         col_a, col_b = st.columns([1, 1])
         with col_a:
@@ -1677,17 +1881,17 @@ with tab_showcase:
             mem_type = st.selectbox("记忆类型", ["user", "session", "project", "business", "agent", "feedback", "reference"], key="mem_type")
             mem_content = st.text_area("记忆内容", value="用户反馈生成的报告太长，希望更简洁", key="mem_content")
             mem_importance = st.slider("重要性", 1, 5, 3, key="mem_importance")
-            if st.button("📝 写入记忆", use_container_width=True):
+            if st.button("📝 写入记忆", use_container_width=True, key="mem_remember_btn"):
                 st.session_state.prajna_memory.append({
                     "name": mem_name, "type": mem_type, "content": mem_content, "importance": mem_importance
                 })
-                st.success(f"已写入记忆：{mem_name}")
+                st.success(f"✅ 已写入记忆：{mem_name}")
 
         with col_b:
             st.markdown("**memory_recall — 召回记忆**")
             recall_query = st.text_input("查询意图", value="用户喜欢什么风格", key="recall_query")
             recall_types = st.multiselect("记忆类型过滤", ["user", "session", "project", "business", "agent", "feedback", "reference"], default=["user", "business"], key="recall_types")
-            if st.button("🔍 召回记忆", use_container_width=True):
+            if st.button("🔍 召回记忆", use_container_width=True, key="mem_recall_btn"):
                 results = []
                 for mem in st.session_state.prajna_memory:
                     if recall_types and mem["type"] not in recall_types:
@@ -1695,14 +1899,60 @@ with tab_showcase:
                     if any(kw in mem["content"] for kw in recall_query.split()):
                         results.append(mem)
                 if results:
+                    st.markdown(f"<div style='color:#64748b;font-size:0.85rem;margin-bottom:0.5rem;'>召回 {len(results)} 条相关记忆</div>", unsafe_allow_html=True)
                     for r in results:
                         st.markdown(f"<div style='background:white;border-radius:8px;padding:0.75rem;border-left:3px solid #8b5cf6;margin-bottom:0.5rem;'><b>{r['name']}</b> <span style='color:#64748b;font-size:0.8rem;'>[{r['type']}]</span><br><span style='font-size:0.9rem;'>{r['content']}</span></div>", unsafe_allow_html=True)
                 else:
                     st.info("未召回相关记忆")
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("**当前记忆库**")
-        for mem in st.session_state.prajna_memory[-8:]:
+
+        # Memory reflect & prune
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**memory_reflect — 自我反思**")
+            reflect_types = st.multiselect("选择要反思的记忆类型", ["user", "session", "project", "business", "agent", "feedback", "reference"], default=["feedback", "agent"], key="reflect_types")
+            if st.button("🔄 生成反思洞察", use_container_width=True, key="mem_reflect_btn"):
+                filtered = [m for m in st.session_state.prajna_memory if m["type"] in reflect_types]
+                if filtered:
+                    insights = []
+                    feedbacks = [m for m in filtered if m["type"] == "feedback"]
+                    agents = [m for m in filtered if m["type"] == "agent"]
+                    if feedbacks:
+                        topics = set()
+                        for f in feedbacks:
+                            if "长" in f["content"] or "简洁" in f["content"]:
+                                topics.add("报告篇幅控制")
+                            if "慢" in f["content"] or "快" in f["content"]:
+                                topics.add("响应速度")
+                        insights.append(f"发现 {len(feedbacks)} 条反馈记忆，主要关注点：{', '.join(topics) if topics else '用户体验'}")
+                    if agents:
+                        insights.append(f"发现 {len(agents)} 条 Agent 经验记忆，可沉淀为策略记忆优化后续任务")
+                    st.success("反思完成")
+                    for ins in insights:
+                        st.markdown(f"<div style='background:#f0fdf4;border-radius:8px;padding:0.75rem;border-left:3px solid #10b981;margin-bottom:0.5rem;'>💡 {ins}</div>", unsafe_allow_html=True)
+                else:
+                    st.info("所选类型下暂无记忆")
+
+        with c2:
+            st.markdown("**智能剪枝 — 清理低重要性记忆**")
+            prune_threshold = st.slider("重要性阈值", 1, 5, 2, key="prune_threshold")
+            if st.button("✂️ 执行智能剪枝", use_container_width=True, key="mem_prune_btn"):
+                before = len(st.session_state.prajna_memory)
+                st.session_state.prajna_memory = [m for m in st.session_state.prajna_memory if m["importance"] >= prune_threshold]
+                after = len(st.session_state.prajna_memory)
+                st.success(f"已剪枝 {before - after} 条低重要性记忆，剩余 {after} 条")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("**记忆语义网络**")
+        node_html = ""
+        for mem in st.session_state.prajna_memory:
+            node_html += f'<span class="memory-node memory-node-{mem["type"]}">{mem["type"]}: {mem["name"]} {"⭐"*mem["importance"]}</span>'
+        st.markdown(f'<div style="background:white;border-radius:16px;padding:1rem;border:1px solid #e2e8f0;">{node_html}</div>', unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("**当前记忆库清单**")
+        for mem in st.session_state.prajna_memory[-10:]:
             badge_color = {"user":"#3b82f6","session":"#06b6d4","project":"#8b5cf6","business":"#10b981","agent":"#f59e0b","feedback":"#ef4444","reference":"#64748b"}.get(mem["type"], "#64748b")
             st.markdown(
                 f"""
@@ -1728,7 +1978,7 @@ with tab_showcase:
             unsafe_allow_html=True,
         )
 
-        scenario = st.selectbox("选择演示场景", ["招聘一名电商运营助理", "投标智慧园区建设项目", "处理用户报销咨询"])
+        scenario = st.selectbox("选择演示场景", ["招聘一名电商运营助理", "投标智慧园区建设项目", "处理用户报销咨询", "采购一批服务器设备", "审查一份采购合同"])
 
         if scenario == "招聘一名电商运营助理":
             steps = [
@@ -1752,7 +2002,7 @@ with tab_showcase:
                 ("📑 合成 Agent", "汇总生成投标文件 Word 大纲与 Excel 套件"),
                 ("🔄 投标后反思", "memory_reflect 复盘报价策略，沉淀为 agent 记忆"),
             ]
-        else:
+        elif scenario == "处理用户报销咨询":
             steps = [
                 ("👤 用户输入", "\"我的报销单被退回了，是什么原因？\""),
                 ("🎯 意图 Agent", "识别为客服咨询，加载 user/session/business 记忆"),
@@ -1761,6 +2011,28 @@ with tab_showcase:
                 ("📝 工单 Agent", "创建未结工单，写入 project 记忆"),
                 ("📊 反馈 Agent", "识别负面情绪，写入 feedback 记忆"),
                 ("🔄 反思优化", "memory_reflect 建议财务部门优化报销单填写引导"),
+            ]
+        elif scenario == "采购一批服务器设备":
+            steps = [
+                ("👤 用户输入", "\"采购部需要采购 5 台服务器，预算 10 万，请走采购流程\""),
+                ("🎯 意图 Agent", "识别为采购意图，提取品类、数量、预算、期望到货时间"),
+                ("🎛️ Agent 调度中心", "匹配采购 Agent，触发供应商评估与询价比价"),
+                ("🛒 采购 Agent", "生成采购申请单、供应商评估表、询价比价单"),
+                ("⚖️ 法务 Agent", "审查采购合同关键条款与风险点"),
+                ("💵 财务 Agent", "核对预算科目与付款节点"),
+                ("📦 入库 Agent", "到货验收后更新采购台账与库存记忆"),
+                ("🔄 反思优化", "memory_reflect 沉淀供应商表现与采购周期数据"),
+            ]
+        else:
+            steps = [
+                ("👤 用户输入", "\"请法务帮忙审查这份软件采购合同，金额 58 万\""),
+                ("🎯 意图 Agent", "识别为合同审查意图，解析合同类型与金额"),
+                ("🎛️ Agent 调度中心", "匹配法务 Agent，调用历史合同审查经验"),
+                ("⚖️ 法务 Agent", "从主体资格、商务、财务、违约、知产、争议解决六维度审查"),
+                ("💵 财务 Agent", "评估付款条款与税务风险"),
+                ("🎯 业务 Agent", "确认交付验收标准与 SLA"),
+                ("📑 合成 Agent", "输出合同审查意见书 Word 文档"),
+                ("💾 记忆沉淀", "审查结论写入 business 记忆，风险点写入 project 记忆"),
             ]
 
         for idx, (title, desc) in enumerate(steps):
@@ -1849,7 +2121,9 @@ memory_context:
                     {"name": "招聘Agent", "match": 0.98, "load": 0.35, "success": 0.96, "memory": 0.92},
                     {"name": "薪酬Agent", "match": 0.45, "load": 0.20, "success": 0.99, "memory": 0.70},
                     {"name": "客服Agent", "match": 0.30, "load": 0.60, "success": 0.88, "memory": 0.50},
-                    {"name": "文案Agent", "match": 0.55, "load": 0.40, "success": 0.90, "memory": 0.65},
+                    {"name": "法务Agent", "match": 0.55, "load": 0.30, "success": 0.95, "memory": 0.70},
+                    {"name": "采购Agent", "match": 0.35, "load": 0.45, "success": 0.93, "memory": 0.55},
+                    {"name": "生产Agent", "match": 0.25, "load": 0.50, "success": 0.91, "memory": 0.55},
                 ]
                 scored = []
                 for a in agents:
@@ -1903,6 +2177,9 @@ memory_context:
                 ("标书Agent", "🟢 健康", "2.1s", "94%"),
                 ("意图Agent", "🟢 健康", "0.3s", "98%"),
                 ("财务Agent", "🟢 健康", "1.5s", "99%"),
+                ("法务Agent", "🟢 健康", "1.8s", "95%"),
+                ("采购Agent", "🟢 健康", "1.6s", "93%"),
+                ("生产Agent", "🟢 健康", "2.0s", "91%"),
             ]
             st.markdown("**Agent 运行状态**")
             for name, status, rt, success in agent_status:

@@ -444,6 +444,72 @@ st.CodeBlock {
     -webkit-backdrop-filter: blur(8px);
 }
 
+/* Pulse live indicator */
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    margin-right: 0.5rem;
+}
+.pulse-dot::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: -4px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.4);
+    animation: pulseRing 2s ease-out infinite;
+}
+@keyframes pulseRing {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+/* Fade in cards */
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Memory network node */
+.memory-node {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+    margin: 0.25rem;
+    box-shadow: 0 4px 12px -4px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+}
+.memory-node:hover { transform: scale(1.05); }
+.memory-node-user { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+.memory-node-session { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.memory-node-project { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.memory-node-business { background: linear-gradient(135deg, #10b981, #059669); }
+.memory-node-agent { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.memory-node-feedback { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.memory-node-reference { background: linear-gradient(135deg, #64748b, #475569); }
+
+/* Glass highlight */
+.glass-highlight {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 16px;
+}
+
 /* Small responsive adjustments */
 @media (max-width: 768px) {
     .hero-title { font-size: 2rem; }
