@@ -855,11 +855,12 @@ st.markdown(
 # ---------------------------------------------------------------------------
 # Main Tabs
 # ---------------------------------------------------------------------------
-tab_home, tab_templates, tab_architecture, tab_agents = st.tabs([
+tab_home, tab_templates, tab_architecture, tab_agents, tab_showcase = st.tabs([
     "🏠 首页",
     "🛠️ 企业模板中台",
     "🧠 Prajna 核心架构",
     "🤖 Agent 联动示例",
+    "🎁 Prajna 全能力",
 ])
 
 # ---------------------------------------------------------------------------
@@ -1488,6 +1489,321 @@ with tab_agents:
             <div class="flow-step" style="border-left-color:#f59e0b;">
                 <div class="flow-step-title">🤝 入职 Agent 接管</div>
                 <div class="flow-step-desc">Offer 发出后触发入职 Agent，读取招聘 Agent 沉淀的候选人信息，自动生成分配计划、培训计划与薪酬开通流程。</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+# ---------------------------------------------------------------------------
+# Tab 5: Prajna Full Capability Showcase
+# ---------------------------------------------------------------------------
+with tab_showcase:
+    st.markdown(
+        """
+        <div class="section-title">🎁 Prajna 全能力 showcase</div>
+        <div class="section-subtitle">从底层记忆核心到上层业务 Agent，一览 Prajna 企业智能体平台的完整能力矩阵</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Sub-tabs for organized showcase
+    sub_home, sub_skills, sub_memory, sub_workflow, sub_spec = st.tabs([
+        "🗺️ 能力全景图",
+        "📦 技能目录",
+        "💾 记忆核心控制台",
+        "🔄 多 Agent 协同",
+        "📋 原生规范",
+    ])
+
+    # ---------- Sub-tab 1: Capability Map ----------
+    with sub_home:
+        st.markdown(
+            """
+            <div style="background:white;border-radius:16px;padding:2rem;border:1px solid #e2e8f0;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+                <h3 style="margin-top:0;color:#1e3a8a;">Prajna 能力分层全景</h3>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1.5rem;">
+                    <div style="background:linear-gradient(90deg,#1e40af,#3b82f6);color:white;border-radius:12px;padding:1rem;">
+                        <strong>🚀 应用层</strong> · AI 员工门户 · 多模态对话 · 定时任务 · 企业模板中台
+                    </div>
+                    <div style="background:linear-gradient(90deg,#5b21b6,#8b5cf6);color:white;border-radius:12px;padding:1rem;">
+                        <strong>⚡ 能力层</strong> · 自然语言意图识别 · 自主规划执行 · 多智能体协同 · 工具集成 · 白盒可追溯
+                    </div>
+                    <div style="background:linear-gradient(90deg,#0e7490,#06b6d4);color:white;border-radius:12px;padding:1rem;">
+                        <strong>🧠 模型层</strong> · 全模态记忆大模型 · 记忆迭代 · 小样本适配 · LLM 意图理解
+                    </div>
+                    <div style="background:linear-gradient(90deg,#047857,#10b981);color:white;border-radius:12px;padding:1rem;">
+                        <strong>💾 数据层</strong> · 时间记忆 · 语义网络 · 企业知识库 · 业务数据 · 智能剪枝
+                    </div>
+                </div>
+                <p style="color:#64748b;margin-top:1.5rem;line-height:1.6;">
+                    Prajna 不是单一 Agent，而是一套<b>企业智能体操作系统</b>：底层记忆核心让 Agent 拥有长期记忆，
+                    原生架构规范让所有 Agent 可协同、可追溯，上层技能市场覆盖 HR、销售、财务、生产、情报等全业务场景。
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # ---------- Sub-tab 2: Skill Catalog ----------
+    with sub_skills:
+        @st.cache_data(ttl=300)
+        def scan_skills(root_dir: str):
+            root = Path(root_dir).expanduser()
+            skills = []
+            if not root.exists():
+                return skills
+            for skill_dir in root.rglob("SKILL.md"):
+                rel = skill_dir.relative_to(root)
+                parts = rel.parts
+                category = parts[0] if len(parts) > 1 else "其他"
+                name = skill_dir.parent.name
+                desc = ""
+                skill_id = ""
+                try:
+                    with open(skill_dir, "r", encoding="utf-8") as f:
+                        content = f.read(2000)
+                    # parse frontmatter description
+                    if "description:" in content:
+                        m = re.search(r"description:\s*(\|?\s*\n?\s*)(.+?)(\n\w+:|\n# |\n---|\Z)", content, re.S)
+                        if m:
+                            desc = m.group(2).strip().replace("\n", " ")[:120]
+                    if "skill_id:" in content:
+                        m = re.search(r"skill_id:\s*(.+)", content)
+                        if m:
+                            skill_id = m.group(1).strip()
+                except Exception:
+                    pass
+                skills.append({
+                    "category": category,
+                    "name": name,
+                    "skill_id": skill_id or name,
+                    "path": str(skill_dir.parent),
+                    "desc": desc or "企业级智能体技能",
+                })
+            return skills
+
+        all_skills = scan_skills("~/.prajna/skills")
+
+        # Stats
+        s1, s2, s3 = st.columns(3)
+        with s1:
+            st.markdown(f'<div class="metric-card"><div class="metric-value">{len(all_skills)}</div><div class="metric-label">已安装技能</div></div>', unsafe_allow_html=True)
+        with s2:
+            st.markdown(f'<div class="metric-card"><div class="metric-value">{len(set(s["category"] for s in all_skills))}</div><div class="metric-label">技能领域</div></div>', unsafe_allow_html=True)
+        with s3:
+            st.markdown('<div class="metric-card"><div class="metric-value">∞</div><div class="metric-label">可扩展</div></div>', unsafe_allow_html=True)
+
+        # Highlighted skills (system + contest)
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<div style="font-weight:600;color:#1e293b;margin-bottom:0.75rem;">🌟 核心系统技能 + 本次大赛技能</div>', unsafe_allow_html=True)
+
+        highlight_keywords = [
+            "prajna-memory-core", "prajna-native-agent-architecture", "prajna-native-agent-adoption",
+            "Agent调度中心", "监控看板", "系统配置技能",
+            "prajna-salary-template", "prajna-sales-weekly-report", "prajna-recruitment-assistant",
+            "prajna-compensation-system", "prajna-performance-system", "prajna-bidding-assistant",
+            "prajna-ecommerce-finance-kb-catalog", "prajna-financial-dashboard", "prajna-budget-execution-ppt",
+            "prajna-clothing-teamleader-duty", "prajna-ai-leader-daily",
+        ]
+        highlighted = [s for s in all_skills if any(kw in s["path"] for kw in highlight_keywords)]
+
+        cols = st.columns(3)
+        for idx, skill in enumerate(highlighted[:18]):
+            with cols[idx % 3]:
+                st.markdown(
+                    f"""
+                    <div class="skill-card">
+                        <div class="skill-name">{skill['name']}</div>
+                        <div style="color:#64748b;font-size:0.75rem;margin-bottom:0.5rem;">{skill['category']}</div>
+                        <div class="skill-desc">{skill['desc']}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        # Full catalog by category
+        st.markdown("<br>", unsafe_allow_html=True)
+        with st.expander("📂 查看全部技能目录"):
+            categories = sorted(set(s["category"] for s in all_skills))
+            for cat in categories:
+                st.markdown(f"**{cat}**")
+                cat_skills = [s for s in all_skills if s["category"] == cat]
+                for skill in cat_skills:
+                    st.markdown(f"<small>• {skill['name']} — {skill['desc'][:80]}</small>", unsafe_allow_html=True)
+
+    # ---------- Sub-tab 3: Memory Core Console ----------
+    with sub_memory:
+        st.markdown(
+            """
+            <div style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                <h4 style="margin-top:0;color:#5b21b6;">💾 记忆核心交互演示</h4>
+                <p style="color:#64748b;margin:0;">模拟调用 memory_recall / memory_remember / memory_reflect / forget 四个原生接口。数据仅存于当前会话，用于演示接口形态。</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        if "prajna_memory" not in st.session_state:
+            st.session_state.prajna_memory = [
+                {"name": "user_preference_formal", "type": "user", "content": "用户偏好正式汇报风格", "importance": 4},
+                {"name": "business_reimburse_rule", "type": "business", "content": "报销需提前3天申请，发票须为增值税专用发票", "importance": 5},
+                {"name": "project_q3_compensation", "type": "project", "content": "Q3目标：上线薪酬自动核算模块", "importance": 5},
+                {"name": "agent_bidding_lesson", "type": "agent", "content": "上次智慧园区投标因报价偏高未中标，需加强成本核算", "importance": 4},
+            ]
+
+        col_a, col_b = st.columns([1, 1])
+        with col_a:
+            st.markdown("**memory_remember — 写入记忆**")
+            mem_name = st.text_input("记忆名称", value="feedback_report_concise", key="mem_name")
+            mem_type = st.selectbox("记忆类型", ["user", "session", "project", "business", "agent", "feedback", "reference"], key="mem_type")
+            mem_content = st.text_area("记忆内容", value="用户反馈生成的报告太长，希望更简洁", key="mem_content")
+            mem_importance = st.slider("重要性", 1, 5, 3, key="mem_importance")
+            if st.button("📝 写入记忆", use_container_width=True):
+                st.session_state.prajna_memory.append({
+                    "name": mem_name, "type": mem_type, "content": mem_content, "importance": mem_importance
+                })
+                st.success(f"已写入记忆：{mem_name}")
+
+        with col_b:
+            st.markdown("**memory_recall — 召回记忆**")
+            recall_query = st.text_input("查询意图", value="用户喜欢什么风格", key="recall_query")
+            recall_types = st.multiselect("记忆类型过滤", ["user", "session", "project", "business", "agent", "feedback", "reference"], default=["user", "business"], key="recall_types")
+            if st.button("🔍 召回记忆", use_container_width=True):
+                results = []
+                for mem in st.session_state.prajna_memory:
+                    if recall_types and mem["type"] not in recall_types:
+                        continue
+                    if any(kw in mem["content"] for kw in recall_query.split()):
+                        results.append(mem)
+                if results:
+                    for r in results:
+                        st.markdown(f"<div style='background:white;border-radius:8px;padding:0.75rem;border-left:3px solid #8b5cf6;margin-bottom:0.5rem;'><b>{r['name']}</b> <span style='color:#64748b;font-size:0.8rem;'>[{r['type']}]</span><br><span style='font-size:0.9rem;'>{r['content']}</span></div>", unsafe_allow_html=True)
+                else:
+                    st.info("未召回相关记忆")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("**当前记忆库**")
+        for mem in st.session_state.prajna_memory[-8:]:
+            badge_color = {"user":"#3b82f6","session":"#06b6d4","project":"#8b5cf6","business":"#10b981","agent":"#f59e0b","feedback":"#ef4444","reference":"#64748b"}.get(mem["type"], "#64748b")
+            st.markdown(
+                f"""
+                <div style="display:flex;align-items:center;gap:0.75rem;background:white;border-radius:8px;padding:0.75rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;">
+                    <span style="background:{badge_color};color:white;font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:999px;white-space:nowrap;">{mem['type']}</span>
+                    <span style="font-weight:500;">{mem['name']}</span>
+                    <span style="color:#64748b;font-size:0.85rem;flex:1;">{mem['content']}</span>
+                    <span style="color:#f59e0b;font-size:0.8rem;">{'⭐' * mem['importance']}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    # ---------- Sub-tab 4: Multi-Agent Workflow ----------
+    with sub_workflow:
+        st.markdown(
+            """
+            <div style="background:linear-gradient(135deg,#eff6ff,#f0fdf4);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                <h4 style="margin-top:0;color:#1e40af;">🔄 端到端多 Agent 协同演示</h4>
+                <p style="color:#64748b;margin:0;">选择一个业务场景，查看意图 Agent → 调度中心 → 业务 Agent → 记忆核心 的完整协作链路。</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        scenario = st.selectbox("选择演示场景", ["招聘一名电商运营助理", "投标智慧园区建设项目", "处理用户报销咨询"])
+
+        if scenario == "招聘一名电商运营助理":
+            steps = [
+                ("👤 用户输入", "\"我要招聘一名广州 P2 电商运营助理，月薪 6-9K\""),
+                ("🎯 意图 Agent", "调用 memory_recall(user/session/business) → 识别为招聘意图 → 提取岗位、城市、职级、薪资"),
+                ("🎛️ Agent 调度中心", "匹配招聘 Agent，评估其历史岗位画像经验 → 分发任务"),
+                ("🤝 招聘 Agent", "生成 JD、面试评估表、Offer 薪资建议；沉淀岗位画像"),
+                ("💰 薪酬 Agent", "根据城市系数与职级带宽校验 Offer 合理性"),
+                ("⭐ 绩效 Agent", "预生成该岗位 KPI 指标库与绩效合同"),
+                ("📝 入职 Agent", "Offer 接受后自动接管，生成分配计划、培训计划、薪酬开通"),
+                ("💾 记忆沉淀", "招聘结果写入 project/business；成功经验写入 agent 记忆"),
+            ]
+        elif scenario == "投标智慧园区建设项目":
+            steps = [
+                ("📄 招标公告输入", "\"智慧园区智能化建设项目，预算 580 万，工期 180 天\""),
+                ("🎯 意图 Agent", "识别为招投标意图，解析关键约束：金额、工期、资质"),
+                ("🎛️ Agent 调度中心", "并行分发：标书 Agent + 财务 Agent + 法务 Agent"),
+                ("🎯 标书 Agent", "生成资格自审表、技术偏离表、商务报价表、评分响应索引"),
+                ("💵 财务 Agent", "核算成本与毛利率，提供报价建议"),
+                ("⚖️ 法务 Agent", "审核合同条款与风险点"),
+                ("📑 合成 Agent", "汇总生成投标文件 Word 大纲与 Excel 套件"),
+                ("🔄 投标后反思", "memory_reflect 复盘报价策略，沉淀为 agent 记忆"),
+            ]
+        else:
+            steps = [
+                ("👤 用户输入", "\"我的报销单被退回了，是什么原因？\""),
+                ("🎯 意图 Agent", "识别为客服咨询，加载 user/session/business 记忆"),
+                ("🎛️ Agent 调度中心", "匹配客服 Agent，读取用户历史工单"),
+                ("🎧 客服 Agent", "查询退回原因：缺少增值税专用发票 → 生成补正指引"),
+                ("📝 工单 Agent", "创建未结工单，写入 project 记忆"),
+                ("📊 反馈 Agent", "识别负面情绪，写入 feedback 记忆"),
+                ("🔄 反思优化", "memory_reflect 建议财务部门优化报销单填写引导"),
+            ]
+
+        for idx, (title, desc) in enumerate(steps):
+            st.markdown(
+                f"""
+                <div class="flow-step">
+                    <div class="flow-step-title">{title}</div>
+                    <div class="flow-step-desc">{desc}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if idx < len(steps) - 1:
+                st.markdown('<div class="flow-arrow">⬇️</div>', unsafe_allow_html=True)
+
+    # ---------- Sub-tab 5: Native Spec ----------
+    with sub_spec:
+        st.markdown(
+            """
+            <div style="background:white;border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+                <h4 style="margin-top:0;color:#1e3a8a;">📋 SKILL.md Frontmatter 规范</h4>
+                <pre style="background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow-x:auto;font-size:0.85rem;">
+---
+name: 🎁 prajna
+skill_id: recruitment-agent
+description: 一句话描述 Agent 能力
+version: 2.0.0
+author: 锦辉人力·prajna
+tags: [prajna, agent, hr]
+model: deepseek-chat
+native_capabilities:
+  - autonomous_planning
+  - multi_agent_collaboration
+  - tool_integration
+  - traceability
+  - memory_linkage
+requires:
+  - prajna-memory-core
+  - prajna-native-agent-architecture
+memory_context:
+  - user
+  - business
+  - agent
+---
+                </pre>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div style="background:white;border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
+                <h4 style="margin-top:0;color:#1e3a8a;">🔧 记忆核心统一接口</h4>
+                <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                    <tr style="background:#f1f5f9;"><th style="padding:0.75rem;text-align:left;border:1px solid #e2e8f0;">接口</th><th style="padding:0.75rem;text-align:left;border:1px solid #e2e8f0;">作用</th></tr>
+                    <tr><td style="padding:0.75rem;border:1px solid #e2e8f0;"><code>memory_recall</code></td><td style="padding:0.75rem;border:1px solid #e2e8f0;">召回与当前任务相关的记忆</td></tr>
+                    <tr><td style="padding:0.75rem;border:1px solid #e2e8f0;"><code>memory_remember</code></td><td style="padding:0.75rem;border:1px solid #e2e8f0;">将信息写入记忆核心</td></tr>
+                    <tr><td style="padding:0.75rem;border:1px solid #e2e8f0;"><code>memory_reflect</code></td><td style="padding:0.75rem;border:1px solid #e2e8f0;">对执行过程反思并更新策略记忆</td></tr>
+                    <tr><td style="padding:0.75rem;border:1px solid #e2e8f0;"><code>memory_forget</code></td><td style="padding:0.75rem;border:1px solid #e2e8f0;">删除或归档指定记忆</td></tr>
+                </table>
             </div>
             """,
             unsafe_allow_html=True,
