@@ -1299,8 +1299,8 @@ with tab_agents:
         unsafe_allow_html=True,
     )
 
-    sched_input = st.text_input("输入任务描述", value="帮我生成一份广州 P2 电商运营助理的招聘套件")
-    if st.button("🎯 执行调度", use_container_width=True):
+    sched_input = st.text_input("输入任务描述", value="帮我生成一份广州 P2 电商运营助理的招聘套件", key="agent_sched_input")
+    if st.button("🎯 执行调度", use_container_width=True, key="agent_sched_btn"):
         detected_intent = detect_intent(sched_input)
         intent_meta = SKILL_REGISTRY.get(detected_intent, {"name": "未知", "category": "其他"})
 
@@ -1830,8 +1830,8 @@ memory_context:
                 """,
                 unsafe_allow_html=True,
             )
-            task_input = st.text_input("输入任务描述", value="帮我生成一份广州 P2 电商运营助理的招聘套件")
-            if st.button("🎯 执行调度", use_container_width=True):
+            task_input = st.text_input("输入任务描述", value="帮我生成一份广州 P2 电商运营助理的招聘套件", key="system_sched_input")
+            if st.button("🎯 执行调度", use_container_width=True, key="system_sched_btn"):
                 # Simulate scoring
                 agents = [
                     {"name": "招聘Agent", "match": 0.98, "load": 0.35, "success": 0.96, "memory": 0.92},
