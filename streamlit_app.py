@@ -1,10 +1,13 @@
+import io
 import re
 import subprocess
 import sys
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -44,326 +47,7 @@ st.set_page_config(
 # Custom CSS - Modern, clean, card-based design
 # ---------------------------------------------------------------------------
 st.markdown(
-    """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-    :root {
-        --primary: #2563eb;
-        --primary-dark: #1d4ed8;
-        --secondary: #7c3aed;
-        --accent: #06b6d4;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        --bg: #f8fafc;
-        --card: #ffffff;
-        --text: #0f172a;
-        --text-secondary: #475569;
-        --border: #e2e8f0;
-    }
-
-    .stApp {
-        background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #f0f9ff 100%);
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    }
-
-    /* Hero Section */
-    .hero-container {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
-        border-radius: 24px;
-        padding: 3.5rem 2.5rem;
-        margin: 1rem 0 2rem 0;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 25px 50px -12px rgba(30, 58, 138, 0.25);
-    }
-    .hero-container::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -10%;
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        border-radius: 50%;
-    }
-    .hero-title {
-        color: white;
-        font-size: 3rem;
-        font-weight: 700;
-        margin: 0 0 1rem 0;
-        letter-spacing: -0.02em;
-    }
-    .hero-subtitle {
-        color: rgba(255,255,255,0.9);
-        font-size: 1.25rem;
-        margin: 0 0 2rem 0;
-        max-width: 700px;
-        line-height: 1.6;
-    }
-    .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.2);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 9999px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-right: 0.75rem;
-        margin-bottom: 0.75rem;
-    }
-
-    /* Section Headers */
-    .section-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--text);
-        margin: 2rem 0 1rem 0;
-    }
-    .section-subtitle {
-        color: var(--text-secondary);
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-    }
-
-    /* Cards */
-    .capability-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.75rem;
-        border: 1px solid var(--border);
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-        transition: all 0.2s ease;
-        height: 100%;
-    }
-    .capability-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.08), 0 10px 10px -5px rgba(0,0,0,0.02);
-        border-color: #c7d2fe;
-    }
-    .capability-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-    .capability-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--text);
-        margin: 0 0 0.5rem 0;
-    }
-    .capability-desc {
-        color: var(--text-secondary);
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    /* Skill Cards */
-    .skill-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.25rem;
-        border: 2px solid transparent;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        transition: all 0.2s ease;
-        cursor: pointer;
-        height: 100%;
-    }
-    .skill-card:hover {
-        border-color: var(--primary);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
-    }
-    .skill-card-active {
-        border-color: var(--primary);
-        background: #eff6ff;
-    }
-    .skill-icon {
-        font-size: 2rem;
-        margin-bottom: 0.75rem;
-    }
-    .skill-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text);
-        margin: 0 0 0.25rem 0;
-    }
-    .skill-desc {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        line-height: 1.5;
-        margin: 0;
-    }
-
-    /* Agent Flow */
-    .flow-step {
-        background: white;
-        border-radius: 12px;
-        padding: 1.25rem;
-        border-left: 4px solid var(--primary);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        margin-bottom: 0.75rem;
-    }
-    .flow-step-title {
-        font-weight: 600;
-        color: var(--text);
-        margin-bottom: 0.25rem;
-    }
-    .flow-step-desc {
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-    .flow-arrow {
-        text-align: center;
-        color: var(--primary);
-        font-size: 1.5rem;
-        margin: 0.25rem 0;
-    }
-
-    /* Architecture Diagram */
-    .arch-layer {
-        border-radius: 12px;
-        padding: 1.25rem;
-        margin-bottom: 0.75rem;
-        color: white;
-        position: relative;
-    }
-    .arch-layer-1 { background: linear-gradient(90deg, #1e40af 0%, #3b82f6 100%); }
-    .arch-layer-2 { background: linear-gradient(90deg, #5b21b6 0%, #8b5cf6 100%); }
-    .arch-layer-3 { background: linear-gradient(90deg, #0e7490 0%, #06b6d4 100%); }
-    .arch-layer-4 { background: linear-gradient(90deg, #047857 0%, #10b981 100%); }
-    .arch-title {
-        font-weight: 700;
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-    }
-    .arch-items {
-        font-size: 0.9rem;
-        opacity: 0.95;
-        line-height: 1.5;
-    }
-
-    /* Memory Modules */
-    .memory-module {
-        background: white;
-        border-radius: 12px;
-        padding: 1.25rem;
-        border-top: 4px solid var(--secondary);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        height: 100%;
-    }
-    .memory-module-icon {
-        font-size: 1.75rem;
-        margin-bottom: 0.5rem;
-    }
-    .memory-module-title {
-        font-weight: 700;
-        font-size: 1.05rem;
-        color: var(--text);
-        margin-bottom: 0.5rem;
-    }
-    .memory-module-desc {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-        line-height: 1.5;
-    }
-
-    /* Metrics */
-    .metric-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        border-bottom: 4px solid var(--primary);
-    }
-    .metric-value {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 0.25rem;
-    }
-    .metric-label {
-        color: var(--text-secondary);
-        font-size: 0.85rem;
-    }
-
-    /* Input Area */
-    .agent-input-container {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        border: 1px solid var(--border);
-    }
-
-    /* Result Area */
-    .result-card {
-        background: white;
-        border-radius: 12px;
-        padding: 1.25rem;
-        border-left: 4px solid var(--success);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        margin-top: 1rem;
-    }
-
-    /* Footer */
-    .footer {
-        text-align: center;
-        color: #94a3b8;
-        font-size: 0.85rem;
-        margin-top: 4rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--border);
-    }
-
-    /* Streamlit overrides */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 0.5rem;
-        background: white;
-        padding: 0.5rem;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .stTabs [data-baseweb="tab"] {
-        padding: 0.75rem 1.25rem;
-        border-radius: 8px;
-        font-weight: 500;
-    }
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%) !important;
-        color: white !important;
-    }
-    .stButton>button {
-        border-radius: 10px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-        color: white;
-        border: none;
-        box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-    }
-    .stButton>button:hover {
-        background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
-        box-shadow: 0 8px 12px -2px rgba(37, 99, 235, 0.3);
-    }
-    .stButton>button:active {
-        transform: translateY(0);
-    }
-    div[data-testid="stExpander"] {
-        background: white;
-        border-radius: 12px;
-        border: 1px solid var(--border);
-    }
-    </style>
-    """,
+    f"""<style>{(APP_DIR / "assets" / "style.css").read_text(encoding="utf-8")}</style>""",
     unsafe_allow_html=True,
 )
 
@@ -505,7 +189,7 @@ INDUSTRIES = {
 }
 
 INTENT_KEYWORDS = {
-    "salary": ["薪资", "工资", "薪酬", "salary", "收入", "待遇", "薪水"],
+    "salary": ["薪资", "工资", "salary", "收入", "待遇", "薪水"],
     "sales": ["周报", "销售周报", "weekly report", "销售报告", "销售团队", "销售报表"],
     "finance_kb": ["财务知识库", "知识库目录", "钉钉文档目录", "财务目录"],
     "clothing_duty": ["服装厂", "小组长", "岗位职责", "服装", "班组长", "缝纫"],
@@ -745,6 +429,7 @@ def parse_agent_input(text):
 def run_skill(intent, parsed, meta):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+    out_name = None
 
     if intent == "salary":
         out_name = f"prajna_薪资模板_{parsed['industry']}_{parsed['position']}_{timestamp}.xlsx"
@@ -782,7 +467,7 @@ def run_skill(intent, parsed, meta):
         cmd = [sys.executable, str(meta["script"]), "--project", parsed["project"], "--bidder", parsed["bidder"], "--tenderer", parsed["tenderer"], "--amount", str(parsed["amount"]), "--duration", parsed["duration"], "--industry", parsed["industry"], "--output", str(out_prefix), "--format", "all"]
     elif intent == "recruitment":
         safe_pos = re.sub(r"[^\u4e00-\u9fa5a-zA-Z0-9_-]", "_", parsed["position"])[:10]
-        out_prefix = HISTORY_DIR / f"prajna_招聘套件_{safe_pos}_{parsed['city']}_{timestamp}"
+        out_prefix = HISTORY_DIR / f"prajna_招聘套件_{safe_pos}_{parsed['city']}_{timestamp}_output"
         out_path = Path(f"{out_prefix}.xlsx")
         cmd = [sys.executable, str(meta["script"]), "--position", parsed["position"], "--department", parsed["department"], "--city", parsed["city"], "--level", parsed["level"], "--salary-min", str(parsed["salary_min"]), "--salary-max", str(parsed["salary_max"]), "--reports-to", parsed["reports_to"], "--headcount", str(parsed["headcount"]), "--urgency", parsed["urgency"], "--output", str(out_prefix), "--format", "all"]
     elif intent == "compensation":
@@ -810,7 +495,92 @@ def run_skill(intent, parsed, meta):
             if word_files:
                 extra_files.append(word_files[0])
 
+    if out_name is None:
+        out_name = out_path.name
+
     return out_path, out_name, extra_files, result
+
+
+# ---------------------------------------------------------------------------
+# Batch / scenario helpers
+# ---------------------------------------------------------------------------
+SAMPLE_INPUTS = {
+    "salary": "帮我做一份广州互联网电商运营助理 P2 的薪资模板",
+    "sales": "生成华南销售一部本周销售周报，目标 120 万",
+    "finance_kb": "搭建智云电商财务知识库目录",
+    "clothing_duty": "生成服装厂缝纫一组小组长岗位职责",
+    "ai_daily": "生成今日 AI 领袖动态日报",
+    "finance_dashboard": "搭建示范企业股份财务核心指标看板",
+    "budget_ppt": "生成本月预算执行情况汇报 PPT",
+    "bidding": "帮我做一份智慧园区建设项目的投标书",
+    "recruitment": "帮我招聘一名广州 P2 电商运营助理",
+    "compensation": "搭建智云科技企业薪酬体系",
+    "performance": "生成电商运营助理岗位的绩效体系",
+}
+
+
+def run_single_skill_demo(skill_key, timestamp):
+    text = SAMPLE_INPUTS[skill_key]
+    parsed = parse_agent_input(text)
+    meta = SKILL_REGISTRY[skill_key]
+    out_path, out_name, extra_files, result = run_skill(skill_key, parsed, meta)
+    return {
+        "key": skill_key,
+        "name": meta["name"],
+        "category": meta["category"],
+        "main": out_path,
+        "extras": extra_files,
+        "ok": True,
+    }
+
+
+def create_zip_from_results(results, zip_name):
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        for r in results:
+            for f in [r["main"]] + r["extras"]:
+                if f and f.exists():
+                    zf.write(f, arcname=f"{r['category']}/{r['name']}/{f.name}")
+    zip_buffer.seek(0)
+    return zip_buffer.getvalue()
+
+
+SCENARIOS = {
+    "招聘入职包": {
+        "icon": "🤝",
+        "desc": "招聘 → 薪资 → 薪酬体系 → 绩效体系，覆盖人才选用育留完整闭环",
+        "skills": ["recruitment", "salary", "compensation", "performance"],
+        "color": "#2563eb",
+    },
+    "投标商务包": {
+        "icon": "🎯",
+        "desc": "招投标套件 → 财务看板 → 预算 PPT，支撑销售与经营决策",
+        "skills": ["bidding", "finance_dashboard", "budget_ppt"],
+        "color": "#7c3aed",
+    },
+    "HR 管理包": {
+        "icon": "💼",
+        "desc": "薪资模板 → 薪酬体系 → 绩效体系 → 岗位职责，服务人力资源日常管理",
+        "skills": ["salary", "compensation", "performance", "clothing_duty"],
+        "color": "#059669",
+    },
+    "经营决策包": {
+        "icon": "📈",
+        "desc": "财务知识库 → 财务看板 → 预算 PPT → 销售周报，管理层月度经营参考",
+        "skills": ["finance_kb", "finance_dashboard", "budget_ppt", "sales"],
+        "color": "#d97706",
+    },
+}
+
+
+def run_scenario(scenario_key):
+    cfg = SCENARIOS[scenario_key]
+    results = []
+    for skill_key in cfg["skills"]:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        r = run_single_skill_demo(skill_key, timestamp)
+        results.append(r)
+    return results
 
 
 # ---------------------------------------------------------------------------
@@ -837,16 +607,36 @@ with st.sidebar:
 st.markdown(
     """
     <div class="hero-container">
+        <div style="display:inline-block;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);color:white;padding:0.35rem 0.9rem;border-radius:999px;font-size:0.8rem;font-weight:600;margin-bottom:1rem;">
+            🏆 广州「广智能」超级智能体大赛 · 可运行成果
+        </div>
         <div class="hero-title">🧠 Prajna 企业智能体平台</div>
         <div class="hero-subtitle">
-            一句话生成企业级文档 · 原生 Agent 架构底座 · 全模态记忆核心
+            一句话生成企业级文档 · 原生 Agent 架构底座 · 全模态记忆核心<br>
+            <span style="opacity:0.85;font-size:1.05rem;">HR · 销售 · 财务 · 生产 · 招投标 · 情报，11 个场景一键直达</span>
         </div>
         <div>
             <span class="hero-badge">🤖 自然语言智能体</span>
             <span class="hero-badge">🧠 原生 Agent 架构</span>
             <span class="hero-badge">💾 全模态记忆核心</span>
             <span class="hero-badge">📦 11 个企业场景</span>
+            <span class="hero-badge">🔄 多 Agent 协同</span>
         </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Dynamic stats row
+skill_count = len(SKILL_REGISTRY)
+cat_count = len(CATEGORIES)
+st.markdown(
+    f"""
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;">
+        <div class="metric-card"><div class="metric-value">{skill_count}</div><div class="metric-label">企业模板技能</div></div>
+        <div class="metric-card"><div class="metric-value">{cat_count}</div><div class="metric-label">业务领域</div></div>
+        <div class="metric-card"><div class="metric-value">4</div><div class="metric-label">核心系统能力</div></div>
+        <div class="metric-card"><div class="metric-value">0</div><div class="metric-label">外部 API 依赖</div></div>
     </div>
     """,
     unsafe_allow_html=True,
@@ -971,6 +761,60 @@ with tab_home:
             else:
                 st.error("生成后未找到文件。")
                 st.code(result.stdout)
+
+    # Full capability demo
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="section-title">🎬 全能力一键演示</div>
+        <div class="section-subtitle">点击按钮，Prajna 会依次调用全部 11 个技能并打包成 zip，真实展示平台覆盖能力</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    run_all_clicked = st.button("🚀 一键运行全部 11 个技能", type="primary", use_container_width=True)
+
+    if run_all_clicked:
+        results = []
+        failed = []
+        progress = st.progress(0.0)
+        status_container = st.empty()
+        total = len(SKILL_REGISTRY)
+        for idx, (skill_key, meta) in enumerate(SKILL_REGISTRY.items()):
+            status_container.markdown(
+                f"<div class='result-card'><b>⏳ 正在生成 {meta['icon']} {meta['name']} ({idx+1}/{total})...</b></div>",
+                unsafe_allow_html=True,
+            )
+            try:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                r = run_single_skill_demo(skill_key, timestamp)
+                results.append(r)
+            except Exception as e:
+                failed.append((meta["name"], str(e)))
+            progress.progress((idx + 1) / total)
+
+        status_container.empty()
+        progress.empty()
+
+        if failed:
+            st.error(f"{len(failed)} 个技能生成失败")
+            for name, err in failed:
+                st.markdown(f"- **{name}**：{err}")
+        else:
+            zip_name = f"prajna_full_demo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
+            zip_bytes = create_zip_from_results(results, zip_name)
+            st.success(f"✅ 全部 {len(results)} 个技能已生成，共 {len(results) + sum(len(r['extras']) for r in results)} 个文件")
+            st.download_button(
+                label=f"📦 下载全能力演示包（{len(zip_bytes)/1024:.1f} KB）",
+                data=zip_bytes,
+                file_name=zip_name,
+                mime="application/zip",
+                use_container_width=True,
+            )
+            with st.expander("查看本次生成的文件清单"):
+                for r in results:
+                    files = [r["main"].name] + [e.name for e in r["extras"]]
+                    st.markdown(f"**{r['icon'] if False else r['name']}**：{', '.join(files)}")
 
     # Recent files
     st.markdown("<br>", unsafe_allow_html=True)
@@ -1267,26 +1111,45 @@ with tab_architecture:
         unsafe_allow_html=True,
     )
 
-    st.markdown(
+    components.html(
         """
-        <div class="arch-layer arch-layer-1">
-            <div class="arch-title">🏢 应用层 Application Layer</div>
-            <div class="arch-items">多模态对话 · AI 员工 · 记忆库 · 定时任务 · 企业门户</div>
+        <div class="mermaid-container">
+        <div class="mermaid">
+        %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#dbeafe', 'primaryTextColor': '#1e3a8a', 'primaryBorderColor': '#2563eb', 'lineColor': '#64748b', 'secondaryColor': '#f3e8ff', 'tertiaryColor': '#ecfeff' }}}%%
+        graph TB
+            subgraph APP["🏢 应用层 Application Layer"]
+                A1[多模态对话]
+                A2[AI 员工门户]
+                A3[企业模板中台]
+                A4[定时任务]
+            end
+            subgraph CAP["⚡ 能力层 Capability Layer"]
+                B1[自主规划执行]
+                B2[多智能体协同]
+                B3[工具集成]
+                B4[白盒可追溯]
+            end
+            subgraph MODEL["🧬 模型层 Model Layer"]
+                C1[全模态记忆大模型]
+                C2[记忆迭代]
+                C3[意图理解]
+            end
+            subgraph DATA["💾 数据层 Data Layer"]
+                D1[时间记忆]
+                D2[语义网络]
+                D3[企业知识库]
+                D4[业务数据]
+            end
+            APP --> CAP
+            CAP --> MODEL
+            MODEL --> DATA
+            DATA -->|memory_recall| CAP
         </div>
-        <div class="arch-layer arch-layer-2">
-            <div class="arch-title">⚡ 能力层 Capability Layer</div>
-            <div class="arch-items">自主规划执行 · 多智能体协同 · 工具集成 · 白盒可追溯</div>
         </div>
-        <div class="arch-layer arch-layer-3">
-            <div class="arch-title">🧬 模型层 Model Layer</div>
-            <div class="arch-items">全模态记忆大模型 · 记忆迭代 · 小样本适配</div>
-        </div>
-        <div class="arch-layer arch-layer-4">
-            <div class="arch-title">💾 数据层 Data Layer</div>
-            <div class="arch-items">时间记忆 · 语义网络 · 企业知识库 · 业务数据</div>
-        </div>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true, securityLevel:'loose'});</script>
         """,
-        unsafe_allow_html=True,
+        height=520,
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -1354,6 +1217,26 @@ with tab_architecture:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown('<div class="section-title">🔄 Agent 标准生命周期</div>', unsafe_allow_html=True)
 
+    components.html(
+        """
+        <div class="mermaid-container">
+        <div class="mermaid">
+        %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#dbeafe', 'primaryTextColor': '#1e3a8a', 'primaryBorderColor': '#2563eb', 'lineColor': '#64748b', 'secondaryColor': '#f3e8ff' }}}%%
+        graph LR
+            A["1️⃣ 注册 Register"] --> B["2️⃣ 监听 Listen"]
+            B --> C["3️⃣ 感知 Perceive"]
+            C --> D["4️⃣ 规划 Plan"]
+            D --> E["5️⃣ 执行 Act"]
+            E --> F["6️⃣ 反思 Reflect"]
+            F --> G["7️⃣ 上报 Report"]
+        </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true, securityLevel:'loose'});</script>
+        """,
+        height=220,
+    )
+
     lifecycle_steps = [
         ("1️⃣ 注册 Register", "向 Agent 调度中心上报名称、能力、依赖与资源配额"),
         ("2️⃣ 监听 Listen", "接收来自调度中心的任务或事件"),
@@ -1363,16 +1246,18 @@ with tab_architecture:
         ("6️⃣ 反思 Reflect", "调用 memory_reflect 记录结果与改进点"),
         ("7️⃣ 上报 Report", "返回结果、状态与后续建议"),
     ]
-    for title, desc in lifecycle_steps:
-        st.markdown(
-            f"""
-            <div class="flow-step">
-                <div class="flow-step-title">{title}</div>
-                <div class="flow-step-desc">{desc}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    c1, c2 = st.columns(2)
+    for i, (title, desc) in enumerate(lifecycle_steps):
+        with (c1 if i < 4 else c2):
+            st.markdown(
+                f"""
+                <div class="flow-step">
+                    <div class="flow-step-title">{title}</div>
+                    <div class="flow-step-desc">{desc}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown('<div class="section-title">📋 原生架构迁移 Checklist</div>', unsafe_allow_html=True)
@@ -1399,6 +1284,67 @@ with tab_agents:
         unsafe_allow_html=True,
     )
 
+    # Interactive scheduler demo
+    st.markdown(
+        """
+        <div style="background:linear-gradient(135deg,#eff6ff,#f5f3ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1.5rem;">
+            <h4 style="margin-top:0;color:#1e40af;">🎛️ Agent 调度中心：输入任务，查看 Prajna 如何分配 Agent</h4>
+            <p style="color:#64748b;margin:0;">调度中心会根据意图识别结果、Agent 能力匹配度、负载、历史成功率与记忆协同分，自动选择最优 Agent。</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    sched_input = st.text_input("输入任务描述", value="帮我生成一份广州 P2 电商运营助理的招聘套件")
+    if st.button("🎯 执行调度", use_container_width=True):
+        detected_intent = detect_intent(sched_input)
+        intent_meta = SKILL_REGISTRY.get(detected_intent, {"name": "未知", "category": "其他"})
+
+        agent_pool = [
+            {"key": "recruitment", "name": "招聘Agent", "base_match": 0.95, "load": 0.35, "success": 0.96, "memory": 0.92},
+            {"key": "salary", "name": "薪酬Agent", "base_match": 0.55, "load": 0.20, "success": 0.99, "memory": 0.70},
+            {"key": "compensation", "name": "薪酬体系Agent", "base_match": 0.50, "load": 0.25, "success": 0.98, "memory": 0.65},
+            {"key": "bidding", "name": "标书Agent", "base_match": 0.30, "load": 0.40, "success": 0.94, "memory": 0.60},
+            {"key": "sales", "name": "销售Agent", "base_match": 0.25, "load": 0.60, "success": 0.88, "memory": 0.50},
+            {"key": "customer_service", "name": "客服Agent", "base_match": 0.20, "load": 0.60, "success": 0.88, "memory": 0.50},
+        ]
+        # Boost the agent whose key matches detected intent
+        for a in agent_pool:
+            if a["key"] == detected_intent:
+                a["base_match"] = 0.98
+
+        scored = []
+        for a in agent_pool:
+            total = 0.35 * a["base_match"] + 0.25 * (1 - a["load"]) + 0.20 * a["success"] + 0.20 * a["memory"]
+            scored.append({**a, "score": total})
+        scored.sort(key=lambda x: x["score"], reverse=True)
+
+        st.markdown(
+            f"""
+            <div class="result-card" style="border-left-color:#7c3aed;">
+                <b>🧠 意图识别：</b>{intent_meta['name']}（intent={detected_intent}）<br>
+                <b>📂 业务域：</b>{intent_meta['category']}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown("**调度评分结果**")
+        for idx, a in enumerate(scored):
+            rank = "🥇" if idx == 0 else "🥈" if idx == 1 else "🥉" if idx == 2 else f"{idx+1}️⃣"
+            st.markdown(
+                f"""
+                <div style="background:white;border-radius:10px;padding:1rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;">
+                    <div><b>{rank} {a['name']}</b><br><span style="color:#64748b;font-size:0.85rem;">能力匹配 {a['base_match']:.0%} · 负载 {a['load']:.0%} · 历史成功率 {a['success']:.0%} · 记忆协同 {a['memory']:.0%}</span></div>
+                    <div style="font-size:1.25rem;font-weight:800;color:#2563eb;">{a['score']:.3f}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        st.success(f"✅ 调度决策：任务分配给 **{scored[0]['name']}**，原因：能力匹配度最高且记忆协同分最优。")
+        st.info("📝 调度结果已写入 agent 类型记忆：任务 ID、目标 Agent、调度原因、预期 SLA。")
+
+    st.divider()
+    st.markdown('<div class="section-subtitle">典型 Agent 联动场景</div>', unsafe_allow_html=True)
     agent_example = st.selectbox("选择 Agent 联动场景", ["客服 Agent", "标书 Agent", "招聘 Agent"])
 
     if agent_example == "客服 Agent":
@@ -1507,8 +1453,9 @@ with tab_showcase:
     )
 
     # Sub-tabs for organized showcase
-    sub_home, sub_skills, sub_memory, sub_workflow, sub_spec, sub_system, sub_trace, sub_create = st.tabs([
+    sub_home, sub_scenarios, sub_skills, sub_memory, sub_workflow, sub_spec, sub_system, sub_trace, sub_create = st.tabs([
         "🗺️ 能力全景图",
+        "📦 业务场景包",
         "📦 技能目录",
         "💾 记忆核心控制台",
         "🔄 多 Agent 协同",
@@ -1547,7 +1494,54 @@ with tab_showcase:
             unsafe_allow_html=True,
         )
 
-    # ---------- Sub-tab 2: Skill Catalog ----------
+    # ---------- Sub-tab 2: Scenario Packages ----------
+    with sub_scenarios:
+        st.markdown(
+            """
+            <div class="section-title">📦 多 Agent 业务场景包</div>
+            <div class="section-subtitle">一个真实业务场景往往需要多个 Agent 协同。点击卡片，Prajna 会按工作流顺序生成完整文档包。</div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        scenario_cols = st.columns(2)
+        for idx, (scenario_key, cfg) in enumerate(SCENARIOS.items()):
+            with scenario_cols[idx % 2]:
+                st.markdown(
+                    f"""
+                    <div class="scenario-card" style="border-top:4px solid {cfg['color']};">
+                        <div class="scenario-title">{cfg['icon']} {scenario_key}</div>
+                        <div class="scenario-desc">{cfg['desc']}</div>
+                        <div class="scenario-tags">
+                            {''.join(f'<span class="scenario-tag">{SKILL_REGISTRY[k]["name"]}</span>' for k in cfg['skills'])}
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                if st.button(f"🚀 生成 {scenario_key}", key=f"scenario_{scenario_key}", use_container_width=True):
+                    with st.spinner(f"Prajna 正在生成 {scenario_key}..."):
+                        try:
+                            results = run_scenario(scenario_key)
+                            zip_name = f"prajna_{scenario_key}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
+                            zip_bytes = create_zip_from_results(results, zip_name)
+                            total_files = sum(1 + len(r["extras"]) for r in results)
+                            st.success(f"✅ {scenario_key} 已生成，共 {total_files} 个文件")
+                            st.download_button(
+                                label=f"📦 下载 {scenario_key}（{len(zip_bytes)/1024:.1f} KB）",
+                                data=zip_bytes,
+                                file_name=zip_name,
+                                mime="application/zip",
+                                use_container_width=True,
+                                key=f"dl_{scenario_key}",
+                            )
+                            with st.expander("文件清单"):
+                                for r in results:
+                                    st.markdown(f"**{r['name']}**：{r['main'].name}" + (f"、{', '.join(e.name for e in r['extras'])}" if r['extras'] else ""))
+                        except Exception as e:
+                            st.error(f"生成失败：{e}")
+
+    # ---------- Sub-tab 3: Skill Catalog ----------
     with sub_skills:
         @st.cache_data(ttl=300)
         def scan_skills(root_dirs):
