@@ -456,12 +456,15 @@ class CodeGenerator:
         self.use_llm = use_llm
         self.llm_provider = llm_provider
         self.llm = LLMBackend(provider=llm_provider) if use_llm else None
+        self.last_error: Optional[str] = None
 
     def generate(self, intent: str, parameters: Dict[str, Any], task: Optional[str] = None) -> str:
+        self.last_error = None
         if self.use_llm and self.llm and task:
             llm_code = self.llm.generate_code(task, parameters)
             if llm_code:
                 return llm_code
+            self.last_error = self.llm.last_error or "LLM failed to generate code"
             # Fall back to rule templates if LLM unavailable or fails
         source = TEMPLATE_SOURCE[intent]
         code = source
@@ -659,6 +662,7 @@ class CodeAgent:
                     source_task=task,
                 )
 
+        used_llm = self.generator.use_llm and code != TEMPLATE_SOURCE.get(intent, "")
         return {
             "task_id": task_id,
             "intent": intent,
@@ -668,6 +672,8 @@ class CodeAgent:
             "result": asdict(result),
             "memory_path": str(memory_path),
             "recalled_memories": [asdict(m) for m in recalled],
+            "used_llm": used_llm,
+            "llm_error": self.generator.last_error,
         }
 
 

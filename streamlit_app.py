@@ -1290,12 +1290,14 @@ with tab_templates:
                 accept_multiple_files=True,
                 key=f"{selected_skill}_files",
             )
-            c1, c2 = st.columns(2)
+            c1, c2, c3 = st.columns(3)
             with c1:
                 params["tags"] = st.text_input("记忆标签（逗号分隔，可选）", value="demo", key=f"{selected_skill}_tags")
             with c2:
                 params["use_sample"] = st.checkbox("使用内置示例数据", value=True, key=f"{selected_skill}_sample")
-            st.caption("支持的意图：销售分析、薪酬核算、简历筛选、库存分析、KPI 评分。后续将接入 LLM 实现开放式代码生成。")
+            with c3:
+                params["use_llm"] = st.checkbox("使用 LLM 生成代码", value=False, key=f"{selected_skill}_llm", help="需要配置 PRAJNA_LLM_PROVIDER 和 PRAJNA_LLM_API_KEY；未配置时开启 mock 模式")
+            st.caption("支持的意图：销售分析、薪酬核算、简历筛选、库存分析、KPI 评分。开启 LLM 后可处理开放式业务代码需求。")
 
         generate_clicked = st.button(f"🚀 生成 {meta['name']}", type="primary", use_container_width=True)
 
@@ -1412,14 +1414,15 @@ with tab_templates:
                         input_files.append(dest)
 
                     tags = [t.strip() for t in params.get("tags", "").split(",") if t.strip()]
-                    agent = CodeAgent()
+                    agent = CodeAgent(use_llm=params.get("use_llm", False))
                     result = agent.run(params["task"], input_files=input_files, tags=tags)
 
                     recalled = result.get("recalled_memories", [])
+                    llm_badge = "🧠 LLM 生成" if result.get("used_llm") else "📐 规则模板"
                     st.markdown(
                         f"""
                         <div class="result-card">
-                            <h4>✅ 代码智能体执行完成</h4>
+                            <h4>✅ 代码智能体执行完成 <span style="font-size:0.75rem;background:#dbeafe;color:#1e40af;padding:0.2rem 0.5rem;border-radius:999px;">{llm_badge}</span></h4>
                             <p><strong>识别意图：</strong>{result['template_name']}（{result['intent']}）</p>
                             <p><strong>记忆召回：</strong>{len(recalled)} 条相关记忆</p>
                             <p><strong>执行状态：</strong>{'成功' if result['result']['success'] else '失败'}</p>
@@ -1429,6 +1432,8 @@ with tab_templates:
                         """,
                         unsafe_allow_html=True,
                     )
+                    if result.get("llm_error"):
+                        st.warning(f"⚠️ LLM 生成失败，已回退到规则模板：{result['llm_error']}")
 
                     if recalled:
                         with st.expander("🧠 召回的相关记忆"):

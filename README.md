@@ -79,6 +79,18 @@ export PRAJNA_LLM_BASE_URL=              # 可选，自定义 API 地址
 
 配置后，代码智能体会优先调用 LLM；若 LLM 未配置或调用失败，自动回退到规则模板。
 
+### 无 API key 测试 LLM 路径
+
+设置 mock 模式即可在不调用真实 LLM 的情况下测试 LLM 生成路径：
+
+```bash
+export PRAJNA_LLM_MOCK=1
+# 或
+export PRAJNA_LLM_PROVIDER=mock
+```
+
+然后勾选「使用 LLM 生成代码」即可体验 LLM 代码生成与执行的完整流程。
+
 ## 部署到 Render
 
 1. 打开 [render.com](https://render.com/)，用 GitHub 登录。

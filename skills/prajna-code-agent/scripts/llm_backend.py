@@ -28,6 +28,7 @@ import requests
 
 
 DEFAULT_MODELS = {
+    "mock": "mock-model",
     "deepseek": "deepseek-chat",
     "openrouter": "deepseek/deepseek-chat",
     "openai": "gpt-4o-mini",
@@ -35,11 +36,36 @@ DEFAULT_MODELS = {
 }
 
 DEFAULT_BASE_URLS = {
+    "mock": "http://localhost:9999",
     "deepseek": "https://api.deepseek.com/v1",
     "openrouter": "https://openrouter.ai/api/v1",
     "openai": "https://api.openai.com/v1",
     "anthropic": "https://api.anthropic.com/v1",
 }
+
+
+MOCK_CODE = '''
+import pandas as pd
+from pathlib import Path
+
+# Auto-detect input file from current directory
+input_files = list(Path(".").glob("*.xlsx"))
+INPUT = input_files[0] if input_files else Path("data.xlsx")
+OUTPUT = Path("llm_output.xlsx")
+
+def main():
+    df = pd.read_excel(INPUT)
+    # Generic processing: summarize numeric columns and save
+    summary = df.describe().reset_index()
+    with pd.ExcelWriter(OUTPUT, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name="原始数据", index=False)
+        summary.to_excel(writer, sheet_name="统计摘要", index=False)
+    print(f"LLM 生成代码执行完成，输出：{OUTPUT}")
+    print(summary.to_csv(index=False))
+
+if __name__ == "__main__":
+    main()
+'''
 
 
 SYSTEM_PROMPT = """你是一位精通 Python 与企业数据分析的工程师。你的任务是根据用户的自然语言描述，生成一段可直接运行的 Python 代码。
@@ -85,19 +111,32 @@ class LLMBackend:
         self.model = model or os.getenv("PRAJNA_LLM_MODEL", DEFAULT_MODELS.get(self.provider, ""))
         self.base_url = base_url or os.getenv("PRAJNA_LLM_BASE_URL", DEFAULT_BASE_URLS.get(self.provider, ""))
         self.timeout = timeout
+        self.mock_mode = os.getenv("PRAJNA_LLM_MOCK", "0") == "1" or self.provider == "mock"
+        self.last_error: Optional[str] = None
 
     def is_configured(self) -> bool:
+        if self.mock_mode:
+            return True
         return bool(self.provider and self.api_key and self.model and self.base_url)
 
     def generate_code(self, task: str, context: Optional[Dict[str, Any]] = None) -> Optional[str]:
+        self.last_error = None
         if not self.is_configured():
+            self.last_error = "LLM not configured"
             return None
         try:
+            if self.mock_mode:
+                return self._mock_generate(task)
             if self.provider == "anthropic":
                 return self._call_anthropic(task)
             return self._call_openai_compatible(task)
-        except Exception:
+        except Exception as e:
+            self.last_error = str(e)
             return None
+
+    def _mock_generate(self, task: str) -> str:
+        """Return deterministic mock code for testing without an API key."""
+        return MOCK_CODE
 
     def _call_openai_compatible(self, task: str) -> Optional[str]:
         headers = {
