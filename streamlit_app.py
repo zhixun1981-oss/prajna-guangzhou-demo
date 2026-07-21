@@ -20,6 +20,7 @@ SKILLS_DIR = APP_DIR / "skills"
 # Import prajna-code-agent directly so the web UI can run code generation & execution
 sys.path.insert(0, str(SKILLS_DIR / "prajna-code-agent" / "scripts"))
 from code_agent import CodeAgent
+from orchestrator import Orchestrator, WORKFLOWS
 
 # 11 skills
 SALARY_SCRIPT = SKILLS_DIR / "prajna-salary-template" / "scripts" / "generate_salary_template.py"
@@ -1920,6 +1921,67 @@ with tab_agents:
             """,
             unsafe_allow_html=True,
         )
+
+    st.divider()
+    st.markdown(
+        """
+        <div style="background:linear-gradient(135deg,#ecfdf5,#f0f9ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1.5rem;">
+            <h4 style="margin-top:0;color:#047857;">🚀 可执行的多 Agent 联动工作流</h4>
+            <p style="color:#64748b;margin:0;">以下场景会真实调用多个 Skill 和代码智能体，生成完整产物包并打包下载。</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    wf_cols = st.columns(len(WORKFLOWS))
+    for idx, (wf_name, wf_cfg) in enumerate(WORKFLOWS.items()):
+        with wf_cols[idx]:
+            st.markdown(
+                f"""
+                <div style="background:white;border-radius:12px;padding:1rem;border:1px solid #e2e8f0;height:100%;">
+                    <div style="font-weight:700;color:#1e3a8a;margin-bottom:0.5rem;">{wf_name}</div>
+                    <div style="font-size:0.85rem;color:#64748b;">{wf_cfg['desc']}</div>
+                    <div style="margin-top:0.75rem;font-size:0.8rem;color:#94a3b8;">
+                        {' → '.join('代码' if s['type']=='code' else SKILL_REGISTRY.get(s['key'],{}).get('name',s['key']) for s in wf_cfg['steps'])}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if st.button(f"▶️ 运行 {wf_name}", key=f"wf_run_{wf_name}", use_container_width=True):
+                with st.spinner(f"prajna 正在执行 {wf_name}..."):
+                    try:
+                        orch = Orchestrator(output_dir=HISTORY_DIR)
+                        result = orch.run_workflow(wf_name, wf_cfg["steps"])
+                        all_files = []
+                        for r in result.results:
+                            all_files.extend(r.output_files)
+                        all_files = [f for f in all_files if f.exists()]
+
+                        if all_files:
+                            zip_buffer = io.BytesIO()
+                            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+                                for f in all_files:
+                                    zf.write(f, arcname=f"{wf_name}/{f.name}")
+                            zip_buffer.seek(0)
+                            zip_name = f"prajna_{result.workflow_id}.zip"
+                            st.success(f"✅ {wf_name} 执行完成，共生成 {len(all_files)} 个文件")
+                            st.download_button(
+                                label=f"📦 下载 {wf_name} 产物包",
+                                data=zip_buffer.getvalue(),
+                                file_name=zip_name,
+                                mime="application/zip",
+                                use_container_width=True,
+                                key=f"wf_dl_{wf_name}_{result.workflow_id}",
+                            )
+                            with st.expander("📁 产物清单"):
+                                for f in all_files:
+                                    st.markdown(f"- `{f.name}`")
+                        else:
+                            st.error("工作流未生成任何文件")
+                    except Exception as e:
+                        st.error(f"工作流执行异常：{e}")
+                        st.code(traceback.format_exc())
 
 # ---------------------------------------------------------------------------
 # Tab 5: prajna Full Capability Showcase
