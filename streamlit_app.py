@@ -401,8 +401,12 @@ def parse_agent_input(text):
             "urgency": "中",
         })
     elif intent == "compensation":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|为|设计)", "", text)
+        company_clean = re.sub(r"(企业|公司)?\s*(薪酬体系|薪酬矩阵|企业薪酬|compensation).*$", "", company_clean)
+        for kw in ["设计", "互联网", "做", "一份", "的", "生成", "搭建", "为", "公司", "企业"]:
+            company_clean = company_clean.replace(kw, "")
         result.update({
-            "company": re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|薪酬体系|企业薪酬)", "", text).strip()[:20] or "智云科技",
+            "company": company_clean.strip()[:20] or "智云科技",
             "industry": industry,
             "scale": 200,
             "budget": 30000000,
