@@ -352,8 +352,12 @@ def parse_agent_input(text):
             "date": datetime.now().strftime("%Y-%m-%d"),
         })
     elif intent == "finance_kb":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|为|设计)", "", text)
+        company_clean = re.sub(r"(电商企业财务知识库|财务知识库|财务目录|知识库目录|钉钉文档目录).*$", "", company_clean)
+        for kw in ["电商", "企业", "财务", "知识库", "目录", "搭建", "生成", "的"]:
+            company_clean = company_clean.replace(kw, "")
         result.update({
-            "company": re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|电商企业财务知识库|财务知识库|钉钉文档目录)", "", text).strip()[:20] or "智云电商",
+            "company": company_clean.strip()[:20] or "京东集团",
             "author": "财务部",
             "date": datetime.now().strftime("%Y-%m-%d"),
         })
@@ -377,9 +381,13 @@ def parse_agent_input(text):
             "period": datetime.now().strftime("%Y年%m月"),
         })
     elif intent == "budget_ppt":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|为|设计)", "", text)
+        company_clean = re.sub(r"(本月预算执行情况汇报|预算执行情况汇报|预算执行汇报|月度预算汇报|PPT|ppt).*$", "", company_clean)
+        for kw in ["生成", "本月", "预算", "执行", "情况", "汇报", "的", "为"]:
+            company_clean = company_clean.replace(kw, "")
         result.update({
             "month": datetime.now().strftime("%Y年%m月"),
-            "company": re.sub(r"^(帮我|给我|请|做|一份|的|生成|本月预算执行情况汇报|预算执行汇报)", "", text).strip()[:20] or "启明星科技",
+            "company": company_clean.strip()[:20] or "美的集团",
             "author": "财务部",
         })
     elif intent == "bidding":
@@ -515,11 +523,11 @@ def run_skill(intent, parsed, meta):
 SAMPLE_INPUTS = {
     "salary": "帮我做一份广州互联网电商运营助理 P2 的薪资模板",
     "sales": "生成华南销售一部本周销售周报，目标 120 万",
-    "finance_kb": "搭建智云电商财务知识库目录",
+    "finance_kb": "搭建京东集团财务知识库目录",
     "clothing_duty": "生成服装厂缝纫一组小组长岗位职责",
     "ai_daily": "生成今日ai领袖日报",
-    "finance_dashboard": "搭建示范企业股份财务看板，关注资产负债率和净利润率",
-    "budget_ppt": "生成本月预算执行情况汇报 PPT",
+    "finance_dashboard": "搭建美的集团财务看板，关注资产负债率和净利润率",
+    "budget_ppt": "为美的集团生成本月预算执行汇报 PPT",
     "bidding": "帮我做一份智慧园区建设项目的投标书",
     "recruitment": "帮我招聘一名广州 P2 电商运营助理",
     "compensation": "搭建智云科技企业薪酬体系",
@@ -715,7 +723,7 @@ with tab_home:
         "告诉 Prajna 你要生成什么",
         value="帮我做一份深圳互联网产品经理 P5 的薪资模板",
         height=100,
-        placeholder="例如：生成电商销售团队本周周报，目标 80 万 / 搭建智云电商财务知识库目录 / 帮我做一份智慧园区建设项目的投标书",
+        placeholder="例如：生成电商销售团队本周周报，目标 80 万 / 搭建京东集团财务知识库目录 / 为美的集团生成本月预算执行汇报 PPT / 帮我做一份智慧园区建设项目的投标书",
         label_visibility="collapsed",
     )
 
@@ -908,7 +916,7 @@ with tab_templates:
                 params["date"] = st.date_input("填写日期", value=datetime.now()).strftime("%Y-%m-%d")
 
         elif selected_skill == "finance_kb":
-            params["company"] = st.text_input("企业名称", value="智云电商")
+            params["company"] = st.text_input("企业名称", value="京东集团")
             params["author"] = st.text_input("维护部门", value="财务部")
             params["date"] = st.date_input("更新日期", value=datetime.now()).strftime("%Y-%m-%d")
 
@@ -929,13 +937,13 @@ with tab_templates:
             c1, c2 = st.columns(2)
             with c1:
                 params["preset"] = st.selectbox("企业预设", ["通用企业", "通用制造集团", "互联网/SaaS企业", "零售连锁企业", "新能源科技企业"])
-                params["company"] = st.text_input("企业名称", value="示范企业股份")
+                params["company"] = st.text_input("企业名称", value="美的集团")
             with c2:
                 params["period"] = st.text_input("报表周期", value=datetime.now().strftime("%Y年%m月"))
 
         elif selected_skill == "budget_ppt":
             params["month"] = st.text_input("汇报月份", value=datetime.now().strftime("%Y年%m月"))
-            params["company"] = st.text_input("公司名称", value="启明星科技")
+            params["company"] = st.text_input("公司名称", value="美的集团")
             params["author"] = st.text_input("汇报部门", value="财务部")
 
         elif selected_skill == "bidding":
