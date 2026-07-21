@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from code_agent import CodeAgent
+from memory_core import MemoryCore
 
 
 # ---------------------------------------------------------------------------
@@ -95,6 +96,7 @@ class WorkflowResult:
     workflow_id: str
     results: List[StepResult]
     output_dir: Path
+    recalled_memories: List[Any] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -104,12 +106,17 @@ class Orchestrator:
     def __init__(self, output_dir: Optional[Path] = None):
         self.output_dir = output_dir or HISTORY_DIR
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.memory_core = MemoryCore()
 
     def run_workflow(self, name: str, steps: List[Dict[str, Any]]) -> WorkflowResult:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         wf_id = f"{name}_{ts}"
         wf_dir = self.output_dir / wf_id
         wf_dir.mkdir(parents=True, exist_ok=True)
+
+        # Recall relevant memories before executing the workflow
+        query = f"{name} " + " ".join(s.get("name", "") or s.get("key", "") for s in steps)
+        recalled = self.memory_core.recall(query, limit=3)
 
         results: List[StepResult] = []
         for idx, step in enumerate(steps, start=1):
@@ -122,7 +129,19 @@ class Orchestrator:
                 r = StepResult(step_type=step_type or "unknown", name="unknown", ok=False, stderr=f"Unknown step type: {step_type}")
             results.append(r)
 
-        return WorkflowResult(workflow_id=wf_id, results=results, output_dir=wf_dir)
+        # Persist workflow memory
+        ok_count = sum(1 for r in results if r.ok)
+        all_files = [f.name for r in results for f in r.output_files]
+        self.memory_core.remember(
+            content=f"执行工作流「{name}」，共 {len(steps)} 步，成功 {ok_count} 步，生成文件：{all_files}",
+            memory_type="project",
+            tags=[name, "workflow", "orchestrator"],
+            source="orchestrator",
+            source_task=name,
+            metadata={"workflow_id": wf_id, "ok_count": ok_count, "total_steps": len(steps)},
+        )
+
+        return WorkflowResult(workflow_id=wf_id, results=results, output_dir=wf_dir, recalled_memories=recalled)
 
     def _run_skill_step(self, step: Dict[str, Any], wf_dir: Path, idx: int) -> StepResult:
         key = step["key"]

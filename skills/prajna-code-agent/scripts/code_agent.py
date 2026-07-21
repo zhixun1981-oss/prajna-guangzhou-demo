@@ -35,6 +35,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from llm_backend import LLMBackend
+from memory_core import MemoryCore, MemoryEntry
 
 
 # ---------------------------------------------------------------------------
@@ -585,11 +586,21 @@ class CodeAgent:
         self.generator = CodeGenerator(use_llm=use_llm, llm_provider=llm_provider)
         self.executor = SandboxExecutor(timeout=60)
         self.memory = MemoryStore()
+        self.memory_core = MemoryCore()
 
     def run(self, task: str, input_files: Optional[List[Path]] = None, tags: Optional[List[str]] = None) -> Dict[str, Any]:
+        # Recall relevant memories before execution
+        recalled = self.memory_core.recall(task, limit=3)
+
         parsed = self.parser.parse(task)
         intent = parsed["intent"]
         parameters = parsed["parameters"]
+
+        # Augment generation with recalled business memory if available
+        if recalled and not self.generator.use_llm:
+            # For rule mode, we cannot easily rewrite code, but we store memory for UI display
+            pass
+
         code = self.generator.generate(intent, parameters, task=task)
 
         task_id = f"code_{intent}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
@@ -612,6 +623,42 @@ class CodeAgent:
         )
         memory_path = self.memory.save(record, record_dir=record_dir)
 
+        # Persist key information to memory core
+        if result.success:
+            artifact_names = [Path(a).name for a in result.artifacts if Path(a).name != "generated_script.py"]
+            memory_content = (
+                f"任务：{task}\n"
+                f"识别意图：{parsed['template_name']}（{intent}）\n"
+                f"输入文件：{parameters.get('input_file', '无')}，输出文件：{artifact_names}\n"
+                f"执行结果：成功，耗时 {result.duration_ms} ms"
+            )
+            self.memory_core.remember(
+                content=memory_content,
+                memory_type="project",
+                tags=(tags or []) + [intent, "code_agent"],
+                source="code_agent",
+                source_task=task,
+                metadata={"task_id": task_id, "intent": intent, "parameters": parameters},
+            )
+
+            # Also extract reusable business rules into business memory for payroll/sales intents
+            if intent == "payroll_calculation":
+                self.memory_core.remember(
+                    content=f"薪酬核算任务使用城市：{parameters.get('city', '广州')}，输入格式含基本工资、绩效工资、社保基数、公积金基数。",
+                    memory_type="business",
+                    tags=["薪酬核算", parameters.get("city", "广州"), "code_agent"],
+                    source="code_agent",
+                    source_task=task,
+                )
+            elif intent == "sales_analysis":
+                self.memory_core.remember(
+                    content=f"销售数据分析按 {parameters.get('group_by', '区域')} 分组，统计 {parameters.get('amount_col', '销售额')} 与 {parameters.get('target_col', '销售目标')}。",
+                    memory_type="business",
+                    tags=["销售分析", parameters.get("group_by", "区域"), "code_agent"],
+                    source="code_agent",
+                    source_task=task,
+                )
+
         return {
             "task_id": task_id,
             "intent": intent,
@@ -620,6 +667,7 @@ class CodeAgent:
             "generated_code": code,
             "result": asdict(result),
             "memory_path": str(memory_path),
+            "recalled_memories": [asdict(m) for m in recalled],
         }
 
 

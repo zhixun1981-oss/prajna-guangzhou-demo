@@ -21,6 +21,7 @@ SKILLS_DIR = APP_DIR / "skills"
 sys.path.insert(0, str(SKILLS_DIR / "prajna-code-agent" / "scripts"))
 from code_agent import CodeAgent
 from orchestrator import Orchestrator, WORKFLOWS
+from memory_core import MemoryCore
 
 # 11 skills
 SALARY_SCRIPT = SKILLS_DIR / "prajna-salary-template" / "scripts" / "generate_salary_template.py"
@@ -1414,11 +1415,13 @@ with tab_templates:
                     agent = CodeAgent()
                     result = agent.run(params["task"], input_files=input_files, tags=tags)
 
+                    recalled = result.get("recalled_memories", [])
                     st.markdown(
                         f"""
                         <div class="result-card">
                             <h4>✅ 代码智能体执行完成</h4>
                             <p><strong>识别意图：</strong>{result['template_name']}（{result['intent']}）</p>
+                            <p><strong>记忆召回：</strong>{len(recalled)} 条相关记忆</p>
                             <p><strong>执行状态：</strong>{'成功' if result['result']['success'] else '失败'}</p>
                             <p><strong>耗时：</strong>{result['result']['duration_ms']} ms</p>
                             <p><strong>记忆路径：</strong><code>{result['memory_path']}</code></p>
@@ -1426,6 +1429,15 @@ with tab_templates:
                         """,
                         unsafe_allow_html=True,
                     )
+
+                    if recalled:
+                        with st.expander("🧠 召回的相关记忆"):
+                            for mem in recalled:
+                                st.markdown(
+                                    f"**[{mem['memory_type']}]** {mem['content'][:200]}...\n\n"
+                                    f"<span style='color:#64748b;font-size:0.8rem;'>来源：{mem['source']} | 标签：{', '.join(mem.get('tags', []))}</span>",
+                                    unsafe_allow_html=True,
+                                )
 
                     if result["result"]["stdout"]:
                         with st.expander("📤 执行输出"):
@@ -1966,6 +1978,16 @@ with tab_agents:
                             zip_buffer.seek(0)
                             zip_name = f"prajna_{result.workflow_id}.zip"
                             st.success(f"✅ {wf_name} 执行完成，共生成 {len(all_files)} 个文件")
+
+                            if result.recalled_memories:
+                                with st.expander(f"🧠 召回 {len(result.recalled_memories)} 条相关记忆"):
+                                    for mem in result.recalled_memories:
+                                        st.markdown(
+                                            f"**[{mem.memory_type}]** {mem.content[:200]}...\n\n"
+                                            f"<span style='color:#64748b;font-size:0.8rem;'>来源：{mem.source} | 标签：{', '.join(mem.tags)}</span>",
+                                            unsafe_allow_html=True,
+                                        )
+
                             st.download_button(
                                 label=f"📦 下载 {wf_name} 产物包",
                                 data=zip_buffer.getvalue(),
@@ -2184,33 +2206,25 @@ with tab_showcase:
         st.markdown(
             """
             <div style="background:linear-gradient(135deg,#f5f3ff,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
-                <h4 style="margin-top:0;color:#5b21b6;">💾 记忆核心交互演示</h4>
-                <p style="color:#64748b;margin:0;">模拟调用 memory_remember / memory_recall / memory_reflect / memory_forget 四个原生接口。数据仅存于当前会话，用于演示 prajna 全模态记忆核心的接口形态与智能剪枝效果。</p>
+                <h4 style="margin-top:0;color:#5b21b6;">💾 记忆核心控制台</h4>
+                <p style="color:#64748b;margin:0;">连接 prajna 真实记忆核心：调用 memory_remember / memory_recall / memory_reflect / memory_forget 接口。Agent 执行过程中自动沉淀的记忆会在这里显示。</p>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        if "prajna_memory" not in st.session_state:
-            st.session_state.prajna_memory = [
-                {"name": "user_preference_formal", "type": "user", "content": "用户偏好正式汇报风格", "importance": 4},
-                {"name": "business_reimburse_rule", "type": "business", "content": "报销需提前3天申请，发票须为增值税专用发票", "importance": 5},
-                {"name": "project_q3_compensation", "type": "project", "content": "Q3目标：上线薪酬自动核算模块", "importance": 5},
-                {"name": "agent_bidding_lesson", "type": "agent", "content": "上次智慧园区投标因报价偏高未中标，需加强成本核算", "importance": 4},
-                {"name": "feedback_cs_long_report", "type": "feedback", "content": "客服主管反馈周报内容太长，希望只看关键指标", "importance": 3},
-                {"name": "reference_salary_guangzhou_p2", "type": "reference", "content": "广州 P2 电商运营助理市场薪资带宽 6-9K", "importance": 4},
-            ]
+        memory_core = MemoryCore()
+        all_memories = memory_core.list_all(limit=1000)
+        mem_types = [m.memory_type for m in all_memories]
+        type_counts = {t: mem_types.count(t) for t in set(mem_types)}
 
-        # Stats
-        mem_types = [m["type"] for m in st.session_state.prajna_memory]
-        avg_importance = sum(m["importance"] for m in st.session_state.prajna_memory) / max(len(st.session_state.prajna_memory), 1)
         m1, m2, m3, m4 = st.columns(4)
         with m1:
-            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#8b5cf6;">{len(st.session_state.prajna_memory)}</div><div class="metric-label">记忆条目</div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#8b5cf6;">{len(all_memories)}</div><div class="metric-label">记忆条目</div></div>', unsafe_allow_html=True)
         with m2:
             st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#10b981;">{len(set(mem_types))}</div><div class="metric-label">记忆类型</div></div>', unsafe_allow_html=True)
         with m3:
-            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#f59e0b;">{avg_importance:.1f}</div><div class="metric-label">平均重要性</div></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#f59e0b;">{sum(type_counts.values()) / max(len(type_counts), 1):.0f}</div><div class="metric-label">平均/类型</div></div>', unsafe_allow_html=True)
         with m4:
             st.markdown(f'<div class="metric-card"><div class="metric-value" style="color:#06b6d4;"><span class="pulse-dot"></span>正常</div><div class="metric-label">记忆核心状态</div></div>', unsafe_allow_html=True)
 
@@ -2219,90 +2233,65 @@ with tab_showcase:
         col_a, col_b = st.columns([1, 1])
         with col_a:
             st.markdown("**memory_remember — 写入记忆**")
-            mem_name = st.text_input("记忆名称", value="feedback_report_concise", key="mem_name")
-            mem_type = st.selectbox("记忆类型", ["user", "session", "project", "business", "agent", "feedback", "reference"], key="mem_type")
-            mem_content = st.text_area("记忆内容", value="用户反馈生成的报告太长，希望更简洁", key="mem_content")
-            mem_importance = st.slider("重要性", 1, 5, 3, key="mem_importance")
-            if st.button("📝 写入记忆", use_container_width=True, key="mem_remember_btn"):
-                st.session_state.prajna_memory.append({
-                    "name": mem_name, "type": mem_type, "content": mem_content, "importance": mem_importance
-                })
-                st.success(f"✅ 已写入记忆：{mem_name}")
+            mem_type = st.selectbox("记忆类型", ["project", "business", "feedback", "user"], key="mem_type_real")
+            mem_content = st.text_area("记忆内容", value="广州 P2 电商运营助理市场薪资带宽 6-9K，绩效占比 20%", key="mem_content_real", height=80)
+            mem_tags = st.text_input("标签（逗号分隔）", value="薪酬,广州,P2,电商运营助理", key="mem_tags_real")
+            if st.button("📝 写入记忆", use_container_width=True, key="mem_remember_btn_real"):
+                tags = [t.strip() for t in mem_tags.split(",") if t.strip()]
+                memory_core.remember(content=mem_content, memory_type=mem_type, tags=tags, source="user", source_task="手动写入")
+                st.success("✅ 已写入记忆")
+                st.rerun()
 
         with col_b:
             st.markdown("**memory_recall — 召回记忆**")
-            recall_query = st.text_input("查询意图", value="用户喜欢什么风格", key="recall_query")
-            recall_types = st.multiselect("记忆类型过滤", ["user", "session", "project", "business", "agent", "feedback", "reference"], default=["user", "business"], key="recall_types")
-            if st.button("🔍 召回记忆", use_container_width=True, key="mem_recall_btn"):
-                results = []
-                for mem in st.session_state.prajna_memory:
-                    if recall_types and mem["type"] not in recall_types:
-                        continue
-                    if any(kw in mem["content"] for kw in recall_query.split()):
-                        results.append(mem)
+            recall_query = st.text_input("查询意图", value="广州 电商运营助理 薪酬", key="recall_query_real")
+            recall_type = st.selectbox("记忆类型过滤", ["全部", "project", "business", "feedback", "user"], key="recall_type_real")
+            if st.button("🔍 召回记忆", use_container_width=True, key="mem_recall_btn_real"):
+                mtype = None if recall_type == "全部" else recall_type
+                results = memory_core.recall(recall_query, memory_type=mtype, limit=10)
                 if results:
                     st.markdown(f"<div style='color:#64748b;font-size:0.85rem;margin-bottom:0.5rem;'>召回 {len(results)} 条相关记忆</div>", unsafe_allow_html=True)
                     for r in results:
-                        st.markdown(f"<div style='background:white;border-radius:8px;padding:0.75rem;border-left:3px solid #8b5cf6;margin-bottom:0.5rem;'><b>{r['name']}</b> <span style='color:#64748b;font-size:0.8rem;'>[{r['type']}]</span><br><span style='font-size:0.9rem;'>{r['content']}</span></div>", unsafe_allow_html=True)
+                        st.markdown(f"<div style='background:white;border-radius:8px;padding:0.75rem;border-left:3px solid #8b5cf6;margin-bottom:0.5rem;'><b>[{r.memory_type}]</b> <span style='color:#64748b;font-size:0.8rem;'>{r.timestamp[:19]}</span><br><span style='font-size:0.9rem;'>{r.content}</span><br><span style='color:#94a3b8;font-size:0.75rem;'>tags: {', '.join(r.tags)} | source: {r.source}</span></div>", unsafe_allow_html=True)
                 else:
                     st.info("未召回相关记忆")
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # Memory reflect & prune
         c1, c2 = st.columns(2)
         with c1:
             st.markdown("**memory_reflect — 自我反思**")
-            reflect_types = st.multiselect("选择要反思的记忆类型", ["user", "session", "project", "business", "agent", "feedback", "reference"], default=["feedback", "agent"], key="reflect_types")
-            if st.button("🔄 生成反思洞察", use_container_width=True, key="mem_reflect_btn"):
-                filtered = [m for m in st.session_state.prajna_memory if m["type"] in reflect_types]
-                if filtered:
-                    insights = []
-                    feedbacks = [m for m in filtered if m["type"] == "feedback"]
-                    agents = [m for m in filtered if m["type"] == "agent"]
-                    if feedbacks:
-                        topics = set()
-                        for f in feedbacks:
-                            if "长" in f["content"] or "简洁" in f["content"]:
-                                topics.add("报告篇幅控制")
-                            if "慢" in f["content"] or "快" in f["content"]:
-                                topics.add("响应速度")
-                        insights.append(f"发现 {len(feedbacks)} 条反馈记忆，主要关注点：{', '.join(topics) if topics else '用户体验'}")
-                    if agents:
-                        insights.append(f"发现 {len(agents)} 条 Agent 经验记忆，可沉淀为策略记忆优化后续任务")
-                    st.success("反思完成")
-                    for ins in insights:
-                        st.markdown(f"<div style='background:#f0fdf4;border-radius:8px;padding:0.75rem;border-left:3px solid #10b981;margin-bottom:0.5rem;'>💡 {ins}</div>", unsafe_allow_html=True)
-                else:
-                    st.info("所选类型下暂无记忆")
+            reflect_type = st.selectbox("选择要反思的记忆类型", ["全部", "project", "business", "feedback", "user"], key="reflect_type_real")
+            if st.button("🔄 生成反思洞察", use_container_width=True, key="mem_reflect_btn_real"):
+                mtype = None if reflect_type == "全部" else reflect_type
+                insight = memory_core.reflect(memory_type=mtype, days=30, limit=20)
+                st.success("反思完成")
+                st.markdown(f"<div style='background:#f0fdf4;border-radius:8px;padding:0.75rem;border-left:3px solid #10b981;'>💡 {insight}</div>", unsafe_allow_html=True)
 
         with c2:
-            st.markdown("**智能剪枝 — 清理低重要性记忆**")
-            prune_threshold = st.slider("重要性阈值", 1, 5, 2, key="prune_threshold")
-            if st.button("✂️ 执行智能剪枝", use_container_width=True, key="mem_prune_btn"):
-                before = len(st.session_state.prajna_memory)
-                st.session_state.prajna_memory = [m for m in st.session_state.prajna_memory if m["importance"] >= prune_threshold]
-                after = len(st.session_state.prajna_memory)
-                st.success(f"已剪枝 {before - after} 条低重要性记忆，剩余 {after} 条")
+            st.markdown("**memory_forget — 清理记忆**")
+            forget_type = st.selectbox("要清理的类型", ["全部", "project", "business", "feedback", "user"], key="forget_type_real")
+            forget_days = st.number_input("清理多少天前的记忆（0 表示全部）", min_value=0, value=0, step=1, key="forget_days_real")
+            if st.button("🗑️ 执行清理", use_container_width=True, key="mem_forget_btn_real"):
+                mtype = None if forget_type == "全部" else forget_type
+                days = forget_days if forget_days > 0 else None
+                removed = memory_core.forget(memory_type=mtype, days=days)
+                st.success(f"✅ 已清理 {removed} 条记忆")
+                st.rerun()
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("**记忆语义网络**")
-        node_html = ""
-        for mem in st.session_state.prajna_memory:
-            node_html += f'<span class="memory-node memory-node-{mem["type"]}">{mem["type"]}: {mem["name"]} {"⭐"*mem["importance"]}</span>'
-        st.markdown(f'<div style="background:white;border-radius:16px;padding:1rem;border:1px solid #e2e8f0;">{node_html}</div>', unsafe_allow_html=True)
-
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("**当前记忆库清单**")
-        for mem in st.session_state.prajna_memory[-10:]:
-            badge_color = {"user":"#3b82f6","session":"#06b6d4","project":"#8b5cf6","business":"#10b981","agent":"#f59e0b","feedback":"#ef4444","reference":"#64748b"}.get(mem["type"], "#64748b")
+        st.markdown("**当前记忆库清单（最近 20 条）**")
+        badge_color = {"user":"#3b82f6","project":"#8b5cf6","business":"#10b981","feedback":"#ef4444"}
+        for mem in all_memories[:20]:
+            color = badge_color.get(mem.memory_type, "#64748b")
             st.markdown(
                 f"""
-                <div style="display:flex;align-items:center;gap:0.75rem;background:white;border-radius:8px;padding:0.75rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;">
-                    <span style="background:{badge_color};color:white;font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:999px;white-space:nowrap;">{mem['type']}</span>
-                    <span style="font-weight:500;">{mem['name']}</span>
-                    <span style="color:#64748b;font-size:0.85rem;flex:1;">{mem['content']}</span>
-                    <span style="color:#f59e0b;font-size:0.8rem;">{'⭐' * mem['importance']}</span>
+                <div style="display:flex;align-items:flex-start;gap:0.75rem;background:white;border-radius:8px;padding:0.75rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;">
+                    <span style="background:{color};color:white;font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:999px;white-space:nowrap;">{mem.memory_type}</span>
+                    <div style="flex:1;">
+                        <div style="font-size:0.8rem;color:#64748b;">{mem.timestamp[:19]} · {mem.source} · {', '.join(mem.tags)}</div>
+                        <div style="font-size:0.9rem;margin-top:0.25rem;">{mem.content[:200]}{'...' if len(mem.content) > 200 else ''}</div>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
