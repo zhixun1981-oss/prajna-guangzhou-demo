@@ -781,7 +781,7 @@ st.markdown(
         <div class="metric-card"><div class="metric-value">32</div><div class="metric-label">数字员工 Agent</div></div>
         <div class="metric-card"><div class="metric-value">{skill_count}</div><div class="metric-label">可扩展技能</div></div>
         <div class="metric-card"><div class="metric-value">{cat_count}</div><div class="metric-label">业务领域</div></div>
-        <div class="metric-card"><div class="metric-value">20+</div><div class="metric-label">协作平台接入</div></div>
+        <div class="metric-card"><div class="metric-value">20+</div><div class="metric-label">协作平台</div></div>
         <div class="metric-card"><div class="metric-value">0</div><div class="metric-label">外部 API 依赖</div></div>
     </div>
     """,
