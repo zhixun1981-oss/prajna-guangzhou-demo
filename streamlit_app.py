@@ -1507,12 +1507,15 @@ with tab_showcase:
     )
 
     # Sub-tabs for organized showcase
-    sub_home, sub_skills, sub_memory, sub_workflow, sub_spec = st.tabs([
+    sub_home, sub_skills, sub_memory, sub_workflow, sub_spec, sub_system, sub_trace, sub_create = st.tabs([
         "🗺️ 能力全景图",
         "📦 技能目录",
         "💾 记忆核心控制台",
         "🔄 多 Agent 协同",
         "📋 原生规范",
+        "🎛️ 系统级技能",
+        "🔍 白盒追溯",
+        "➕ 创建新 Skill",
     ])
 
     # ---------- Sub-tab 1: Capability Map ----------
@@ -1808,6 +1811,357 @@ memory_context:
             """,
             unsafe_allow_html=True,
         )
+
+    # ---------- Sub-tab 6: System-Level Skills ----------
+    with sub_system:
+        sys_tab = st.radio("选择系统级技能", ["🎛️ Agent 调度中心", "📊 监控看板", "⚙️ 系统配置"], horizontal=True)
+
+        if sys_tab == "🎛️ Agent 调度中心":
+            st.markdown(
+                """
+                <div style="background:linear-gradient(135deg,#eff6ff,#f5f3ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                    <h4 style="margin-top:0;color:#1e40af;">Agent 调度中心演示</h4>
+                    <p style="color:#64748b;margin:0;">输入一个任务，调度中心会根据 Agent 能力匹配度、负载、历史成功率和记忆协同分，选择最优 Agent。</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            task_input = st.text_input("输入任务描述", value="帮我生成一份广州 P2 电商运营助理的招聘套件")
+            if st.button("🎯 执行调度", use_container_width=True):
+                # Simulate scoring
+                agents = [
+                    {"name": "招聘Agent", "match": 0.98, "load": 0.35, "success": 0.96, "memory": 0.92},
+                    {"name": "薪酬Agent", "match": 0.45, "load": 0.20, "success": 0.99, "memory": 0.70},
+                    {"name": "客服Agent", "match": 0.30, "load": 0.60, "success": 0.88, "memory": 0.50},
+                    {"name": "文案Agent", "match": 0.55, "load": 0.40, "success": 0.90, "memory": 0.65},
+                ]
+                scored = []
+                for a in agents:
+                    base = 0.25 * (1 - a["load"]) + 0.25 * a["match"] + 0.15 * a["success"] + 0.15 * (1 - 0.1)
+                    memory_score = 0.10 * a["success"] + 0.10 * a["memory"]
+                    total = base + memory_score
+                    scored.append({**a, "score": total})
+                scored.sort(key=lambda x: x["score"], reverse=True)
+
+                st.markdown("**调度评分结果**")
+                for idx, a in enumerate(scored):
+                    rank = "🥇" if idx == 0 else "🥈" if idx == 1 else "🥉" if idx == 2 else "4️⃣"
+                    st.markdown(
+                        f"""
+                        <div style="background:white;border-radius:10px;padding:1rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center;">
+                            <div><b>{rank} {a['name']}</b><br><span style="color:#64748b;font-size:0.85rem;">能力匹配 {a['match']:.0%} · 负载 {a['load']:.0%} · 历史成功率 {a['success']:.0%} · 记忆协同 {a['memory']:.0%}</span></div>
+                            <div style="font-size:1.25rem;font-weight:700;color:#2563eb;">{a['score']:.3f}</div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
+                winner = scored[0]["name"]
+                st.success(f"✅ 调度决策：任务分配给 **{winner}**，原因：能力匹配度最高且记忆协同分最优。")
+                st.info("📝 调度结果已写入 agent 类型记忆：任务 ID、目标 Agent、调度原因、预期 SLA。")
+
+        elif sys_tab == "📊 监控看板":
+            st.markdown(
+                """
+                <div style="background:linear-gradient(135deg,#f0fdf4,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                    <h4 style="margin-top:0;color:#047857;">Prajna 系统运行监控</h4>
+                    <p style="color:#64748b;margin:0;">实时展示各 Agent 健康状态、业务指标与记忆核心健康度（演示数据）。</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            m1, m2, m3, m4 = st.columns(4)
+            with m1:
+                st.markdown('<div class="metric-card" style="border-bottom-color:#10b981;"><div class="metric-value" style="color:#10b981;">98.5%</div><div class="metric-label">系统可用性</div></div>', unsafe_allow_html=True)
+            with m2:
+                st.markdown('<div class="metric-card" style="border-bottom-color:#3b82f6;"><div class="metric-value" style="color:#3b82f6;">42</div><div class="metric-label">活跃任务数</div></div>', unsafe_allow_html=True)
+            with m3:
+                st.markdown('<div class="metric-card" style="border-bottom-color:#f59e0b;"><div class="metric-value" style="color:#f59e0b;">3</div><div class="metric-label">排队任务数</div></div>', unsafe_allow_html=True)
+            with m4:
+                st.markdown('<div class="metric-card" style="border-bottom-color:#8b5cf6;"><div class="metric-value" style="color:#8b5cf6;">156ms</div><div class="metric-label">平均响应时间</div></div>', unsafe_allow_html=True)
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            agent_status = [
+                ("招聘Agent", "🟢 健康", "1.2s", "96%"),
+                ("薪酬Agent", "🟢 健康", "0.8s", "99.9%"),
+                ("客服Agent", "🟡 负载较高", "4.5s", "87%"),
+                ("标书Agent", "🟢 健康", "2.1s", "94%"),
+                ("意图Agent", "🟢 健康", "0.3s", "98%"),
+                ("财务Agent", "🟢 健康", "1.5s", "99%"),
+            ]
+            st.markdown("**Agent 运行状态**")
+            for name, status, rt, success in agent_status:
+                st.markdown(
+                    f"""
+                    <div style="display:flex;justify-content:space-between;background:white;border-radius:8px;padding:0.75rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;">
+                        <span style="font-weight:500;">{name}</span>
+                        <span style="color:#64748b;font-size:0.85rem;">{status} · 响应 {rt} · 成功率 {success}</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("**记忆核心健康度**")
+            mem_metrics = [
+                ("遗忘率", "0.6%", "< 1%", "🟢"),
+                ("幻觉率", "0.12%", "< 0.2%", "🟢"),
+                ("召回延迟", "142ms", "< 200ms", "🟢"),
+                ("写入成功率", "99.98%", "> 99.9%", "🟢"),
+                ("跨 Agent 共享率", "100%", "100%", "🟢"),
+            ]
+            for name, val, target, status in mem_metrics:
+                st.markdown(
+                    f"""
+                    <div style="display:flex;justify-content:space-between;background:white;border-radius:8px;padding:0.75rem;border:1px solid #e2e8f0;margin-bottom:0.5rem;">
+                        <span>{name}</span>
+                        <span><b>{val}</b> <span style="color:#94a3b8;">/ 目标 {target}</span> {status}</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        else:  # 系统配置
+            st.markdown(
+                """
+                <div style="background:linear-gradient(135deg,#fff7ed,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                    <h4 style="margin-top:0;color:#c2410c;">系统全局配置</h4>
+                    <p style="color:#64748b;margin:0;">管理全局参数、特性开关、记忆核心与原生 Agent 架构开关（演示用途，变更仅在当前会话生效）。</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if "prajna_config" not in st.session_state:
+                st.session_state.prajna_config = {
+                    "memory_core_enabled": True,
+                    "memory_pruning_enabled": True,
+                    "memory_reflection_enabled": True,
+                    "native_agent_arch_enabled": True,
+                    "multi_agent_collaboration_enabled": True,
+                    "memory_linkage_required": True,
+                    "audit_enabled": True,
+                }
+
+            c1, c2 = st.columns(2)
+            with c1:
+                st.markdown("**记忆核心开关**")
+                st.session_state.prajna_config["memory_core_enabled"] = st.toggle("启用记忆核心", value=st.session_state.prajna_config["memory_core_enabled"])
+                st.session_state.prajna_config["memory_pruning_enabled"] = st.toggle("启用智能剪枝", value=st.session_state.prajna_config["memory_pruning_enabled"])
+                st.session_state.prajna_config["memory_reflection_enabled"] = st.toggle("启用自我反思", value=st.session_state.prajna_config["memory_reflection_enabled"])
+            with c2:
+                st.markdown("**原生 Agent 架构开关**")
+                st.session_state.prajna_config["native_agent_arch_enabled"] = st.toggle("强制遵循原生架构", value=st.session_state.prajna_config["native_agent_arch_enabled"])
+                st.session_state.prajna_config["multi_agent_collaboration_enabled"] = st.toggle("允许多 Agent 协同", value=st.session_state.prajna_config["multi_agent_collaboration_enabled"])
+                st.session_state.prajna_config["memory_linkage_required"] = st.toggle("强制 Agent 调用记忆核心", value=st.session_state.prajna_config["memory_linkage_required"])
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("💾 保存配置（演示）", use_container_width=True):
+                st.success("配置已热加载，10 秒内通知所有 Agent 订阅者。")
+                st.json(st.session_state.prajna_config)
+
+    # ---------- Sub-tab 7: White-box Trace ----------
+    with sub_trace:
+        st.markdown(
+            """
+            <div style="background:linear-gradient(135deg,#fef2f2,#eff6ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                <h4 style="margin-top:0;color:#b91c1c;">🔍 白盒追溯：招聘任务完整链路</h4>
+                <p style="color:#64748b;margin:0;">每个决策步骤记录思考过程、依据、结果，支持按任务 ID 回放完整执行链路。</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        trace_steps = [
+            {
+                "time": "T+0ms",
+                "step": "1. 用户输入",
+                "reasoning": "接收到用户请求：'帮我招聘一名广州 P2 电商运营助理'",
+                "memory_id": "—",
+                "output": "原始请求文本",
+            },
+            {
+                "time": "T+120ms",
+                "step": "2. 意图识别",
+                "reasoning": "关键词匹配：招聘、岗位、城市、职级。置信度 0.97。",
+                "memory_id": "memory://business/recruitment_patterns",
+                "output": "意图=招聘，实体={岗位:电商运营助理, 城市:广州, 职级:P2}",
+            },
+            {
+                "time": "T+250ms",
+                "step": "3. 记忆召回",
+                "reasoning": "调用 memory_recall(query='电商运营助理 广州 P2', types=['business','agent'])，命中 3 条历史记忆。",
+                "memory_id": "memory://agent/recruitment_agent_experience",
+                "output": "历史岗位画像 + 广州 P2 薪资带宽 + 既往面试评估维度",
+            },
+            {
+                "time": "T+380ms",
+                "step": "4. 调度决策",
+                "reasoning": "招聘Agent 能力匹配度 0.98，历史成功率 96%，记忆协同分 0.93，评分最高。",
+                "memory_id": "memory://agent/scheduler_decisions",
+                "output": "任务分配给 招聘Agent，预期 SLA 120s",
+            },
+            {
+                "time": "T+950ms",
+                "step": "5. Agent 执行",
+                "reasoning": "根据记忆加载的岗位画像，生成 JD、面试评估表、Offer 薪资建议。",
+                "memory_id": "memory://business/job_profile_ecommerce_assistant",
+                "output": "招聘套件 Excel + Word 文档",
+            },
+            {
+                "time": "T+1200ms",
+                "step": "6. 结果校验",
+                "reasoning": "检查输出完整性：JD 6 项职责、面试评估 7 个维度、Offer 薪资在广州 P2 带宽内。",
+                "memory_id": "—",
+                "output": "校验通过",
+            },
+            {
+                "time": "T+1500ms",
+                "step": "7. 记忆沉淀",
+                "reasoning": "将岗位画像更新写入 business 记忆，任务结果写入 project 记忆。",
+                "memory_id": "memory://business/job_profile_ecommerce_assistant",
+                "output": "记忆写入成功",
+            },
+            {
+                "time": "T+1800ms",
+                "step": "8. 自我反思",
+                "reasoning": "本次生成耗时 1.8s，输出完整。可优化点：JD 中可补充直播运营经验要求。",
+                "memory_id": "memory://agent/recruitment_agent_experience",
+                "output": "反思记录已更新",
+            },
+        ]
+
+        for step in trace_steps:
+            st.markdown(
+                f"""
+                <div style="background:white;border-radius:12px;padding:1.25rem;border-left:4px solid #2563eb;box-shadow:0 1px 3px rgba(0,0,0,0.05);margin-bottom:0.75rem;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+                        <span style="font-weight:700;color:#1e3a8a;">{step['step']}</span>
+                        <span style="color:#94a3b8;font-size:0.85rem;">{step['time']}</span>
+                    </div>
+                    <div style="color:#475569;font-size:0.9rem;line-height:1.6;">
+                        <b>思考：</b>{step['reasoning']}<br>
+                        <b>记忆来源：</b><code style="background:#f1f5f9;padding:0.1rem 0.3rem;border-radius:4px;">{step['memory_id']}</code><br>
+                        <b>输出：</b>{step['output']}
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    # ---------- Sub-tab 8: Create New Skill ----------
+    with sub_create:
+        st.markdown(
+            """
+            <div style="background:linear-gradient(135deg,#f0f9ff,#f5f3ff);border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;margin-bottom:1rem;">
+                <h4 style="margin-top:0;color:#0369a1;">➕ 一句话创建新 Skill</h4>
+                <p style="color:#64748b;margin:0;">用自然语言描述你想创建的 Skill，Prajna 自动生成 SKILL.md 框架与 manifest.json。</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        skill_desc = st.text_area(
+            "描述你的 Skill",
+            value="创建一个合同审查助手，能够自动识别合同中的风险条款、付款条件和违约责任，并生成审查报告。",
+            height=100,
+        )
+        skill_author = st.text_input("作者", value="Prajna")
+        skill_category = st.selectbox("分类", ["业务", "工具", "系统", "分析", "内容", "其他"])
+
+        if st.button("✨ 生成 Skill 框架", use_container_width=True):
+            # Simple heuristic to generate skill_id and name
+            desc_lower = skill_desc.lower()
+            if "合同" in desc_lower:
+                skill_id = "contract-review-assistant"
+                skill_name = "合同审查助手"
+            elif "报表" in desc_lower or "报告" in desc_lower:
+                skill_id = "report-generator"
+                skill_name = "报告生成助手"
+            elif "客服" in desc_lower or "问答" in desc_lower:
+                skill_id = "customer-service-agent"
+                skill_name = "智能客服助手"
+            elif "数据" in desc_lower or "分析" in desc_lower:
+                skill_id = "data-analytics-agent"
+                skill_name = "数据分析助手"
+            elif "营销" in desc_lower or "文案" in desc_lower:
+                skill_id = "marketing-copy-agent"
+                skill_name = "营销文案助手"
+            else:
+                skill_id = "custom-skill"
+                skill_name = "自定义技能"
+
+            skill_md = f"""---
+name: {skill_name}
+skill_id: {skill_id}
+description: |
+  {skill_desc.strip()}
+version: 1.0.0
+author: {skill_author}
+category: {skill_category}
+tags: [skill, {skill_category}]
+requires:
+  - prajna-memory-core
+  - prajna-native-agent-architecture
+memory_context:
+  - business
+  - project
+---
+
+# {skill_name}
+
+## 1. 角色定位
+
+{skill_name} 是 Prajna 企业智能体平台中的 {skill_category} 类 Skill，{skill_desc.strip()}。
+
+## 2. 核心功能
+
+- 功能 1：接收输入并解析关键参数
+- 功能 2：调用记忆核心加载相关上下文
+- 功能 3：执行业务逻辑并生成输出
+- 功能 4：沉淀执行结果与反思到记忆核心
+
+## 3. 输入输出
+
+| 输入 | 类型 | 说明 |
+|------|------|------|
+| input_text | string | 用户自然语言输入 |
+
+| 输出 | 类型 | 说明 |
+|------|------|------|
+| output_file | file | 生成的文档或报告 |
+
+## 4. 记忆联动
+
+- 执行前调用 `memory_recall` 加载 `business` 和 `project` 记忆
+- 执行后调用 `memory_reflect` 记录反思
+
+## 5. 免责声明
+
+【人工智能生成-需人工核验】本 Skill 生成的内容仅供参考，不构成法律、财务或商业决策建议。
+"""
+
+            manifest_json = f"""{{
+  "id": "{skill_id}",
+  "name": "{skill_name}",
+  "version": "1.0.0",
+  "description": "{skill_desc.strip()}",
+  "author": "{skill_author}",
+  "category": "{skill_category}",
+  "tags": ["skill", "{skill_category}"],
+  "requires": ["prajna-memory-core", "prajna-native-agent-architecture"],
+  "memory_context": ["business", "project"]
+}}"""
+
+            st.markdown("**生成的 SKILL.md**")
+            st.code(skill_md, language="markdown")
+            st.markdown("**生成的 manifest.json**")
+            st.code(manifest_json, language="json")
+
+            # Offer downloads
+            col1, col2 = st.columns(2)
+            with col1:
+                st.download_button("📥 下载 SKILL.md", skill_md, file_name="SKILL.md", mime="text/markdown", use_container_width=True)
+            with col2:
+                st.download_button("📥 下载 manifest.json", manifest_json, file_name="manifest.json", mime="application/json", use_container_width=True)
 
 # ---------------------------------------------------------------------------
 # Footer
