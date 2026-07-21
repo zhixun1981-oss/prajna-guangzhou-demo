@@ -1550,42 +1550,48 @@ with tab_showcase:
     # ---------- Sub-tab 2: Skill Catalog ----------
     with sub_skills:
         @st.cache_data(ttl=300)
-        def scan_skills(root_dir: str):
-            root = Path(root_dir).expanduser()
+        def scan_skills(root_dirs):
             skills = []
-            if not root.exists():
-                return skills
-            for skill_dir in root.rglob("SKILL.md"):
-                rel = skill_dir.relative_to(root)
-                parts = rel.parts
-                category = parts[0] if len(parts) > 1 else "其他"
-                name = skill_dir.parent.name
-                desc = ""
-                skill_id = ""
-                try:
-                    with open(skill_dir, "r", encoding="utf-8") as f:
-                        content = f.read(2000)
-                    # parse frontmatter description
-                    if "description:" in content:
-                        m = re.search(r"description:\s*(\|?\s*\n?\s*)(.+?)(\n\w+:|\n# |\n---|\Z)", content, re.S)
-                        if m:
-                            desc = m.group(2).strip().replace("\n", " ")[:120]
-                    if "skill_id:" in content:
-                        m = re.search(r"skill_id:\s*(.+)", content)
-                        if m:
-                            skill_id = m.group(1).strip()
-                except Exception:
-                    pass
-                skills.append({
-                    "category": category,
-                    "name": name,
-                    "skill_id": skill_id or name,
-                    "path": str(skill_dir.parent),
-                    "desc": desc or "企业级智能体技能",
-                })
+            seen = set()
+            for root_dir in root_dirs:
+                root = Path(root_dir).expanduser()
+                if not root.exists():
+                    continue
+                for skill_dir in root.rglob("SKILL.md"):
+                    key = str(skill_dir.parent)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    rel = skill_dir.relative_to(root)
+                    parts = rel.parts
+                    category = parts[0] if len(parts) > 1 else "其他"
+                    name = skill_dir.parent.name
+                    desc = ""
+                    skill_id = ""
+                    try:
+                        with open(skill_dir, "r", encoding="utf-8") as f:
+                            content = f.read(2000)
+                        # parse frontmatter description
+                        if "description:" in content:
+                            m = re.search(r"description:\s*(\|?\s*\n?\s*)(.+?)(\n\w+:|\n# |\n---|\Z)", content, re.S)
+                            if m:
+                                desc = m.group(2).strip().replace("\n", " ")[:120]
+                        if "skill_id:" in content:
+                            m = re.search(r"skill_id:\s*(.+)", content)
+                            if m:
+                                skill_id = m.group(1).strip()
+                    except Exception:
+                        pass
+                    skills.append({
+                        "category": category,
+                        "name": name,
+                        "skill_id": skill_id or name,
+                        "path": str(skill_dir.parent),
+                        "desc": desc or "企业级智能体技能",
+                    })
             return skills
 
-        all_skills = scan_skills("~/.prajna/skills")
+        all_skills = scan_skills(["~/.prajna/skills", str(APP_DIR / "skills")])
 
         # Stats
         s1, s2, s3 = st.columns(3)

@@ -14,6 +14,10 @@ from datetime import datetime
 from pathlib import Path
 
 # Graceful dependency handling
+class _Placeholder:
+    def __init__(self, *args, **kwargs):
+        pass
+
 try:
     from pptx import Presentation
     from pptx.util import Inches, Pt
@@ -26,6 +30,34 @@ try:
 except ImportError as exc:
     HAVE_PPTX = False
     PPTX_IMPORT_ERROR = str(exc)
+    # Placeholders so module-level default arguments don't crash on import
+    Presentation = _Placeholder
+    Inches = Pt = _Placeholder
+    RGBColor = _Placeholder
+    PP_ALIGN = type("PP_ALIGN", (), {"LEFT": None, "CENTER": None, "RIGHT": None, "JUSTIFY": None})()
+    MSO_ANCHOR = type("MSO_ANCHOR", (), {"MIDDLE": None, "TOP": None})()
+    MSO_SHAPE = type("MSO_SHAPE", (), {"ROUNDED_RECTANGLE": None, "RECTANGLE": None})()
+    CategoryChartData = _Placeholder
+    XL_CHART_TYPE = type("XL_CHART_TYPE", (), {"COLUMN_CLUSTERED": None, "BAR_CLUSTERED": None, "PIE": None, "LINE": None})()
+    XL_LEGEND_POSITION = type("XL_LEGEND_POSITION", (), {"BOTTOM": None, "RIGHT": None})()
+
+
+# ---------------------------------------------------------------------------
+# Helpers - color constants (placeholders when pptx is unavailable)
+# ---------------------------------------------------------------------------
+try:
+    ACCENT_BLUE = RGBColor(0x1F, 0x4E, 0x78)
+    DARK_BLUE = RGBColor(0x12, 0x2A, 0x4D)
+    LIGHT_BLUE = RGBColor(0x44, 0x72, 0xC4)
+    GOLD = RGBColor(0xC5, 0xA0, 0x4E)
+    WHITE = RGBColor(0xFF, 0xFF, 0xFF)
+    BLACK = RGBColor(0x33, 0x33, 0x33)
+    GRAY = RGBColor(0x88, 0x88, 0x88)
+    RED = RGBColor(0xC0, 0x00, 0x00)
+    GREEN = RGBColor(0x00, 0x80, 0x00)
+    ORANGE = RGBColor(0xFF, 0x66, 0x00)
+except (NameError, TypeError):
+    ACCENT_BLUE = DARK_BLUE = LIGHT_BLUE = GOLD = WHITE = BLACK = GRAY = RED = GREEN = ORANGE = None
 
 
 # ---------------------------------------------------------------------------
@@ -41,16 +73,6 @@ SAMPLES_DIR = Path.home() / ".prajna" / "prajna-budget-execution-ppt" / "samples
 # Helpers
 # ---------------------------------------------------------------------------
 CN_FONT = "Microsoft YaHei"
-ACCENT_BLUE = RGBColor(0x1F, 0x4E, 0x78)
-DARK_BLUE = RGBColor(0x12, 0x2A, 0x4D)
-LIGHT_BLUE = RGBColor(0x44, 0x72, 0xC4)
-GOLD = RGBColor(0xC5, 0xA0, 0x4E)
-WHITE = RGBColor(0xFF, 0xFF, 0xFF)
-BLACK = RGBColor(0x33, 0x33, 0x33)
-GRAY = RGBColor(0x88, 0x88, 0x88)
-RED = RGBColor(0xC0, 0x00, 0x00)
-GREEN = RGBColor(0x00, 0x80, 0x00)
-ORANGE = RGBColor(0xFF, 0x66, 0x00)
 
 
 def load_json(path):
