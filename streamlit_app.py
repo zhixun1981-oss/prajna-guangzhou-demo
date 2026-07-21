@@ -367,9 +367,13 @@ def parse_agent_input(text):
     elif intent == "ai_daily":
         result.update({"date": datetime.now().strftime("%Y-%m-%d")})
     elif intent == "finance_dashboard":
+        company_clean = re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|为|设计)", "", text)
+        company_clean = re.sub(r"(财务核心指标看板|财务看板|财务指标).*$", "", company_clean)
+        for kw in ["资产负债率", "净利润率", "现金流量比率", "核心指标", "关注", "和", "、", "互联网", "企业", "公司"]:
+            company_clean = company_clean.replace(kw, "")
         result.update({
             "preset": infer_finance_preset(text),
-            "company": re.sub(r"^(帮我|给我|请|做|一份|的|生成|搭建|财务核心指标看板|财务看板)", "", text).strip()[:20] or "示范企业股份",
+            "company": company_clean.strip()[:20] or "示范企业股份",
             "period": datetime.now().strftime("%Y年%m月"),
         })
     elif intent == "budget_ppt":
@@ -513,8 +517,8 @@ SAMPLE_INPUTS = {
     "sales": "生成华南销售一部本周销售周报，目标 120 万",
     "finance_kb": "搭建智云电商财务知识库目录",
     "clothing_duty": "生成服装厂缝纫一组小组长岗位职责",
-    "ai_daily": "生成今日 AI 领袖动态日报",
-    "finance_dashboard": "搭建示范企业股份财务核心指标看板",
+    "ai_daily": "生成今日ai领袖日报",
+    "finance_dashboard": "搭建示范企业股份财务看板，关注资产负债率和净利润率",
     "budget_ppt": "生成本月预算执行情况汇报 PPT",
     "bidding": "帮我做一份智慧园区建设项目的投标书",
     "recruitment": "帮我招聘一名广州 P2 电商运营助理",
